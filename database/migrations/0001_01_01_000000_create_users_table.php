@@ -14,11 +14,37 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string("username")->nullable();
+            $table->string('mobile')->unique();
+            $table->string('country_code');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
+            $table->enum('gender',["male","female"]);
+            $table->enum('role',["0","1",'2'])->comment("0=admin 1=influencer 2=user");
+            $table->decimal('balance',16,2)->default(0);
+            $table->string('reff_code')->nullable();
+            $table->integer('category_id')->nullable();
+            $table->string('service_label_name')->nullable()->comment('name of service will show in profle section');
+            $table->string('plan_label_name')->nullable()->comment('name of service will show in profle section');
+            $table->string('avtar')->nullable();
+            $table->string('cover')->nullable();
+            $table->text('bio')->nullable();
+            $table->string('app_theme_color')->nullable();
+            $table->text('instagram_url')->nullable();
+            $table->text('snapchat_url')->nullable();
+            $table->text('twitter_url')->nullable();
+            $table->text('youtube_url')->nullable();
+            $table->text('facebook_url')->nullable();
+            $table->text('linkedin_url')->nullable();
+            //$table->foreign('category_id')->references('id')->on('categories');
+
+
+            
+
             $table->rememberToken();
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
