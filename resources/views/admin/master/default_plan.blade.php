@@ -1,0 +1,212 @@
+@extends('admin.layout.app')
+
+@section('content')
+<!-- BREADCRUMB -->
+<div class="page-meta">
+    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Masters</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Plan</li>
+        </ol>
+    </nav>
+</div>
+<!-- /BREADCRUMB -->
+
+<div class="seperator-header layout-top-spacing">
+    <div class="text-center" style="display:inline-block">
+        <button type="button" class="btn btn-primary mb-2 mr-2" data-bs-toggle="modal" data-bs-target="#PriceModalCenter">
+            Add Plan
+        </button>
+    </div>
+</div>
+<!-- Create Modal -->
+<div class="modal fade" id="PriceModalCenter" tabindex="-1" role="dialog" aria-labelledby="PriceModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="PriceModalCenterTitle">Add Plan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <form action="{{ route('admin.masters.price.submit') }}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1">Price</label>
+                        <input type="number" name="price" class="form-control" id="exampleFormControlInput1">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-bs-dismiss="modal">
+                        <i class="flaticon-cancel-12"></i>
+                        Discard
+                    </button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<!-- /Create Modal -->
+
+<div class="row layout-spacing">
+    <div class="col-lg-12">
+        <div class="statbox widget box box-shadow">
+            <div class="widget-content widget-content-area">
+                <table id="style-2" class="table style-2 dt-table-hover">
+                    <thead>
+                        <tr>
+                            <th class="checkbox-column dt-no-sorting"> S.No. </th>
+                            <th class="text-center">Price</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center dt-no-sorting">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php($sn = 1)
+                        @foreach($price as $value)
+                        <tr>
+                            <td class="checkbox-column">
+                                {{ $sn }}
+                            </td>
+                            <td class="text-center">
+                                {{ $value->prices }}
+                            </td>
+                            <td class="text-center">
+                                @if($value->status == 0)
+                                    <a href="{{ route('admin.masters.price.status', $value->id) }}">
+                                        <span class="badge outline-badge-success mb-2 me-4">
+                                            Active
+                                        </span>
+                                    </a> 
+                                @else
+                                    <a href="{{ route('admin.masters.price.status', $value->id) }}">
+                                        <span class="badge outline-badge-danger mb-2 me-4">
+                                            Inactive
+                                        </span>
+                                    </a>
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                <a href="javascript:void(0);" class="bs-tooltip" data-bs-toggle="tooltip">
+                                    <button class="btn btn-outline-info btn-icon mb-2 me-4 edit-btn" data-content="{{$value->prices}}" data-id="{{$value->id}}">
+                                        <div class="icon-container">
+                                            <i class="far fa-edit"></i>
+                                        </div>
+                                    </button>
+                                </a>
+                                <form action="{{ route('admin.masters.price.delete') }}" method="post" style="display:inline-block" id="DeletePrice">
+                                    @method('delete') @csrf
+                                    <input type="hidden" name="id" value="{{$value->id}}">
+                                    <a href="javascript:void(0);" class="bs-tooltip" data-bs-toggle="tooltip">
+                                        <button type="button" class="btn btn-outline-danger btn-icon mb-2 me-4" id="deleterow">
+                                            <div class="icon-container">
+                                                <i class="far fa-trash-alt"></i>
+                                            </div>
+                                        </button>
+                                    </a>
+                                </form>
+                            </td>
+                        </tr>
+                        @php($sn++)
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="EditPriceModalCenter" tabindex="-1" role="dialog" aria-labelledby="EditPriceModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="EditPriceModalCenterTitle">Edit Prices</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <form action="{{ route('admin.masters.editprice.submit') }}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1">Price</label>
+                        <input type="number" name="newprice" class="form-control" id="newprice">
+                    </div>
+                </div>
+                <input type="hidden" name="editid" id="editid">
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-bs-dismiss="modal">
+                        <i class="flaticon-cancel-12"></i>
+                        Discard
+                    </button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<!-- /Edit Modal -->
+@endsection
+
+@push('js')
+<script>
+    $(document).ready(function() {
+        c2 = $('#style-2').DataTable({
+            columnDefs: [{
+                targets: 0,
+                width: "30px",
+                className: "",
+                orderable: !1,
+            }],
+            "dom": "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>" +
+                "<'table-responsive'tr>" +
+                "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
+            "oLanguage": {
+                "oPaginate": {
+                    "sPrevious": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>',
+                    "sNext": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>'
+                },
+                "sInfo": "Showing page _PAGE_ of _PAGES_",
+                "sSearch": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+                "sSearchPlaceholder": "Search...",
+                "sLengthMenu": "Results :  _MENU_",
+            },
+            "lengthMenu": [5, 10, 20, 50],
+            "pageLength": 10
+        });
+    })
+
+    document.querySelector('#deleterow').addEventListener('click', function() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#DeletePrice').submit();
+            }
+        })
+    })
+
+    $(document).on('click', '.edit-btn',function(){
+        $('#newprice').val($(this).attr('data-content'));
+        $('#editid').val($(this).attr('data-id'));
+        $('#EditPriceModalCenter').modal('show');
+    })
+</script>
+@endpush

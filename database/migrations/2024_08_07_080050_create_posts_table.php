@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('post_title',255);
             $table->enum('post_type',["Execlusive","Prime"]);
             $table->enum("file_type",["image","video"]);
-            $table->int("like_count")->default(0);
+            $table->integer("like_count")->default(0);
             $table->decimal("total_earn")->default(0);
             $table->integer("total_unlock")->default(0);
             $table->timestamp('created_at')->useCurrent();

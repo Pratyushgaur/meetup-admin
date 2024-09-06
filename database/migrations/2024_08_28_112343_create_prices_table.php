@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('prices', function (Blueprint $table) {
             $table->id();
             $table->string('prices');
+            $table->tinyInteger('status')->default(0)->comment('0 => active | 1 => inactive');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

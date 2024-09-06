@@ -523,6 +523,13 @@ body.dark .form-text {
 body.dark .form-control[type=range] {
   padding: 0;
 }
+
+input[type=number]::-webkit-outer-spin-button ,
+input[type=number]::-webkit-inner-spin-button{ 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
 body.dark .form-control:focus {
   box-shadow: none;
   border-color: #3b3f5c;
