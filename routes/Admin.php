@@ -1,7 +1,16 @@
 <?php
 
-use App\Http\Controllers\Admin\{AdminController,DashboardController,MastersController};
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\{
+    AdminController,
+    InfluncerController,
+    MastersController,
+    UserController,
+    BusinessSettingController,
+    PaymentController,
+    transactionController
+};
+
 
 Route::group(['prefix' =>'admin','as' => 'admin.'],function(){
     //Auth Routes
@@ -11,6 +20,17 @@ Route::group(['prefix' =>'admin','as' => 'admin.'],function(){
     Route::group(['middleware' => 'Admin-Auth'], function(){
 
         Route::get('dashboard', [AdminController::class,'dashboard'])->name('dashboard');
+        Route::get('logout', [AdminController::class,'logout'])->name('logout');
+
+        Route::group(['prefix' => 'profile' , 'as' => 'profile.'],function(){
+            // Admin Profile Routes
+            Route::get('/profile', [AdminController::class,'profile'])->name('profile');
+            Route::post('/profile', [AdminController::class,'ProfileSubmit'])->name('profileSubmit');
+            Route::post('/profile/Password', [AdminController::class,'ProfilepasswordSubmit'])->name('profilepasswordSubmit');
+            Route::get('/pricestatus/{id}', [AdminController::class,'DefaultPriceStatus'])->name('price.status');
+            Route::post('/editprofile', [AdminController::class,'DefaultPriceEdit'])->name('editprice.submit');
+            Route::delete('/pricedelete', [AdminController::class,'DefaultPriceDelete'])->name('price.delete');
+        });
 
         Route::group(['prefix' => 'masters' , 'as' => 'masters.'],function(){
             // Default Pricing Routes
@@ -40,26 +60,63 @@ Route::group(['prefix' =>'admin','as' => 'admin.'],function(){
             Route::get('/giftstatus/{id}', [MastersController::class,'DefaultGiftStatus'])->name('gift.status');
             Route::post('/editgift', [MastersController::class,'DefaultGiftEdit'])->name('editgift.submit');
             Route::delete('/giftdelete', [MastersController::class,'DefaultGiftDelete'])->name('gift.delete');
+
+            // Category Routes
+            Route::get('/category', [MastersController::class,'Category'])->name('category');
+            Route::post('/category', [MastersController::class,'CategorySubmit'])->name('category.submit');
+            Route::get('/categorystatus/{id}', [MastersController::class,'CategoryStatus'])->name('category.status');
+            Route::post('/editcategory', [MastersController::class,'CategoryEdit'])->name('editcategory.submit');
+            Route::delete('/categorydelete', [MastersController::class,'CategoryDelete'])->name('category.delete');
         });
 
-        Route::group(['prefix' => 'influncers' , 'as' => 'influncers.'],function(){
-            Route::get('influencer', [AdminController::class,'influencer'])->name('influencer');
+        Route::group(['prefix' => 'influncers' , 'as' => 'influncers.'], function(){
+            // Influncer Analysis Routes
+            Route::get('list', [InfluncerController::class,'List'])->name('list');
+            Route::get('/status/{id}', [InfluncerController::class,'InfluncerStatus'])->name('status');
+            Route::get('posts/{id}', [InfluncerController::class,'InfluncerPostView'])->name('post.view');
+            Route::get('pending-order', [InfluncerController::class,'PendingOrders'])->name('pending.order');
+            Route::get('orders/view/{id}', [InfluncerController::class,'PendingOrdersView'])->name('pending.order.view');
+            Route::get('kyc-verification', [InfluncerController::class,'KYCVerification'])->name('kyc.verification');
+            Route::get('kyc/view/{id}', [InfluncerController::class,'KYCVerificationView'])->name('kyc.verification.view');
+            Route::post('kyc/view/{id}', [InfluncerController::class,'KYCVerificationViewSubmit'])->name('kyc.verification.view.submit');
         });
 
         Route::group(['prefix' => 'users' , 'as' => 'users.'],function(){
-            Route::get('user-list', [AdminController::class,'user_list'])->name('user-list');
+            // User Analysis Routes
+            Route::get('list', [UserController::class,'UserList'])->name('list');
+            Route::get('/status/{id}', [UserController::class,'UserStatus'])->name('status');
+
         });
 
         Route::group(['prefix' => 'payments' , 'as' => 'payments.'],function(){
+            Route::get('list', [PaymentController::class,'paymentList'])->name('list');
             
         });
 
         Route::group(['prefix' => 'transactions' , 'as' => 'transactions.'],function(){
+            Route::get('Userlist', [transactionController::class,'transactionUserList'])->name('Userlist');
+            Route::get('influncerlist', [transactionController::class,'transactionInfluncerList'])->name('influncerlist');
             
         });
 
         Route::group(['prefix' => 'business-setup' , 'as' => 'business-setup.'],function(){
-            
+            // Business Settings Routes
+            Route::get('term-condition', [BusinessSettingController::class,'TermCondition'])->name('term.condition');
+            Route::post('term-condition', [BusinessSettingController::class,'TermConditionSubmit'])->name('term.condition.submit');
+
+            Route::get('privacy-policy', [BusinessSettingController::class,'PrivacyPolicy'])->name('privacy.policy');
+            Route::post('privacy-policy', [BusinessSettingController::class,'PrivacyPolicySubmit'])->name('privacy.policy.submit');
+
+            Route::get('company-setup', [BusinessSettingController::class,'CompanySetup'])->name('company.setup');
+            Route::post('company-setup', [BusinessSettingController::class,'CompanySetupSubmit'])->name('company.setup.submit');
+
+            Route::get('commission-setup', [BusinessSettingController::class,'CommissionSetup'])->name('commission.setup');
+            Route::post('commission-setup', [BusinessSettingController::class,'CommissionSetupSubmit'])->name('commission.setup.submit');
+
+            Route::get('send-notification', [BusinessSettingController::class,'SendNotification'])->name('send.notification');
+            Route::post('send-notification', [BusinessSettingController::class,'SendNotificationSubmit'])->name('send.notification.submit');
+            Route::post('send-notification/key', [BusinessSettingController::class,'SendNotificationKeySubmit'])->name('send.notificationkey.submit');
+
         });
     });
 

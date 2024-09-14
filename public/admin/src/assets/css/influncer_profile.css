@@ -1,0 +1,155 @@
+body.dark .custom--form{
+    color:antiquewhite !important;
+}
+
+body.dark .custom--form input{
+    color:antiquewhite !important;
+}
+
+body.dark .custom--form textarea{
+    color:antiquewhite !important;
+}
+
+body.dark .custom--form select{
+    color:antiquewhite !important;
+}
+
+body.dark .custom--form select > *{
+    background-color: #0e1726;
+}
+
+body.dark .custom--form .influancer--details--section{
+    border-top: 1px solid #ffffff;
+}
+
+select > *{
+    background-color: #ffffff;
+}
+
+.custom--form{
+    color: black !important;
+}
+
+.influncer--profile--layout{
+    position: relative;
+    margin-bottom: 80px;
+}
+
+.cover--profile--section{
+    width: 100%;
+    height: 200px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#edit-profile--cover{
+    position: absolute;
+    right: 20px;
+    top: 10px;
+}
+
+.cover--profile--section img{
+    aspect-ratio: 2/1;
+    object-fit: cover;
+    width: 100%;
+}
+
+.influncer--profile--layout > img{
+    position: absolute;
+    top: 159px;
+    left: calc(50% - 55px);
+    width: 110px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.profile--name--section{
+    position: relative;
+}
+
+.profile--name--object{
+    position: absolute;
+    left: calc(50% - 13px);
+    top: 5px;
+}
+
+.profile--input{
+    position: relative;
+    width: 100%;
+    height: 30px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    outline: none;
+    z-index: 150;
+}
+
+.profile--input:focus{
+    border-bottom: 1px solid #ffffff;
+    outline: none;
+}
+
+#influncer--bio{
+    border: 1px solid #ffffff;
+}
+
+#influncer--bio{
+    position: relative;
+    width: 100%;
+    height: 50px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    outline: none;
+    z-index: 150;
+}
+
+#influncer--bio:focus{
+    border-bottom: 1px solid #ffffff;
+    outline: none;
+}
+
+.influancer--details--section{
+    width: 100%;
+    min-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #000000;
+}
+
+.details--sections--1{
+    width: 50%;
+    height: 100%;
+    padding: 0px 5px;
+}
+
+.details--sections--2{
+    width: 50%;
+    height: 100%;
+    padding: 0px 5px;
+}
+
+.detail--content--container{
+    height: 35px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.detail--icon--section{
+    width: 15%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.detail--content--section{
+    width: 85%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

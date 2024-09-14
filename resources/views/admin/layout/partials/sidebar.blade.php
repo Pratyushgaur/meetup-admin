@@ -3,13 +3,13 @@
      <nav id="sidebar">
          <div class="navbar-nav theme-brand flex-row text-center">
              <div class="nav-logo">
-                 <div class="nav-item theme-logo">
+                 <div class="nav-item theme-logo" style="width:90px;">
                      <a href="{{ route('admin.dashboard') }}">
-                         <img src="{{ asset('admin/src/assets/img/logo.svg')}}" class="navbar-logo" alt="logo">
+                         <img src="{{ asset(Helpers_get_logo()) }}" class="" alt="logo">
                      </a>
                  </div>
                  <div class="nav-item theme-text">
-                     <a href="{{ route('admin.dashboard') }}" class="nav-link"> CORK </a>
+                     <a href="{{ route('admin.dashboard') }}" class="nav-link"> {{Helpers_get_company_name()}} </a>
                  </div>
              </div>
              <div class="nav-item sidebar-toggle">
@@ -73,23 +73,28 @@
                  <ul class="collapse submenu list-unstyled {{Request::is('admin/masters*') ? 'show' : '' }}" id="masters" data-bs-parent="#accordionExample">
                      <li class="{{Request::is('admin/masters/price') ? 'active' : '' }}">
                          <a href="{{ route('admin.masters.price') }}">
-                            Default Price
-                        </a>
+                             Default Price
+                         </a>
                      </li>
-                     <li>
-                         <a href="./app-invoice-preview.html"> 
-                         Default Plans 
-                        </a>
+                     <li class="{{Request::is('admin/masters/plan') ? 'active' : '' }}">
+                         <a href="{{route('admin.masters.plan')}}">
+                             Default Plans
+                         </a>
                      </li>
-                     <li>
-                         <a href="./app-invoice-add.html"> 
-                         Default Services 
-                        </a>
+                     <li class="{{Request::is('admin/masters/service') ? 'active' : '' }}">
+                         <a href="{{route('admin.masters.service')}}">
+                             Default Services
+                         </a>
                      </li>
-                     <li>
-                         <a href="./app-invoice-edit.html"> 
-                            Gifts 
-                        </a>
+                     <li class="{{Request::is('admin/masters/gift') ? 'active' : '' }}">
+                         <a href="{{route('admin.masters.gift')}}">
+                             Gifts
+                         </a>
+                     </li>
+                     <li class="{{Request::is('admin/masters/category') ? 'active' : '' }}">
+                         <a href="{{route('admin.masters.category')}}">
+                             Category
+                         </a>
                      </li>
                  </ul>
              </li>
@@ -109,20 +114,20 @@
                      </div>
                  </a>
                  <ul class="collapse submenu list-unstyled {{Request::is('admin/influncers*') ? 'show' : '' }}" id="influncers" data-bs-parent="#accordionExample">
-                     <li class="{{Request::is('admin/influncers/list') ? 'active' : '' }}">
-                         <a href="./element-alerts.html"> 
-                            List 
-                        </a>
+                     <li class="{{Request::is('admin/influncers/list') || Request::is('admin/influncers/posts*') ? 'active' : '' }}">
+                         <a href="{{route('admin.influncers.list')}}">
+                             List
+                         </a>
                      </li>
-                     <li>
-                         <a href="./element-avatar.html"> 
-                            Pending Orders 
-                        </a>
+                     <li class="{{Request::is('admin/influncers/pending-order') || Request::is('admin/influncers/orders/view*') ? 'active' : '' }}">
+                         <a href="{{route('admin.influncers.pending.order')}}">
+                             Pending Orders
+                         </a>
                      </li>
-                     <li>
-                         <a href="./element-avatar.html"> 
-                            KYC Verifications
-                        </a>
+                     <li class="{{Request::is('admin/influncers/kyc-verification') || Request::is('admin/influncers/kyc/view*') ? 'active' : '' }}">
+                         <a href="{{route('admin.influncers.kyc.verification')}}">
+                             KYC Verifications
+                         </a>
                      </li>
                  </ul>
              </li>
@@ -146,18 +151,18 @@
                  </a>
                  <ul class="collapse submenu list-unstyled {{Request::is('admin/users*') ? 'show' : '' }}" id="users" data-bs-parent="#accordionExample">
                      <li class="{{Request::is('admin/users/list') ? 'active' : '' }}">
-                         <a href="./user-profile.html"> List </a>
+                         <a href="{{route('admin.users.list')}}"> List </a>
                      </li>
                  </ul>
              </li>
 
              <li class="menu menu-heading">
                  <div class="heading">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus">
                          <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    <span>Payments & Settlements</span>
-                </div>
+                     </svg>
+                     <span>Payments & Settlements</span>
+                 </div>
              </li>
 
              <li class="menu {{Request::is('admin/payments*') ? 'active' : '' }}">
@@ -177,16 +182,14 @@
                  </a>
                  <ul class="collapse submenu list-unstyled {{Request::is('admin/payments*') ? 'show' : '' }}" id="payments" data-bs-parent="#accordionExample">
                      <li class="{{Request::is('admin/payments*') ? 'show' : '' }}">
-                         <a href="./app-invoice-list.html"> List </a>
+                         <a href="{{route('admin.payments.list')}}">
+                             List 
+                            </a>
                      </li>
                      <li>
-                         <a href="./app-invoice-preview.html"> Preview </a>
-                     </li>
-                     <li>
-                         <a href="./app-invoice-add.html"> Add </a>
-                     </li>
-                     <li>
-                         <a href="./app-invoice-edit.html"> Edit </a>
+                         <a href="">
+                             Preview
+                         </a>
                      </li>
                  </ul>
              </li>
@@ -209,25 +212,25 @@
                  </a>
                  <ul class="collapse submenu list-unstyled {{Request::is('admin/transactions*') ? 'show' : '' }}" id="transactions" data-bs-parent="#accordionExample">
                      <li class="{{Request::is('admin/transactions') ? 'active' : '' }}">
-                         <a href="./app-ecommerce-product-shop.html"> 
-                            Influncers 
-                        </a>
+                         <a href="{{route('admin.transactions.influncerlist')}}">
+                             Influncers
+                         </a>
                      </li>
                      <li>
-                         <a href="./app-ecommerce-product.html"> 
-                            Users
-                        </a>
+                         <a href="{{route('admin.transactions.Userlist')}}">
+                             Users
+                         </a>
                      </li>
                  </ul>
              </li>
 
              <li class="menu menu-heading">
                  <div class="heading">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus">
                          <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    <span>Business Set up</span>
-                </div>
+                     </svg>
+                     <span>Business Set up</span>
+                 </div>
              </li>
 
              <li class="menu {{Request::is('admin/business-setup*') ? 'active' : '' }}">
@@ -246,30 +249,30 @@
                      </div>
                  </a>
                  <ul class="collapse submenu list-unstyled {{Request::is('admin/business-setup*') ? 'show' : '' }}" id="business_setting" data-bs-parent="#accordionExample">
-                     <li class="{{Request::is('admin/business-setup') ? 'active' : '' }}">
-                         <a href="./app-ecommerce-product-shop.html"> 
-                            Term & Conditions 
-                        </a>
+                     <li class="{{Request::is('admin/business-setup/term-condition') ? 'active' : '' }}">
+                         <a href="{{route('admin.business-setup.term.condition')}}">
+                             Term & Conditions
+                         </a>
                      </li>
-                     <li>
-                         <a href="./app-ecommerce-product.html"> 
-                            Privacy Policy
-                        </a>
+                     <li class="{{Request::is('admin/business-setup/privacy-policy') ? 'active' : '' }}">
+                         <a href="{{route('admin.business-setup.privacy.policy')}}">
+                             Privacy Policy
+                         </a>
                      </li>
-                     <li>
-                         <a href="./app-ecommerce-product.html"> 
-                            Company Setup
-                        </a>
+                     <li class="{{Request::is('admin/business-setup/company-setup') ? 'active' : '' }}">
+                         <a href="{{route('admin.business-setup.company.setup')}}">
+                             Company Setup
+                         </a>
                      </li>
-                     <li>
-                         <a href="./app-ecommerce-product.html"> 
-                            Commissions setup
-                        </a>
+                     <li class="{{Request::is('admin/business-setup/commission-setup') ? 'active' : '' }}">
+                         <a href="{{route('admin.business-setup.commission.setup')}}">
+                             Commissions setup
+                         </a>
                      </li>
-                     <li>
-                         <a href="./app-ecommerce-product.html"> 
-                            Send Notification
-                        </a>
+                     <li class="{{Request::is('admin/business-setup/send-notification') ? 'active' : '' }}">
+                         <a href="{{route('admin.business-setup.send.notification')}}">
+                             Send Notification
+                         </a>
                      </li>
                  </ul>
              </li>

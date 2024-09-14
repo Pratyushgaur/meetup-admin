@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6729a01f146edccd2e40de12cfdd6fe9
+class ComposerStaticInitd230f7dfc63a7ec7d80323aa82a91c09
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -39,6 +39,7 @@ class ComposerStaticInit6729a01f146edccd2e40de12cfdd6fe9
         'ce9671a430e4846b44e1c68c7611f9f5' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery.php',
         'a1cfe24d14977df6878b9bf804af2d1c' => __DIR__ . '/..' . '/nunomaduro/collision/src/Adapters/Phpunit/Autoload.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
+        'b0e2707ec10169fdd1d4306d31499aad' => __DIR__ . '/../..' . '/app/Helpers/CentralLogic.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -532,8 +533,12 @@ class ComposerStaticInit6729a01f146edccd2e40de12cfdd6fe9
     public static $classMap = array (
         'App\\Events\\InfluencerSetup' => __DIR__ . '/../..' . '/app/Events/InfluencerSetup.php',
         'App\\Http\\Controllers\\Admin\\AdminController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/AdminController.php',
-        'App\\Http\\Controllers\\Admin\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/LoginController.php',
+        'App\\Http\\Controllers\\Admin\\BusinessSettingController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/BusinessSettingController.php',
+        'App\\Http\\Controllers\\Admin\\InfluncerController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/InfluncerController.php',
         'App\\Http\\Controllers\\Admin\\MastersController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/MastersController.php',
+        'App\\Http\\Controllers\\Admin\\PaymentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/PaymentController.php',
+        'App\\Http\\Controllers\\Admin\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/UserController.php',
+        'App\\Http\\Controllers\\Admin\\transactionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/transactionController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\influencer\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/influencer/HomeController.php',
         'App\\Http\\Controllers\\influencer\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/influencer/LoginController.php',
@@ -543,11 +548,14 @@ class ComposerStaticInit6729a01f146edccd2e40de12cfdd6fe9
         'App\\Http\\Middleware\\InfluencerMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/InfluencerMiddleware.php',
         'App\\Listeners\\InfluencerSetupListener' => __DIR__ . '/../..' . '/app/Listeners/InfluencerSetupListener.php',
         'App\\Models\\Admin' => __DIR__ . '/../..' . '/app/Models/Admin.php',
+        'App\\Models\\BusinessSetting' => __DIR__ . '/../..' . '/app/Models/BusinessSetting.php',
         'App\\Models\\Categories' => __DIR__ . '/../..' . '/app/Models/Categories.php',
         'App\\Models\\DefaultPlan' => __DIR__ . '/../..' . '/app/Models/DefaultPlan.php',
         'App\\Models\\DefaultService' => __DIR__ . '/../..' . '/app/Models/DefaultService.php',
+        'App\\Models\\Gift' => __DIR__ . '/../..' . '/app/Models/Gift.php',
         'App\\Models\\Influencerplan' => __DIR__ . '/../..' . '/app/Models/Influencerplan.php',
         'App\\Models\\Price' => __DIR__ . '/../..' . '/app/Models/Price.php',
+        'App\\Models\\SendNotification' => __DIR__ . '/../..' . '/app/Models/SendNotification.php',
         'App\\Models\\Service' => __DIR__ . '/../..' . '/app/Models/Service.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Models\\UserOtp' => __DIR__ . '/../..' . '/app/Models/UserOtp.php',
@@ -6630,9 +6638,9 @@ class ComposerStaticInit6729a01f146edccd2e40de12cfdd6fe9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6729a01f146edccd2e40de12cfdd6fe9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6729a01f146edccd2e40de12cfdd6fe9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6729a01f146edccd2e40de12cfdd6fe9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd230f7dfc63a7ec7d80323aa82a91c09::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd230f7dfc63a7ec7d80323aa82a91c09::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd230f7dfc63a7ec7d80323aa82a91c09::$classMap;
 
         }, null, ClassLoader::class);
     }

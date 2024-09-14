@@ -21,7 +21,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->enum('gender',["male","female"]);
-            $table->enum('role',["0","1"])->comment("0=user 1=influencer");
+            $table->enum('role',["1","2"])->comment("1=influencer 2=user");
+            $table->tinyInteger('status')->default(0)->comment('0 = Active | 1 = Inactive');
+            $table->integer('commission')->default(0);
             $table->decimal('balance',16,2)->default(0);
             $table->string('reff_code')->nullable();
             $table->integer('category_id')->nullable();

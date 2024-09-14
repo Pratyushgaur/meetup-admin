@@ -19,6 +19,7 @@ class AdminSeeder extends Seeder
             'gender' => 'male',
             'email' =>'admin@gmail.com',
             'password' => 123456,
+            'profile_image' => 'image'
         ]);
     }
 }

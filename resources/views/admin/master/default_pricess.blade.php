@@ -79,36 +79,35 @@
                             </td>
                             <td class="text-center">
                                 @if($value->status == 0)
-                                    <a href="{{ route('admin.masters.price.status', $value->id) }}">
-                                        <span class="badge outline-badge-success mb-2 me-4">
-                                            Active
-                                        </span>
-                                    </a> 
+                                <a href="{{ route('admin.masters.price.status', $value->id) }}">
+                                    <span class="badge outline-badge-success mb-2 me-4">
+                                        Active
+                                    </span>
+                                </a>
                                 @else
-                                    <a href="{{ route('admin.masters.price.status', $value->id) }}">
-                                        <span class="badge outline-badge-danger mb-2 me-4">
-                                            Inactive
-                                        </span>
-                                    </a>
+                                <a href="{{ route('admin.masters.price.status', $value->id) }}">
+                                    <span class="badge outline-badge-danger mb-2 me-4">
+                                        Inactive
+                                    </span>
+                                </a>
                                 @endif
                             </td>
+
                             <td class="text-center">
-                                <a href="javascript:void(0);" class="bs-tooltip" data-bs-toggle="tooltip">
-                                    <button class="btn btn-outline-info btn-icon mb-2 me-4 edit-btn" data-content="{{$value->prices}}" data-id="{{$value->id}}">
-                                        <div class="icon-container">
-                                            <i class="far fa-edit"></i>
-                                        </div>
-                                    </button>
+                                <a class="badge badge-light-primary text-start me-2 action-edit edit-btn" href="javascript:void(0);" data-content="{{$value->prices}}" data-id="{{$value->id}}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3">
+                                        <path d="M12 20h9"></path>
+                                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                    </svg>
                                 </a>
-                                <form action="{{ route('admin.masters.price.delete') }}" method="post" style="display:inline-block" id="DeletePrice">
+                                <form action="{{ route('admin.masters.price.delete') }}" method="post" style="display:inline-block" class="DeletePrice">
                                     @method('delete') @csrf
                                     <input type="hidden" name="id" value="{{$value->id}}">
-                                    <a href="javascript:void(0);" class="bs-tooltip" data-bs-toggle="tooltip">
-                                        <button type="button" class="btn btn-outline-danger btn-icon mb-2 me-4" id="deleterow">
-                                            <div class="icon-container">
-                                                <i class="far fa-trash-alt"></i>
-                                            </div>
-                                        </button>
+                                    <a class="badge badge-light-danger text-start action-delete deleterow" href="javascript:void(0);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
+                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
                                     </a>
                                 </form>
                             </td>
@@ -187,23 +186,7 @@
         });
     })
 
-    document.querySelector('#deleterow').addEventListener('click', function() {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $('#DeletePrice').submit();
-            }
-        })
-    })
-
-    $(document).on('click', '.edit-btn',function(){
+    $(document).on('click', '.edit-btn', function() {
         $('#newprice').val($(this).attr('data-content'));
         $('#editid').val($(this).attr('data-id'));
         $('#EditPriceModalCenter').modal('show');

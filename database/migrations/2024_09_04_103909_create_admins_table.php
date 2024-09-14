@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('country_code');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('profile_image');
             $table->enum('gender',["male","female","other"]);
             $table->timestamps();
         });

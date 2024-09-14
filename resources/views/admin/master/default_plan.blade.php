@@ -32,9 +32,17 @@
                     </svg>
                 </button>
             </div>
-            <form action="{{ route('admin.masters.price.submit') }}" method="post">
+            <form action="{{ route('admin.masters.plan.submit') }}" method="post">
                 @csrf
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1">Title</label>
+                        <input type="text" name="title" class="form-control" id="exampleFormControlInput1">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1">Description</label>
+                        <textarea name="description" class="form-control"></textarea>
+                    </div>
                     <div class="form-group">
                         <label for="exampleFormControlInput1">Price</label>
                         <input type="number" name="price" class="form-control" id="exampleFormControlInput1">
@@ -62,6 +70,8 @@
                     <thead>
                         <tr>
                             <th class="checkbox-column dt-no-sorting"> S.No. </th>
+                            <th class="text-center">Title</th>
+                            <th class="text-center">Description</th>
                             <th class="text-center">Price</th>
                             <th class="text-center">Status</th>
                             <th class="text-center dt-no-sorting">Action</th>
@@ -69,23 +79,29 @@
                     </thead>
                     <tbody>
                         @php($sn = 1)
-                        @foreach($price as $value)
+                        @foreach($default_plan as $value)
                         <tr>
                             <td class="checkbox-column">
                                 {{ $sn }}
                             </td>
                             <td class="text-center">
-                                {{ $value->prices }}
+                                {{ $value->title }}
+                            </td>
+                            <td class="text-center">
+                                {{ $value->description }}
+                            </td>
+                            <td class="text-center">
+                                {{ $value->price }}
                             </td>
                             <td class="text-center">
                                 @if($value->status == 0)
-                                    <a href="{{ route('admin.masters.price.status', $value->id) }}">
+                                    <a href="{{ route('admin.masters.plan.status', $value->id) }}">
                                         <span class="badge outline-badge-success mb-2 me-4">
                                             Active
                                         </span>
                                     </a> 
                                 @else
-                                    <a href="{{ route('admin.masters.price.status', $value->id) }}">
+                                    <a href="{{ route('admin.masters.plan.status', $value->id) }}">
                                         <span class="badge outline-badge-danger mb-2 me-4">
                                             Inactive
                                         </span>
@@ -93,22 +109,20 @@
                                 @endif
                             </td>
                             <td class="text-center">
-                                <a href="javascript:void(0);" class="bs-tooltip" data-bs-toggle="tooltip">
-                                    <button class="btn btn-outline-info btn-icon mb-2 me-4 edit-btn" data-content="{{$value->prices}}" data-id="{{$value->id}}">
-                                        <div class="icon-container">
-                                            <i class="far fa-edit"></i>
-                                        </div>
-                                    </button>
+                                <a class="badge badge-light-primary text-start me-2 action-edit edit-btn" href="javascript:void(0);" data-title="{{$value->title}}" data-description="{{$value->description}}" data-price="{{$value->price}}" data-id="{{$value->id}}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3">
+                                        <path d="M12 20h9"></path>
+                                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                    </svg>
                                 </a>
-                                <form action="{{ route('admin.masters.price.delete') }}" method="post" style="display:inline-block" id="DeletePrice">
+                                <form action="{{ route('admin.masters.plan.delete') }}" method="post" style="display:inline-block" class="DeletePrice">
                                     @method('delete') @csrf
                                     <input type="hidden" name="id" value="{{$value->id}}">
-                                    <a href="javascript:void(0);" class="bs-tooltip" data-bs-toggle="tooltip">
-                                        <button type="button" class="btn btn-outline-danger btn-icon mb-2 me-4" id="deleterow">
-                                            <div class="icon-container">
-                                                <i class="far fa-trash-alt"></i>
-                                            </div>
-                                        </button>
+                                    <a class="badge badge-light-danger text-start action-delete deleterow" href="javascript:void(0);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
+                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
                                     </a>
                                 </form>
                             </td>
@@ -127,7 +141,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="EditPriceModalCenterTitle">Edit Prices</h5>
+                <h5 class="modal-title" id="EditPriceModalCenterTitle">Edit Plans</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -135,9 +149,17 @@
                     </svg>
                 </button>
             </div>
-            <form action="{{ route('admin.masters.editprice.submit') }}" method="post">
+            <form action="{{ route('admin.masters.editplan.submit') }}" method="post">
                 @csrf
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1">Title</label>
+                        <input type="text" name="newtitle" class="form-control" id="newtitle">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1">Description</label>
+                        <textarea name="newdescription" class="form-control" id="newdescription"></textarea>
+                    </div>
                     <div class="form-group">
                         <label for="exampleFormControlInput1">Price</label>
                         <input type="number" name="newprice" class="form-control" id="newprice">
@@ -187,24 +209,10 @@
         });
     })
 
-    document.querySelector('#deleterow').addEventListener('click', function() {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $('#DeletePrice').submit();
-            }
-        })
-    })
-
     $(document).on('click', '.edit-btn',function(){
-        $('#newprice').val($(this).attr('data-content'));
+        $('#newtitle').val($(this).attr('data-title'));
+        $('#newdescription').text($(this).attr('data-description'));
+        $('#newprice').val($(this).attr('data-price'));
         $('#editid').val($(this).attr('data-id'));
         $('#EditPriceModalCenter').modal('show');
     })
