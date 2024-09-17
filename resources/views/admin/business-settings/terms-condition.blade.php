@@ -26,7 +26,7 @@
                         </div>
                     </div>
                     <div class="widget-content widget-content-area">
-                        <textarea name="term_condition" id="inp_editor1">{{ $data->term_condition }}</textarea>
+                        <textarea name="term_condition" id="inp_editor1">{{ $data->term_condition ?? null}}</textarea>
                     </div>
                 </div>
             </div>

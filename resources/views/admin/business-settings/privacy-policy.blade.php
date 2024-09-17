@@ -25,7 +25,7 @@
                         </div>
                     </div>
                     <div class="widget-content widget-content-area">
-                        <textarea name="privacy_policy" id="inp_editor1">{{ $data->privacy_policy }}</textarea>
+                        <textarea name="privacy_policy" id="inp_editor1">{{ $data->privacy_policy ?? null }}</textarea>
                     </div>
                 </div>
             </div>

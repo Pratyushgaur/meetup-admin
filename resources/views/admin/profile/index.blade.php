@@ -77,7 +77,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="customFileEg1">Image</label>
-                                                <input type="file" class="form-control mb-3" id="customFileEg1" name="image">
+                                                <input type="file" class="form-control mb-3" id="customFileEg1" name="image" accept="image/*">
                                             </div>
                                         </div>
                                     </div>

@@ -31,7 +31,7 @@
                             <th class="text-center">Views</th>
                             <th class="text-center">Status</th>
                             <th class="text-center">Total Income</th>
-                            <th class="text-center">View Posts</th>
+                            <th class="text-center">Edit Profile</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,11 +42,11 @@
                                 {{ $sn }}
                             </td>
                             <td class="text-center">
-                                {{ $value->name }}
+                                {{ $value->name }} - {{ $value->username }}
                             </td>
                             <td class="text-center">
                                 <div class="avatar avatar-xl">
-                                    <img alt="avatar" src="{{ asset('gift/').'/'.$value->image }}" class="rounded"
+                                    <img alt="avatar" src="{{ asset('avator/').'/'.$value->avtar }}" class="rounded"
                                         id="viewer" />
                                 </div>
                             </td>
@@ -59,7 +59,7 @@
                                 
                             </td>
                             <td class="text-center">
-                                {{ $value->price }}
+                                {{ $value->commission }}
                             </td>
                             <td class="text-center">
                                 {{ $value->price }}
@@ -80,7 +80,7 @@
                                 @endif
                             </td>
                             <td class="text-center">
-                                {{ $value->price }}
+                                {{ $value->total_income }}
                             </td>
                             <td class="text-center">
                                 <a class="badge badge-light-primary text-start me-2 action-edit edit-btn"
@@ -163,6 +163,9 @@
                                                 </svg>
                                             </div>
                                             <div class="detail--content--section">
+                                                <div class="detail--icon--section" style="width: 30%;">
+                                                    <input type="text" class="profile--input" name="code" value="+912" title="91" require>
+                                                </div>
                                                 <input type="number" class="profile--input" name="number" value="1234567890" title="1234567890" require>
                                             </div>
                                         </div>

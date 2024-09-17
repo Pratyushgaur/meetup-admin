@@ -25,6 +25,7 @@ return new class extends Migration
             $table->tinyInteger('status')->default(0)->comment('0 = Active | 1 = Inactive');
             $table->integer('commission')->default(0);
             $table->decimal('balance',16,2)->default(0);
+            $table->decimal('total_income',16,2)->default(0);
             $table->string('reff_code')->nullable();
             $table->integer('category_id')->nullable();
             $table->string('service_label_name')->nullable()->comment('name of service will show in profle section');
@@ -39,7 +40,7 @@ return new class extends Migration
             $table->text('youtube_url')->nullable();
             $table->text('facebook_url')->nullable();
             $table->text('linkedin_url')->nullable();
-            //$table->foreign('category_id')->references('id')->on('categories');
+            $table->timestamp('last_settlement')->nullable();
 
 
             

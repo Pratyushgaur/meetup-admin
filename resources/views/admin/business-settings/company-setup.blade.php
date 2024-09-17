@@ -57,69 +57,69 @@
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="Name">Company Name</label>
-                                                            <input type="text" class="form-control mb-3" id="Name" placeholder="Enter your company name" value="{{ $data->name }}" name="company_name">
+                                                            <input type="text" class="form-control mb-3" id="Name" placeholder="Enter your company name" value="{{ $data->name ?? null }}" name="company_name">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="phone">Email</label>
                                                             <input type="email" class="form-control mb-3" id="email"
-                                                                placeholder="Enter your email" name="email" value="{{ $data->email }}">
+                                                                placeholder="Enter your email" name="email" value="{{ $data->email ?? null }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="phone">Phone</label>
                                                             <input type="number" class="form-control mb-3" name="phone"
-                                                                placeholder="Enter your phone number" value="{{ $data->mobile_no }}">
+                                                                placeholder="Enter your phone number" value="{{ $data->mobile_no ?? null }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="country">Country</label>
                                                             <select class="form-select mb-3" id="country" name="country">
-                                                                <option value="india" {{ $data->country == 'india'? 'selected' : '' }}>India</option>
-                                                                <option value="united_state" {{ $data->country == 'united_state'? 'selected' : '' }}>United States</option>
-                                                                <option value="japan" {{ $data->country == 'japan'? 'selected' : '' }}>Japan</option>
-                                                                <option value="china" {{ $data->country == 'china'? 'selected' : '' }}>China</option>
-                                                                <option value="brazil" {{ $data->country == 'brazil'? 'selected' : '' }}>Brazil</option>
-                                                                <option value="norway" {{ $data->country == 'norway'? 'selected' : '' }}>Norway</option>
-                                                                <option value="canada" {{ $data->country == 'canada'? 'selected' : '' }}>Canada</option>
+                                                                <option value="india" {{ $data->country ?? null == 'india'? 'selected' : '' }}>India</option>
+                                                                <option value="united_state" {{ $data->country ?? null == 'united_state'? 'selected' : '' }}>United States</option>
+                                                                <option value="japan" {{ $data->country ?? null == 'japan'? 'selected' : '' }}>Japan</option>
+                                                                <option value="china" {{ $data->country ?? null == 'china'? 'selected' : '' }}>China</option>
+                                                                <option value="brazil" {{ $data->country ?? null == 'brazil'? 'selected' : '' }}>Brazil</option>
+                                                                <option value="norway" {{ $data->country ?? null == 'norway'? 'selected' : '' }}>Norway</option>
+                                                                <option value="canada" {{ $data->country ?? null == 'canada'? 'selected' : '' }}>Canada</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="address">Address</label>
-                                                            <textarea name="address" id="" class="form-control mb-3" cols="30" rows="1">{{ $data->address }}</textarea>
+                                                            <textarea name="address" id="" class="form-control mb-3" cols="30" rows="1">{{ $data->address ?? null }}</textarea>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="phone">Facebook URL</label>
                                                             <input type="text" class="form-control mb-3" name="facebook"
-                                                                placeholder="https://www.facebook.com/" value="{{ $data->facebook_url }}">
+                                                                placeholder="https://www.facebook.com/" value="{{ $data->facebook_url ?? null }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="phone">Instagram URL</label>
                                                             <input type="text" class="form-control mb-3" name="insta"
-                                                                placeholder="https://www.instagram.com/" value="{{ $data->instagram_url }}">
+                                                                placeholder="https://www.instagram.com/" value="{{ $data->instagram_url ?? null }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="phone">Twitter URL</label>
                                                             <input type="text" class="form-control mb-3" name="twitter"
-                                                                placeholder="https://www.twitter.com/" value="{{ $data->X_url }}">
+                                                                placeholder="https://www.twitter.com/" value="{{ $data->X_url ?? null }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="phone">Linkedin URL</label>
                                                             <input type="text" class="form-control mb-3" name="linkedin"
-                                                                placeholder="https://www.linkedin.com/" value="{{ $data->linkedin_url }}">
+                                                                placeholder="https://www.linkedin.com/" value="{{ $data->linkedin_url ?? null }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -130,7 +130,7 @@
                                                             <div class="form-group">
                                                                 <label for="customFileEg1">Logo</label>
                                                                 <input type="file" class="form-control mb-3"
-                                                                    id="customFileEg1" name="logo">
+                                                                    id="customFileEg1" name="logo" accept="image/*">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -139,7 +139,7 @@
                                                             <div class="form-group">
                                                                 <label for="customFileEg1">Fevicon</label>
                                                                 <input type="file" class="form-control mb-3"
-                                                                    id="customFileEg2" name="fevicon">
+                                                                    id="customFileEg2" name="fevicon" accept="image/*">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -149,7 +149,7 @@
                                                     <div class="col-md-6">
                                                         <div class="w-100" id="profilepreview">
                                                             <div class="avatar avatar-xl">
-                                                                <img alt="avatar" src="{{ asset('companyimage/').'/'.$data->logo }}"
+                                                                <img alt="avatar" src="{{ asset('companyimage/').'/'.($data->logo ?? null) }}"
                                                                     onerror="this.src='{{asset('admin/src/assets/img/upload-en.png')}}'"
                                                                     class="rounded" id="viewer" />
                                                             </div>
@@ -158,7 +158,7 @@
                                                     <div class="col-md-6">
                                                         <div class="w-100" id="profilepreview">
                                                             <div class="avatar avatar-xl">
-                                                                <img alt="avatar" src="{{ asset('companyimage/').'/'.$data->fevicon }}"
+                                                                <img alt="avatar" src="{{ asset('companyimage/').'/'.($data->fevicon ?? null) }}"
                                                                     onerror="this.src='{{asset('admin/src/assets/img/upload-en.png')}}'"
                                                                     class="rounded" id="viewer2" />
                                                             </div>
