@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\InfluencerMiddleware;
+
+
 //login
 Route::get('influencer-login', function () {
     return view('influencer.login_pages.login');
@@ -41,19 +43,6 @@ Route::group(['prefix' => 'influencer','as' => 'influencer.','middleware' => Inf
     Route::post('membership-edit',[App\Http\Controllers\influencer\MembershipController::class,'membership_update'])->name('membership.edit');
 });
 
+require "Admin.php";
 
-
-
-
-Route::get('admin-login', function () {
-    return view('admin.login');
-});
-
-Route::post('admin-login',[App\Http\Controllers\Admin\LoginController::class,'login'])->name('admin.login.post');
-
-Route::group(['prefix' =>'admin','as' => 'admin.'],function(){
-    Route::get('dashboard',[App\Http\Controllers\Admin\DashboardController::class,'dashboard'])->name('dashboard');
-});
-
-
-// 
+ 
