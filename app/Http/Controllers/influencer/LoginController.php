@@ -47,6 +47,7 @@ class LoginController extends Controller
         if(!session()->has('registerData')){
             return redirect()->route("influencer.signup");
         }
+        
         return view("influencer.login_pages.otp_verify");   
     }
 
@@ -93,7 +94,10 @@ class LoginController extends Controller
 
     
     }
-
+    function logout(){
+        \Auth::logout();
+        return redirect()->route("influencer.login");
+    }
     function define_yourself(Request $request){
         $categories = Categories::orderBy("name","DESC")->get();
         return view("influencer.login_pages.defineyourself",compact('categories'));
@@ -188,7 +192,10 @@ class LoginController extends Controller
         if(!session()->has('loginData')){
             return redirect()->route("influencer.login");
         }
-        return view("influencer.login_pages.login_otp_verify");   
+        $user = $session=session()->get('loginData');
+        $otpdata = UserOtp::where('mobile','=',$user['mobile'])->first();
+        
+        return view("influencer.login_pages.login_otp_verify",compact('otpdata'));   
     }
     function generateUsername($name){
         $check = User::where('username','=',$name)->exists();

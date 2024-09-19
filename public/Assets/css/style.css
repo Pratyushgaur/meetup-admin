@@ -19,6 +19,11 @@ body {
     overflow-y: scroll
 }
 
+.image_fit{
+    width: 100%;
+    height: 100%;
+}
+
 .fw-6 {
     font-weight: 600;
 }

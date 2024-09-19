@@ -4,7 +4,7 @@
             <a href="{{ route('influencer.home') }}"><img src="{{ asset('assets/images/bottom-nav-home.png') }}" alt="" class="bottom--nav--image"></a>
         </div>
         <div class="bottom--nav--item">
-            <img src="{{ asset('assets/images/bottom-nav-network.png') }}" alt="" class="bottom--nav--image">
+            <a href="{{ route('influencer.post','exclusive') }}"><img src="{{ asset('assets/images/bottom-nav-network.png') }}" alt="" class="bottom--nav--image"></a>
         </div>
         <div class="bottom--nav--item" onclick="OpenModel()">
             <img src="{{ asset('assets/images/bottom-nav-add.png') }}" alt="" class="bottom--nav--image">
