@@ -41,7 +41,7 @@
 
         <div class="profile--links--section mt-3">
 
-            <a href="" class="btn profile--links">
+            <a href="{{route('influencer.profile.preview')}}" class="btn profile--links">
                 Preview App
             </a>
             <a href="{{ route('influencer.profile.edit') }}" class="btn profile--links">

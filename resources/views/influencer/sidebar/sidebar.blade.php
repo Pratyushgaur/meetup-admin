@@ -63,7 +63,7 @@
             </div>
 
             <div class="sidebar--point--section">
-                <a href="#" class="sidebar--point">
+                <a href="{{ route('influencer.logout') }}" class="sidebar--point">
                     <img src="{{ asset('assets/images/Logout.png') }}" alt="" class="sidebar--img--icon" height="20px" width="20px">
                     <span class="sidebar--span--content">Logout</span>
                 </a>

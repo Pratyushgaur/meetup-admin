@@ -34,6 +34,7 @@
             <p class="verify--text">
                 Enter OTP
             </p>
+            {{$otpdata->otp}}
             <div class="verify--input--section digit-group">
                 <input type="number" id="digit-1" class="form-control form--input otp in1" data-next="digit-2"  name="otp_1" onKeyPress="if(this.value.length==1) return false;" placeholder="0">
                 <input type="number" id="digit-2" class="form-control form--input otp in2" data-next="digit-3" data-previous="digit-1" name="otp_2"  onKeyPress="if(this.value.length==1) return false;" placeholder="0">
