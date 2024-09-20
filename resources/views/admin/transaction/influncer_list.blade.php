@@ -1,5 +1,5 @@
 @extends('admin.layout.app')
-
+@section('title', 'Transaction Influncer List')
 @section('content')
 <!-- BREADCRUMB -->
 <div class="page-meta">

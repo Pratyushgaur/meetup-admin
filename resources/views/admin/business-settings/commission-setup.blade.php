@@ -1,4 +1,5 @@
 @extends('admin.layout.app')
+@section('title', 'Commission Setup')
 @section('content')
 <div class="card mt-5">
     <div class="card-body">
