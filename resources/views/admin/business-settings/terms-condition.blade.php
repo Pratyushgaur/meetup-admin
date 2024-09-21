@@ -1,5 +1,5 @@
 @extends('admin.layout.app')
-
+@section('title', 'Terms Condition')
 @section('content')
 <div class="container">
 

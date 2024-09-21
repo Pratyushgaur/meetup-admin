@@ -1,5 +1,5 @@
 @extends('admin.layout.app')
-
+@section('title', 'Company Setup')
 @push('css')
 <style>
     #profilepreview {

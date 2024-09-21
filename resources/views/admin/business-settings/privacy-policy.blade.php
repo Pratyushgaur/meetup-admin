@@ -1,5 +1,5 @@
 @extends('admin.layout.app')
-
+@section('title', 'Privacy Policy')
 @section('content')
 <div class="container">
     <!-- BREADCRUMB -->

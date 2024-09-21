@@ -1,5 +1,5 @@
 @extends('admin.layout.app')
-
+@section('title', 'Influncer Post View')
 @push('css')
 <style>
     .post--preview--section {

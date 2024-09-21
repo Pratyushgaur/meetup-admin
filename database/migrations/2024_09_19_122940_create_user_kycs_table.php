@@ -19,14 +19,15 @@ return new class extends Migration
             $table->string('aadhar_no');  
             $table->string('billing_name');  
             $table->text('address');  
-            $table->string('city');  
+            $table->string('city');
             $table->string('pincode',30);  
             $table->string('upi_id')->nullable();  
             $table->string('bank_name')->nullable();  
             $table->string('account_no')->nullable();  
             $table->string('account_holder')->nullable();  
-            $table->string('account_ifsc')->nullable();  
-            $table->text('docs')->nullable();  
+            $table->string('account_ifsc')->nullable();
+            $table->text('docs')->nullable();
+            $table->tinyInteger('status')->default(0)->comment('0 = NotSubmitted | 1= pending | 2 = approve | 3 = Rejected');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

@@ -1,5 +1,5 @@
 @extends('admin.layout.app')
-
+@section('title', 'Default pricess')
 @section('content')
 <!-- BREADCRUMB -->
 <div class="page-meta">

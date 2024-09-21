@@ -1,5 +1,5 @@
 @extends('admin.layout.app')
-
+@section('title', 'Pending Order View')
 @section('content')
 <!-- BREADCRUMB -->
 <div class="page-meta">

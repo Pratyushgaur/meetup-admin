@@ -15,6 +15,7 @@ class PostController extends Controller
           'post_type' => 'required|in:0,1',
           'plan'     => 'required_if:post_type,1|numeric|min:0',
         ]);
+        
         $imagePath = [];
         $mainImage = '';
         if($request->hasFile('images')){

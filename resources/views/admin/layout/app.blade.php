@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-    <title>CORK Admin - Multipurpose Bootstrap Dashboard Template </title>
+    <title>@yield('title')</title>
     <link rel="icon" type="image/x-icon" href="{{ asset(Helpers_get_favicon())}}" />
     <link href="{{ asset('admin/layouts/vertical-dark-menu/css/light/loader.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('admin/layouts/vertical-dark-menu/css/dark/loader.css')}}" rel="stylesheet" type="text/css" />
@@ -97,6 +97,9 @@
 
     <link href="{{ asset('admin/src/assets/css/dark/scrollspyNav.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('admin/src/assets/css/dark/components/tabs.css')}}" rel="stylesheet" type="text/css" />
+
+    <link href="{{ asset('admin/src/assets/css/light/components/media_object.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('admin/src/assets/css/dark/components/media_object.css')}}" rel="stylesheet" type="text/css">
 
     @stack('css')
     <style>
