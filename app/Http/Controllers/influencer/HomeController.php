@@ -70,7 +70,9 @@ class HomeController extends Controller
         return view('influencer.home.profile',compact('service','plans'));
     }
     function profile_preview(){
-        return view('influencer.home.profile_view');
+        $plans = \App\Models\Influencerplan::where('user_id',\Auth::id())->latest()->get();
+        
+        return view('influencer.home.profile_view',compact('plans'));
 
     }
 }

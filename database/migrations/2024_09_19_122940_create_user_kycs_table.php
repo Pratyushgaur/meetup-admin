@@ -27,6 +27,8 @@ return new class extends Migration
             $table->string('account_holder')->nullable();  
             $table->string('account_ifsc')->nullable();  
             $table->text('docs')->nullable();  
+            $table->enum('status',["0","1","2"])->default("0");  
+            $table->text('reject_reason')->nullable();  
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
