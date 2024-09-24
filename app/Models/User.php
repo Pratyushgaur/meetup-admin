@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class,'userid','id');
     }
+
+    public function kyc()
+    {
+        return $this->hasOne(UserKyc::class,'user_id','id');
+    }
 }

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\{
 };
 
 
+
 Route::group(['prefix' =>'admin','as' => 'admin.'],function(){
     //Auth Routes
     Route::get('/login', [AdminController::class,'index'])->name('login');
@@ -90,7 +91,8 @@ Route::group(['prefix' =>'admin','as' => 'admin.'],function(){
         });
 
         Route::group(['prefix' => 'payments' , 'as' => 'payments.'],function(){
-            Route::get('list', [PaymentController::class,'paymentList'])->name('list');
+            Route::get('UnSettlements', [PaymentController::class,'paymentUnSettlements'])->name('unsettlements');
+            Route::get('Settlements', [PaymentController::class,'paymentSettlements'])->name('settlements');
             
         });
 
@@ -118,7 +120,12 @@ Route::group(['prefix' =>'admin','as' => 'admin.'],function(){
             Route::post('send-notification', [BusinessSettingController::class,'SendNotificationSubmit'])->name('send.notification.submit');
             Route::post('send-notification/key', [BusinessSettingController::class,'SendNotificationKeySubmit'])->name('send.notificationkey.submit');
 
+            Route::post('/send-notification-edit', [BusinessSettingController::class,'SendNotificationEdit'])->name('edit.send.notification.submit');
+            Route::delete('/send-notification-delete', [BusinessSettingController::class,'SendNotificationDelete'])->name('send.notification.delete');
+
         });
     });
-
+    Route::get('test', function() {
+        dd(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] , Helpers_get_previous_months());
+    });
 });

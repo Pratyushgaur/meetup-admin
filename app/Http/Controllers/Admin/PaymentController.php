@@ -16,9 +16,15 @@ class PaymentController extends Controller
      * 
      * @return View
      */
-    public function paymentList(): View
+    public function paymentUnSettlements(): View
     {
        
-        return view('admin.payments.payment_list');
+        return view('admin.payments.payment_unsettlement_list');
+    }
+
+    public function paymentSettlements(): View
+    {
+       
+        return view('admin.payments.payment_settlements_list');
     }
 }

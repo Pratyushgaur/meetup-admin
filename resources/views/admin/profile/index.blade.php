@@ -39,14 +39,14 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label for="Name">Name</label>
+                                                <label for="Name">Name <span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control mb-3" id="Name" placeholder="Full Name"
                                                     name="name" value="{{ $admin->name}}">
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label for="phone">Phone</label>
+                                                <label for="phone">Phone <span class="text-danger">*</span></label>
                                                 <input type="number" class="form-control mb-3" id="phone"
                                                     placeholder="Enter your phone number" name="phone" value="{{ $admin->mobile}}">
                                             </div>
@@ -58,7 +58,7 @@
                                     <div class="w-100" id="profilepreview">
                                         <div class="avatar avatar-xl">
                                             <img alt="avatar" src="{{ asset('adminProfile/').'/'.$admin->profile_image}}"
-                                            onerror="this.src='{{asset('admin/src/assets/img/profile-30.png')}}'" class="rounded" id="viewer" />
+                                            onerror="this.src='{{asset('adminProfile/defaulta_profile.jpg')}}'" class="rounded" id="viewer" />
                                         </div>
                                     </div>
                                 </div>
@@ -67,7 +67,7 @@
                                     <div class="col-md-6">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label for="email">Email</label>
+                                                <label for="email">Email <span class="text-danger">*</span></label>
                                                 <input type="email" class="form-control mb-3" id="email"
                                                     placeholder="Enter your email" name="email" value="{{ $admin->email}}">
                                             </div>
@@ -76,7 +76,7 @@
                                     <div class="col-md-6">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label for="customFileEg1">Image</label>
+                                                <label for="customFileEg1">Image <span class="text-danger">*</span></label>
                                                 <input type="file" class="form-control mb-3" id="customFileEg1" name="image" accept="image/*">
                                             </div>
                                         </div>

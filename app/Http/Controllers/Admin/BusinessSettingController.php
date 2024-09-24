@@ -9,6 +9,8 @@ use Illuminate\Routing\Redirector;
 use App\Models\BusinessSetting;
 use App\Models\SendNotification;
 use App\Models\User;
+use Illuminate\Support\Facades\File;
+
 
 class BusinessSettingController extends Controller
 {
@@ -205,6 +207,7 @@ class BusinessSettingController extends Controller
      */
     public function CommissionSetup(): View
     {
+        
         $data = BusinessSetting::first();
         return view('admin.business-settings.commission-setup',compact('data'));
     }
@@ -334,4 +337,69 @@ class BusinessSettingController extends Controller
             return redirect(route('admin.business-setup.send.notification'));
         }
     }
+
+    /**
+     * 
+     * @param Request $request
+     * @return Redirector|RedirectResponse
+     */
+    public function SendNotificationEdit(Request $request): Redirector|RedirectResponse
+    {
+        $request->validate([
+            'newtitle' => 'required',
+            'newdescription' => 'required',
+            'editid' => 'required'
+        ]);
+
+        try {
+            $sendnotification = SendNotification::find($request->editid);
+            $sendnotification->title = $request->newtitle;
+            $sendnotification->description = $request->newdescription;
+            if(isset($request->newimage) && !is_null($request->newimage))
+            {
+                if(File::exists(public_path('notification-image/').$sendnotification->image))
+                {
+                    File::delete(public_path('notification-image/').$sendnotification->image);
+                }
+                $notification_image = time() . '_' . rand(1000,10000000) . '_' .$request->newimage->getClientOriginalName();
+                $request->newimage->move(public_path('notification-image'), $notification_image, 'real_publics');
+
+                $sendnotification->image = $notification_image;
+            }
+            $sendnotification->save();
+
+            flash()->success('Send Notification Edited Successfully');
+            return redirect(route('admin.business-setup.send.notification'));
+        } catch (\Throwable $th) {
+            flash()->error($th->getMessage());
+            return redirect(route('admin.business-setup.send.notification'));
+        }
+
+    }
+
+     /**
+     * 
+     * @param Request $request
+     * @return Redirector|RedirectResponse
+     */
+    public function SendNotificationDelete(Request $request): Redirector|RedirectResponse
+    {
+        $request->validate([
+            'id' => 'required'
+        ]);
+
+        try {
+            $send_notification = SendNotification::find($request->id);
+            if($send_notification->exists()){
+                $send_notification->delete();
+            }
+
+            flash()->success('Send Notification Deleted');
+            return redirect(route('admin.business-setup.send.notification'));
+        } catch (\Throwable $th) {
+            flash()->success("Entry Doesn't exists");
+            return redirect(route('admin.business-setup.send.notification'));
+        } 
+    }
+    
 }

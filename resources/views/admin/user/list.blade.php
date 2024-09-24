@@ -45,7 +45,9 @@
                                 {{ $value->name }}
                             </td>
                             <td class="text-center">
-                                {{ $value->Avtar }}
+                                <div class="avatar avatar-xl">
+                                    <img alt="avatar" src="{{ asset('gift/').'/'.$value->avtar }}" class="rounded" id="viewer"  onerror="this.src='{{asset('avator/default_avator.png')}}'"/>
+                                </div>
                             </td>
                             <td class="text-center">
                                 {{ $value->mobile }}
@@ -67,13 +69,13 @@
                             </td>
                             <td class="text-center">
                                 @if($value->status == 0)
-                                    <a href="{{ route('admin.users.user.status', $value->id) }}">
+                                    <a href="{{ route('admin.users.status', $value->id) }}">
                                         <span class="badge outline-badge-success mb-2 me-4">
                                             Active
                                         </span>
                                     </a> 
                                 @else
-                                    <a href="{{ route('admin.users.user.status', $value->id) }}">
+                                    <a href="{{ route('admin.users.status', $value->id) }}">
                                         <span class="badge outline-badge-danger mb-2 me-4">
                                             Inactive
                                         </span>

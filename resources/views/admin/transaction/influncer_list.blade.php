@@ -41,7 +41,7 @@
                     <tbody>
                         <tr>
                             <td class="checkbox-column"> 1 </td>
-                            <td><a href="./app-invoice-preview.html"><span class="inv-number">#098424</span></a></td>
+                            <td>#098424</td>
                             <td>
                                 <div class="d-flex">
                                     <div class="usr-img-frame me-2 rounded-circle">

@@ -2501,7 +2501,7 @@ input[type=radio].coolor-radio {
     position: absolute;
     height: 100%;
     width: 100%;
-    z-index: 1800;
+    z-index: 1000;
     top: 0;
     background-color: rgba(255, 255, 255, 0.4);
 }

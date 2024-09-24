@@ -7,6 +7,7 @@ use Illuminate\Http\{Request,RedirectResponse};
 use Illuminate\Contracts\View\View;
 use Illuminate\Routing\Redirector;
 use App\Models\User;
+use App\Models\Post;
 use App\Models\Categories;
 use Illuminate\Support\Facades\File;
 
@@ -35,53 +36,41 @@ class InfluncerController extends Controller
      */
     public function List_edit_submit(Request $request): Redirector|RedirectResponse
     {
-        // dd($request->all());
-      
         $request->validate([
-            // 'profilecover' => 'required|image',
-            // 'profileimage' => 'required|image',
-            // 'name' => 'required',
-            // 'username' => 'required',
-            // 'bio' => 'required',
-            // 'code' => 'required',
-            // 'number' => 'required',
-            // 'email' => 'required|email',
-            // 'gender' => 'required',
-            // 'commission' => 'required',
-            // 'Categories' => 'required',
-            // 'twitter_link' => 'required',
-            // 'facebook_link' => 'required',
-            // 'youtube_link' => 'required',
-            // 'linkedin_link' => 'required',
-            // 'instagram_link' => 'required',
-            // 'snapchat_link' => 'required',
+            'profilecover' => 'nullable|image',
+            'profileimage' => 'nullable|image',
+            'name' => 'required',
+            'username' => 'required',
+            'code' => 'required',
+            'number' => 'required',
+            'email' => 'required|email',
+            'commission' => 'required',
+            'Categories' => 'required',
             'editid' => 'required',     
-        ]);
-
+        ]);        
+        
+        $influencer_post = User::find($request->editid);
         if($request->has('profilecover'))
         {
             $profilecover = time() . '_' . rand(1000,10000000) . '_' .$request->profilecover->getClientOriginalName();
-            dd("done");
             $request->profilecover->move(public_path('cover'), $profilecover, 'real_publics');
+            $influencer_post->cover = $profilecover;
         }
-        dd('done1');
-        
-
-        $profileimage = time() . '_' . rand(1000,10000000) . '_' .$request->profileimage->getClientOriginalName();
-        $request->profileimage->move(public_path('avator'), $profileimage, 'real_publics');
-
-        $influencer_post = User::find($request->editid);
-        // $influencer_post->cover = $profilecover;
-        // $influencer_post->avtar = $profileimage;
+        if($request->has('profileimage'))
+        {
+            $profileimage = time() . '_' . rand(1000,10000000) . '_' .$request->profileimage->getClientOriginalName();
+            $request->profileimage->move(public_path('avator'), $profileimage, 'real_publics');
+            $influencer_post->avtar = $profileimage;
+        }
+         
         $influencer_post->name = $request->name;
         $influencer_post->username = $request->username;
         $influencer_post->bio = $request->bio;
         $influencer_post->country_code = $request->code;
         $influencer_post->mobile = $request->number;
         $influencer_post->email  = $request->email;
-        // $influencer_post->gender = $request->gender;
         $influencer_post->commission = $request->commission;
-        // $influencer_post->prices = $request->Categories;
+        $influencer_post->category_id = $request->Categories;
         $influencer_post->twitter_url = $request->twitter_link;
         $influencer_post->facebook_url = $request->facebook_link;
         $influencer_post->youtube_url = $request->youtube_link;
@@ -129,7 +118,9 @@ class InfluncerController extends Controller
             ['id' , '=' , $id],
             ['role' , '=' , '1'],
         ])->first();
-        return view('admin.influencer.post_view',compact('profile'));
+        $post = Post::all();
+     
+        return view('admin.influencer.post_view',compact('profile','post'));
     }
 
     /**
@@ -168,7 +159,7 @@ class InfluncerController extends Controller
     {
         $influencer_list = User::where([
             ['role' , '=' , '1']
-        ])->get();
+        ])->with('kyc')->get();
         return view('admin.influencer.kyc_verify',compact('influencer_list'));
     }
 
@@ -179,8 +170,8 @@ class InfluncerController extends Controller
      */
     public function KYCVerificationView($id) : View
     {
-       
-        return view('admin.influencer.kyc_verify_view');
+       $kyc_data = User::where('id' , $id)->with('kyc')->first();
+        return view('admin.influencer.kyc_verify_view',compact('kyc_data'));
     }
 
     

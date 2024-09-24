@@ -28,7 +28,7 @@
                             <th class="text-center">Avatar</th>
                             <th class="text-center">Posts</th>
                             <th class="text-center">Commision</th>
-                            <th class="text-center">Views</th>
+                            <th class="text-center">Unlock</th>
                             <th class="text-center">Status</th>
                             <th class="text-center">Total Income</th>
                             <th class="text-center">Edit Profile</th>
@@ -37,6 +37,7 @@
                     <tbody>
                         @php($sn = 1)
                         @foreach($influencer_list as $value)
+                       
                         <tr>
                             <td class="checkbox-column">
                                 {{ $sn }}
@@ -46,23 +47,42 @@
                             </td>
                             <td class="text-center">
                                 <div class="avatar avatar-xl">
-                                    <img alt="avatar" src="{{ asset('avator/').'/'.$value->avtar }}" class="rounded-circle"
-                                        id="viewer" />
+                                    <img alt="avatar" src="{{ asset('avator/').'/'.$value->avtar }}"
+                                        onerror="this.src='{{asset('avator/default_avator.png')}}'"
+                                        class="rounded-circle" id="viewer" />
                                 </div>
                             </td>
                             <td class="text-center">
+                                @if($value->post->count() > 0 )
                                 <a href="{{ route('admin.influncers.post.view', $value->id) }}">
                                     <span class="badge outline-badge-info mb-2 me-4">
                                         {{ $value->post->count() }}
                                     </span>
                                 </a>
+                                @else
+                                <a href="javascript:void(0);">
+                                    <span class="badge outline-badge-info mb-2 me-4">
+                                        {{ $value->post->count()}}
+                                    </span>
+                                </a>
+                                @endif
 
                             </td>
                             <td class="text-center">
                                 {{ $value->commission }}
                             </td>
-                            <td class="text-center">
-                                {{ $value->price }}
+                            <td class="text-center">  
+                                       
+                                @if(count($value->post) > 0) 
+                                    @php($unlock = 0)
+                                    @foreach($value->post as $value2)
+                                        @php($unlock += $value2->total_unlock)                                   
+                                                                    
+                                    @endforeach
+                                    {{$unlock}}
+                                @else
+                                    0
+                                @endif
                             </td>
                             <td class="text-center">
                                 @if($value->status == 0)
@@ -83,8 +103,8 @@
                                 {{ $value->total_income }}
                             </td>
                             <td class="text-center">
-                                <a class="badge badge-light-primary text-start me-2 action-edit edit-btn" data-model="EditPriceModalCenter-{{ $value->id }}"
-                                    href="javascript:void(0);">
+                                <a class="badge badge-light-primary text-start me-2 action-edit edit-btn"
+                                    data-model="EditPriceModalCenter-{{ $value->id }}" href="javascript:void(0);">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round" class="feather feather-eye">
@@ -94,7 +114,7 @@
                                 </a>
                             </td>
                         </tr>
-                     
+
                         <div class="modal fade" id="EditPriceModalCenter-{{ $value->id }}" tabindex="-1" role="dialog"
                             aria-labelledby="EditPriceModalCenterTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -121,8 +141,7 @@
                                                 <div class="user-profile custom--form">
                                                     <div class="widget-content widget-content-area">
                                                         <div class="text-center influncer--profile--layout">
-                                                            <a href="javascript:void(0)" class="mt-2 edit-profile"
-                                                                id="edit-profile--cover">
+                                                            <a href="javascript:void(0)" class="mt-2 edit-profile edit-profile--cover" id="edit-profile--cover">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                                     height="24" viewBox="0 0 24 24" fill="none"
                                                                     stroke="currentColor" stroke-width="2"
@@ -135,15 +154,17 @@
                                                                 </svg>
                                                             </a>
                                                             <div class="cover--profile--section">
-                                                                <img src="{{ asset('cover/').'/'.$value->cover }}"
-                                                                    alt="avatar" id="viewer1">
+
+                                                                <img src="{{ asset('cover/').'/'.$value->cover }}" alt="avatar" id="viewer1{{ $value->id }}"  onerror="this.src='{{asset('cover/default_cover.jpg')}}'">
+                                                                <input type="file" name="profilecover" class="customFileEg1" accept="image/*"  data-name="viewer1{{ $value->id }}" id="cover" hidden>
                                                             </div>
-                                                            <img src="{{ asset('avator/').'/'.$value->avtar }}" alt="avatar"
-                                                                class="profile--image" id="viewer2"
-                                                                title="Click To change" name="profile_img">
+                                                            <img src="{{ asset('avator/').'/'.$value->avtar }}" alt="avatar" class="profile--image" id="viewer2{{ $value->id }}" height="100" width="50" title="Click To change" name="profile_img"
+                                                                onerror="this.src='{{asset('avator/default_avator.png')}}'" class="rounded-circle" >
+                                                            <input type="file" name="profileimage" class="customFileEg2" accept="image/*" data-name="viewer2{{ $value->id }}" id="profile" hidden>
                                                         </div>
-                                                        <input type="file" name="profilecover" id="customFileEg1" accept="image/*" hidden>
-                                                        <input type="file" name="profileimage" id="customFileEg2" accept="image/*" hidden>
+                                                        
+                                                        
+
                                                         <div class="profile--name--section row">
                                                             <div class="profile--name--object">
                                                                 -
@@ -157,10 +178,14 @@
                                                                     class="profile--input" require
                                                                     value="{{ $value->username }}">
                                                             </div>
-                                                            <div class="col-12 mt-2">
+                                                            <div class="">
+                                                                <textarea name="bio"
+                                                                    class="inp_editor1">{{ $value->bio }}</textarea>
+                                                            </div>
+                                                            <!-- <div class="col-12 mt-2">
                                                                 <textarea name="bio" id="influncer--bio" cols="30"
                                                                     rows="10" value="">{!! $value->bio !!}</textarea>
-                                                            </div>
+                                                            </div> -->
                                                         </div>
 
                                                         <div class="influancer--details--section">
@@ -182,8 +207,9 @@
                                                                         <div class="detail--icon--section"
                                                                             style="width: 30%;">
                                                                             <input type="text" class="profile--input"
-                                                                                name="code" value="{{ $value->country_code }}" title="91"
-                                                                                require>
+                                                                                name="code"
+                                                                                value="{{ $value->country_code }}"
+                                                                                title="91" require>
                                                                         </div>
                                                                         <input type="number" class="profile--input"
                                                                             name="number" value="{{ $value->mobile }}"
@@ -204,8 +230,7 @@
                                                                     <div class="detail--content--section">
                                                                         <input type="email"
                                                                             class="profile--input text-truncate"
-                                                                            name="email"
-                                                                            value="{{ $value->email }}"
+                                                                            name="email" value="{{ $value->email }}"
                                                                             title="deepanshuprajapati89@gmail.com"
                                                                             require>
                                                                     </div>
@@ -226,7 +251,7 @@
                                                                     </div>
                                                                     <div class="detail--content--section">
                                                                         <input type="text" class="profile--input"
-                                                                            value="{{ $value->gender }}" disabled >
+                                                                            value="{{ $value->gender }}" disabled>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -247,7 +272,8 @@
                                                                     </div>
                                                                     <div class="detail--content--section">
                                                                         <input type="number" class="profile--input"
-                                                                            name="commission" value="{{ $value->commission }}" require>
+                                                                            name="commission"
+                                                                            value="{{ $value->commission }}" require>
                                                                     </div>
                                                                 </div>
                                                                 <div class="detail--content--container">
@@ -268,8 +294,10 @@
                                                                         <select name="Categories" id="Categories"
                                                                             class="profile--input">
                                                                             @foreach($category as $value2)
-                                                                            <option value="">{{$value2->name}}</option>
-                                                                           @endforeach
+                                                                            <option value="{{$value2->id}}"
+                                                                                {{$value->category_id == $value2->id ? 'selected':''}}>
+                                                                                {{$value2->name}}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -298,7 +326,8 @@
                                                                     </div>
                                                                     <div class="detail--content--section">
                                                                         <input type="text" class="profile--input"
-                                                                            name="twitter_link" value="{{ $value->twitter_url }}"
+                                                                            name="twitter_link"
+                                                                            value="{{ $value->twitter_url }}"
                                                                             title="1234567890" require>
                                                                     </div>
                                                                 </div>
@@ -344,7 +373,8 @@
                                                                     </div>
                                                                     <div class="detail--content--section">
                                                                         <input type="text" class="profile--input"
-                                                                            name="youtube_link" value="{{ $value->youtube_url }}">
+                                                                            name="youtube_link"
+                                                                            value="{{ $value->youtube_url }}">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -367,7 +397,8 @@
                                                                     </div>
                                                                     <div class="detail--content--section">
                                                                         <input type="text" class="profile--input"
-                                                                            name="linkedin_link" value="{{ $value->linkedin_url }}"
+                                                                            name="linkedin_link"
+                                                                            value="{{ $value->linkedin_url }}"
                                                                             title="1234567890" require>
                                                                     </div>
                                                                 </div>
@@ -421,7 +452,8 @@
                                                                     </div>
                                                                     <div class="detail--content--section">
                                                                         <input type="text" class="profile--input"
-                                                                            value="{{ $value->snapchat_url }}" name="snapchat_link">
+                                                                            value="{{ $value->snapchat_url }}"
+                                                                            name="snapchat_link">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -488,30 +520,48 @@ $(document).ready(function() {
         }
     }
 
-    $("#customFileEg1").change(function() {
-        readURL(this, 'viewer1');
+
+    $(".customFileEg1").change(function() {
+        $cover = $(this).attr('data-name');
+        console.log($cover);
+        readURL(this, $cover);
     });
 
-    $("#customFileEg2").change(function() {
-        readURL(this, 'viewer2');
+    $(".customFileEg2").change(function() {
+        $profile = $(this).attr('data-name');
+        readURL(this, $profile);
+    });
+
+    $('.inp_editor1').summernote({
+        placeholder: 'Your Bio',
+        tabsize: 2,
+        height: 100,
+        toolbar: [
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+        ],
     });
 })
 $(document).on('click', '.edit-btn', function() {
 
     $('#editid').val($(this).attr('data-id'));
-    var id= $(this).attr("data-model");
+    var id = $(this).attr("data-model");
     $('#' + id).modal('show');
 
 })
 
 $(document).on('click', '.profile--image', function() {
-    $('#customFileEg2').click();
-    console.log('done');
+
+    $(this).siblings(".customFileEg2").click();
+    //  $('.customFileEg2').click();
+    console.log();
 })
 
-$(document).on('click', '#edit-profile--cover', function() {
-    $('#customFileEg1').click();
-    console.log('done');
+$(document).on('click', '.edit-profile--cover', function() {
+    $(this).siblings(".cover--profile--section").children(".customFileEg1").click();
 })
+
+       
 </script>
 @endpush

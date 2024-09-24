@@ -36,7 +36,7 @@
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Price</label>
+                        <label for="exampleFormControlInput1">Price <span class="text-danger">*</span></label>
                         <input type="number" name="price" class="form-control" id="exampleFormControlInput1">
                     </div>
                 </div>
@@ -138,7 +138,7 @@
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Price</label>
+                        <label for="exampleFormControlInput1">Price <span class="text-danger">*</span></label>
                         <input type="number" name="newprice" class="form-control" id="newprice">
                     </div>
                 </div>

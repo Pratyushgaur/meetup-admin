@@ -36,15 +36,15 @@
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Title</label>
+                        <label for="exampleFormControlInput1">Title <span class="text-danger">*</span></label>
                         <input type="text" name="title" class="form-control" id="exampleFormControlInput1">
                     </div>
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Description</label>
+                        <label for="exampleFormControlInput1">Description <span class="text-danger">*</span></label>
                         <textarea name="description" class="form-control"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Price</label>
+                        <label for="exampleFormControlInput1">Price <span class="text-danger">*</span></label>
                         <input type="number" name="price" class="form-control" id="exampleFormControlInput1">
                     </div>
                 </div>
@@ -153,15 +153,15 @@
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Title</label>
+                        <label for="exampleFormControlInput1">Title <span class="text-danger">*</span></label>
                         <input type="text" name="newtitle" class="form-control" id="newtitle">
                     </div>
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Description</label>
+                        <label for="exampleFormControlInput1">Description <span class="text-danger">*</span></label>
                         <textarea name="newdescription" class="form-control" id="newdescription"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Price</label>
+                        <label for="exampleFormControlInput1">Price <span class="text-danger">*</span></label>
                         <input type="number" name="newprice" class="form-control" id="newprice">
                     </div>
                 </div>

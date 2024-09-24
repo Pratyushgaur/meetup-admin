@@ -9,6 +9,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Admin;
 use App\Models\User;
+use Carbon\Carbon;
 
 
 class AdminController extends Controller
@@ -53,7 +54,20 @@ class AdminController extends Controller
      */
     function dashboard(): View
     {
-        return view("admin.dashboard");
+        $data = [];
+        $cdate = Carbon::now();
+        $mdate = new Carbon('-1 month');
+        $ydate = new Carbon('-1 year');
+
+        $data['income'] = Helpers_get_total_income();
+
+        $data['influancer_total'] = User::where('role',1)->count();
+        $data['influancer_month'] = User::where('role',1)->whereDate('created_at', "<=" , $cdate->format('Y-m-d H:i:s'))->whereDate('created_at', ">=" , $mdate->format('Y-m-d')." 00:00:00")->count();
+
+        $data['user_total'] = User::where('role',0)->count();
+        $data['user_month'] = User::where('role',0)->whereDate('created_at', "<=" , $cdate->format('Y-m-d H:i:s'))->whereDate('created_at', ">=" , $mdate->format('Y-m-d')." 00:00:00")->count();
+
+        return view("admin.dashboard" , compact('data'));
     }
 
     /**

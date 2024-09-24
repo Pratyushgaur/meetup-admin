@@ -180,7 +180,7 @@
                     <div class="avatar-container">
                         <div class="avatar avatar-sm avatar-indicators avatar-online">
                             <img alt="avatar" src="{{ asset('adminProfile/').'/'.auth('admin')->user()->profile_image}}"
-                            onerror="this.src='{{asset('admin/src/assets/img/profile-30.png')}}'" class="rounded-circle">
+                            onerror="this.src='{{asset('adminProfile/defaulta_profile.jpg')}}'" class="rounded-circle">
                         </div>
                     </div>
                 </a>

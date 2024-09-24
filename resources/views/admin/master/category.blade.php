@@ -41,12 +41,12 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Category Logo</label>
+                        <label for="exampleFormControlInput1">Category Logo <span class="text-danger">*</span></label>
                         <input type="file" name="icon" class="form-control" id="customFileEg1" accept="image/*">
                     </div>
                     <br>
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Category Title</label>
+                        <label for="exampleFormControlInput1">Category Title <span class="text-danger">*</span></label>
                         <input type="text" name="title" class="form-control" id="exampleFormControlInput1">
                     </div>
                 </div>

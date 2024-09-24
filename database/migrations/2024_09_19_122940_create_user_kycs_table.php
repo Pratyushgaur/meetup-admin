@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('account_holder')->nullable();  
             $table->string('account_ifsc')->nullable();
             $table->text('docs')->nullable();
-            $table->tinyInteger('status')->default(0)->comment('0 = NotSubmitted | 1= pending | 2 = approve | 3 = Rejected');
+            $table->tinyInteger('status')->default(0)->comment('0 = pending | 1= approve | 2 = Rejected ');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

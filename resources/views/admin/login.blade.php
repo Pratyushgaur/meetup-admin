@@ -49,13 +49,13 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="mb-3">
-                                                <label class="form-label">Email</label>
+                                                <label class="form-label">Email <span class="text-danger">*</span></label>
                                                 <input type="email" name="email" class="form-control" required>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="mb-4">
-                                                <label class="form-label">Password</label>
+                                                <label class="form-label">Password <span class="text-danger">*</span></label>
                                                 <input type="password" name="password" class="form-control" required>
                                             </div>
                                         </div>
