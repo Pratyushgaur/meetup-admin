@@ -1,5 +1,5 @@
 @extends('admin.layout.app')
-
+@section('title', 'Send Notification')
 @push('css')
 <style>
 #profilepreview {

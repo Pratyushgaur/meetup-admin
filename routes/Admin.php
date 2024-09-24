@@ -72,6 +72,7 @@ Route::group(['prefix' =>'admin','as' => 'admin.'],function(){
         Route::group(['prefix' => 'influncers' , 'as' => 'influncers.'], function(){
             // Influncer Analysis Routes
             Route::get('list', [InfluncerController::class,'List'])->name('list');
+            Route::post('list', [InfluncerController::class,'List_edit_submit'])->name('list.edit.submit');
             Route::get('/status/{id}', [InfluncerController::class,'InfluncerStatus'])->name('status');
             Route::get('posts/{id}', [InfluncerController::class,'InfluncerPostView'])->name('post.view');
             Route::get('pending-order', [InfluncerController::class,'PendingOrders'])->name('pending.order');

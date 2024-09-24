@@ -1,5 +1,5 @@
 @extends('admin.layout.app')
-
+@section('title', 'Kyc Verify')
 @section('content')
 <!-- BREADCRUMB -->
 <div class="page-meta">

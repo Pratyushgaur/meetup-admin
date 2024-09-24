@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('aadhar_no');  
             $table->string('billing_name');  
             $table->text('address');  
-            $table->string('city');  
+            $table->string('city');
             $table->string('pincode',30);  
             $table->string('upi_id')->nullable();  
             $table->string('bank_name')->nullable();  

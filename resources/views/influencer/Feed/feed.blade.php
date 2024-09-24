@@ -192,6 +192,18 @@
             </div>
             <div class="video-detail-section">
                 <div class="video-type">
+                    <div class="feed--prime--btn">
+                        <div class="feed--prime--btn--content">
+                            Exclusive
+                        </div>
+                    </div>
+                    <div class="feed--prime--btn">
+                        <div class="feed--prime--btn--content">
+                            Silver
+                        </div>
+                    </div>
+                </div>
+                <div class="video-type">
                     <div class="post--content">
                         {{ $value->post_title }}<!-- After shower 💦 -->
                     </div>
