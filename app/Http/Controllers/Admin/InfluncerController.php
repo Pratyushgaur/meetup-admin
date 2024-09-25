@@ -112,15 +112,54 @@ class InfluncerController extends Controller
      * @param $id
      * @return view
      */
-    public function InfluncerPostView($id) : View
+    public function InfluncerPostView(Request $request,$id) : View
     {
-        $profile = User::where([
-            ['id' , '=' , $id],
-            ['role' , '=' , '1'],
-        ])->first();
-        $post = Post::all();
-     
-        return view('admin.influencer.post_view',compact('profile','post'));
+        if(isset($request->category))
+        {
+            dd($request->category);
+        }
+        elseif (isset($request->sort)) 
+        {
+            dd($request->sort);
+            dd($profile);
+        }
+        else
+        {
+            $data ='ASC';
+            $profile = User::where([
+                ['id' , '=' , $id],
+                ['role' , '=' , '1'],
+            ])->with('post',function($q){
+                $q->where('created_at' , '=', 'ASC' );
+            })->first();
+        }
+
+        dd($profile);
+        return view('admin.influencer.post_view',compact('profile'));
+    }
+
+     /**
+     * 
+     * @param $id
+     * @return Redirector|RedirectResponse
+     */
+    public function InfluncerPostStatus($id): Redirector|RedirectResponse
+    {
+        try {
+            $post_status = Post::find($id);
+            if($post_status->status == 0){
+                $post_status->status = 1;
+            }else{
+                $post_status->status = 0;
+            }
+            $post_status->save();
+
+            flash()->success('Status Edited Successfully');
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            flash()->error('Unexpectec Error');
+            return redirect(route('admin.influncers.list'));
+        }
     }
 
     /**
