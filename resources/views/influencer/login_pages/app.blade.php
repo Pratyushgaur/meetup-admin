@@ -80,10 +80,9 @@
             flex-wrap: wrap;
             justify-content: space-between;
             margin: 20px;
-            height: 100px;
+            min-height: 200px;
+            max-height: 250px;
             padding: 5px 10px;
-           
-
         }
 
         .createPostImg {
@@ -105,8 +104,6 @@
         .post-type-container a {
             padding: 20px;
             border: 1px solid gray;
-
-
         }
 
         .error {
@@ -115,6 +112,13 @@
 
         .mainSectioncreate{
             position: relative;
+            width: 33.3%;
+        }
+
+        #imagePreviewContainer{
+            width: 100%;
+            margin-right: 0px !important;
+            margin-left: 0px !important;
         }
 
         .deletecreatepost{
@@ -188,7 +192,7 @@
 
                     </div>
                     <div style="display:none; margin-top:20px;" class="create-post-form-section">
-                        <span class="text-danger text-center error_message_post" style="display:block; "></span>
+                        <span class="text-danger text-center error_message_post" style="display:block;"></span>
                         <form class="create-post-form" method="post" action="{{ route('influencer.membership.edit') }}" enctype="multipart/form-data">
                             @csrf
                             <input type="file" name="coverimage" class="edit-cover-image" style="display:none;">
@@ -236,12 +240,11 @@
                                 <label for="Select1">Choose Subscription</label>
                                 <select name="plan" class="form-control live-stram-input plans" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
                                     <?php
-                                    if (auth()->check()) {
-                                        $plans = \App\Models\Influencerplan::where('user_id', '=', auth()->user()->id)->get();
-                                    } else {
-                                        $plans = [];
-                                    }
-
+                                        if (auth()->check()) {
+                                            $plans = \App\Models\Influencerplan::where('user_id', '=', auth()->user()->id)->get();
+                                        } else {
+                                            $plans = [];
+                                        }
                                     ?>
                                     @foreach($plans as $key =>$value)
                                     <option value="{{ $value->id }}">{{$value->title}}</option>
@@ -283,7 +286,9 @@
 
                                 </div>
                             </div>
-                            
+                            <div class="addmorecontiner" onclick="createVideotrigger()">
+                                <img src="{{asset('assets/images/camera.png')}}" width="20" style="margin-bottom: 4px;" alt=""> Add More
+                            </div>
                             <div class="form-group pl-3 pr-3">
                                 <label for="Select1">Post Type</label>
                                 <select name="posttype" class="form-control live-stram-input post_type" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
