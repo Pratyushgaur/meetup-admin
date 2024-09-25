@@ -51,6 +51,7 @@ Route::group(['prefix' => 'influencer','as' => 'influencer.','middleware' => Inf
     //post
     Route::get('post/{type}',[App\Http\Controllers\influencer\PostController::class,'view'])->name('post');
     Route::post('post',[App\Http\Controllers\influencer\PostController::class,'index'])->name('post.submit');
+    Route::post('videopost',[App\Http\Controllers\influencer\PostController::class,'video_post'])->name('video.post.submit');
     //settings
     Route::get('payout-setting',[App\Http\Controllers\influencer\SettingController::class,'payout_setting'])->name('payout.setting');
     Route::post('payout-setting',[App\Http\Controllers\influencer\SettingController::class,'payout_setting_post'])->name('payout.setting.post');

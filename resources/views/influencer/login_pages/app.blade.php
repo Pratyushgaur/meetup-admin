@@ -82,6 +82,7 @@
             margin: 20px;
             height: 100px;
             padding: 5px 10px;
+            overflow-x:scroll;
            
 
         }
@@ -259,15 +260,15 @@
                         </form>
                     </div>
                     <div style="display:none; margin-top:20px;" class="create-video-post-form-section">
-                        <span class="text-danger text-center error_message_post" style="display:block; "></span>
-                        <form class="create-post-form" method="post" action="{{ route('influencer.membership.edit') }}" enctype="multipart/form-data">
+                        <span class="text-danger text-center error_message_video_post" style="display:block; "></span>
+                        <form class="create-video-post-form" method="post" action="{{ route('influencer.membership.edit') }}" enctype="multipart/form-data">
                             @csrf
                             <input type="file" name="coverimage" class="edit-cover-image" style="display:none;">
 
 
                             <div class="form-group pl-3 pr-3">
                                 <label for="Input1">Post Title</label>
-                                <textarea class="form-control live-stram-input description" name="description" rows="3" id="Input2" placeholder="Post Title "></textarea>
+                                <textarea class="form-control live-stram-input video_description" name="description" rows="3" id="Input2" placeholder="Post Title "></textarea>
                             </div>
                             <div class="video-preview-section">
                                 <div class="row" id="imagePreviewContainer">
@@ -286,14 +287,14 @@
                             
                             <div class="form-group pl-3 pr-3">
                                 <label for="Select1">Post Type</label>
-                                <select name="posttype" class="form-control live-stram-input post_type" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
+                                <select name="posttype" class="form-control live-stram-input video_post_type" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
                                     <option value="0">Exclusive</option>
                                     <option value="1">Subscription</option>
                                 </select>
                             </div>
-                            <div class="form-group pl-3 pr-3 price-section">
+                            <div class="form-group pl-3 pr-3 video_price-section">
                                 <label for="Select1">Price</label>
-                                <select name="price" class="form-control live-stram-input price" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
+                                <select name="price" class="form-control live-stram-input video_price" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
                                     <?php
                                     $price = \App\Models\Price::get();
 
@@ -304,9 +305,9 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group pl-3 pr-3 plan-section" style="display:none">
+                            <div class="form-group pl-3 pr-3 video_plan-section" style="display:none">
                                 <label for="Select1">Choose Subscription</label>
-                                <select name="plan" class="form-control live-stram-input plans" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
+                                <select name="plan" class="form-control live-stram-input video_plans" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
                                     <?php
                                     if (auth()->check()) {
                                         $plans = \App\Models\Influencerplan::where('user_id', '=', auth()->user()->id)->get();
@@ -321,10 +322,11 @@
                                 </select>
                             </div>
 
-
+                            <canvas id="thumbnailCanvas" style="display: none;"></canvas>
+                            <img id="thumbnailPreview" style="display: none;" alt="Video Thumbnail" width="320" height="240">
 
                             <div class="btn-change-cover-section">
-                                <button type="button" class="btn btn-cancel-create stream--btn--bg create-post-btn">
+                                <button type="button" class="btn btn-cancel-create stream--btn--bg create-video-post-btn">
                                     Post
                                 </button>
                             </div>
@@ -346,6 +348,7 @@
     <script src="{{asset('OwlCarousel/dist/owl.carousel.min.js')}}"></script>
     @stack('js')
     <script>
+        var canvas = document.getElementById('thumbnailCanvas');
         function createImagetrigger() {
 
             document.getElementById("createImage").click();
@@ -375,11 +378,35 @@
             $(".create-post-form-section").hide();
             $(".create-video-post-form-section").show();
             const file = event.target.files[0];
-            if (file) {
+            const video = document.getElementById('videoPreview');
+            
+            var context = canvas.getContext('2d');
+            if (file && file.type.startsWith('video/')) {
+                var videoURL = URL.createObjectURL(file);
+                video.src = videoURL;
+                video.load();
+                video.play();
+                video.addEventListener('loadeddata', function() {
+                    // Set canvas dimensions to match video dimensions
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    // Seek to a specific time (e.g., 2 seconds) to capture the frame
+                    video.currentTime = 2;
+                    video.addEventListener('seeked', function() {
+                        // Draw the video frame onto the canvas
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                        // Convert canvas to data URL for thumbnail preview and upload
+                        var thumbnailDataURL = canvas.toDataURL('image/jpeg');
+                        $('#thumbnailPreview').attr('src', thumbnailDataURL);
+                    }, { once: true });
+                });
                 const videoPreview = document.getElementById('videoPreview');
-                videoPreview.src = URL.createObjectURL(file);
-                videoPreview.load();
-                videoPreview.play();
+               // video.src = URL.createObjectURL(file);
+                //video.load();
+                video.play();
+            }else {
+                alert('Please select a valid video file.');
             }
         })
         $(".post_type").change(function() {
@@ -389,6 +416,15 @@
             } else {
                 $(".price-section").hide();
                 $(".plan-section").show();
+            }
+        })
+        $(".video_post_type").change(function() {
+            if ($(this).val() == '0') {
+                $(".video_plan-section").hide();
+                $(".video_price-section").show();
+            } else {
+                $(".video_price-section").hide();
+                $(".video_plan-section").show();
             }
         })
 
@@ -428,6 +464,42 @@
 
 
         });
+        $(".create-video-post-btn").click(function(){
+            if ($('.create-video-post-form').valid()) {
+                let csrfToken = $('meta[name="csrf-token"]').attr('content');
+                document.getElementById('loader').classList.add('loader-visible');
+                const formData = new FormData();
+                var videoFile = $('#createVideo')[0].files[0];
+                formData.append('video', videoFile);
+                formData.append('description', $('.video_description').val());
+                formData.append('price', $('.video_price').val());
+                formData.append('post_type', $('.video_post_type').val());
+                formData.append('plan', $('.video_plans').val());
+                canvas.toBlob(function(blob) {
+                    formData.append('thumbnail', blob, 'thumbnail.jpg');
+                    $.ajax({
+                        url: "{{ route('influencer.video.post.submit') }}",
+                        method: "post",
+                        contentType: false,
+                        processData: false,
+                        data: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the request headers
+                        },
+                        success: function(response) {
+                            // $(".create-post-image-section").hide();
+                            // $(".create-post-form-section").show();
+                            document.getElementById('loader').classList.remove('loader-visible');
+                            window.location.href = "{{ route('influencer.success.page') }}";
+                        },
+
+                    });
+                   
+                }, 'image/jpeg');
+                
+                
+            }
+        })
 
         $('.create-post-form').validate({
             rules: {
@@ -450,6 +522,43 @@
             },
             errorElement: 'span',
             errorLabelContainer: '.error_message_post',
+            messages: {
+                description: {
+                    required: "Please enter the post title",
+                },
+                price: {
+                    required: "Please Choose the price",
+                    number: "Please enter a valid number",
+                },
+                plans: {
+                    required: "Please Choose the Plan",
+                    number: "Please enter a valid number",
+                }
+
+            }
+        });
+
+        $('.create-video-post-form').validate({
+            rules: {
+                description: {
+                    required: true
+                },
+                price: {
+                    required: (element) => {
+                        return $('.post_type').val() === '0';
+                    },
+                    number: true,
+
+                },
+                plans: {
+                    required: (element) => {
+                        return $('.post_type').val() === '1';
+                    }
+                }
+
+            },
+            errorElement: 'span',
+            errorLabelContainer: '.error_message_video_post',
             messages: {
                 description: {
                     required: "Please enter the post title",
