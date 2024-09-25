@@ -45,6 +45,8 @@ Route::group(['prefix' => 'influencer','as' => 'influencer.','middleware' => Inf
     Route::post('membership-edit',[App\Http\Controllers\influencer\MembershipController::class,'membership_update'])->name('membership.edit');
     //links 
     route::get('links',[App\Http\Controllers\influencer\LinksController::class,'index'])->name('links');
+    route::post('links',[App\Http\Controllers\influencer\LinksController::class,'save'])->name('links.post');
+    route::get('links/delete/{id}',[App\Http\Controllers\influencer\LinksController::class,'delete'])->name('link.delete');
 
     //post
     Route::get('post/{type}',[App\Http\Controllers\influencer\PostController::class,'view'])->name('post');

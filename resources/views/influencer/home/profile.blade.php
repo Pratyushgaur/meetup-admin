@@ -155,8 +155,14 @@
         <div class="feature--dispaly">
             <div id="carouselExampleControls2" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
-                @forelse ($links as $user)
-                    <li>{{ $user->name }}</li>
+                @forelse ($links as $key => $user)
+                <div class="carousel-item @if($key == 0) active @endif">
+                            <div class="feature--display--body feature--display--body--links">
+                                {{$user->title}}
+                                <br>
+                                <a href="javascript:viod(0)" class="feature--links text-truncate"></a>
+                            </div>
+                        </div>
                 @empty
                         <div class="carousel-item active">
                             <div class="feature--display--body feature--display--body--links">

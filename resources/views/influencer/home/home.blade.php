@@ -88,7 +88,7 @@
         <!-- Home Link Section -->
         <div class="home--profile--linkSection">
             <div class="home--link--input">
-                <input type="text" name="" id="link--input" class="link--input text-truncate" placeholder="qwetrertuytyuitywerertyrtyrtueyrweteruirturty">
+                <input type="text" value="https://meetupme.com/{{ auth()->user()->username }}" name="" id="link--input" class="link--input text-truncate" placeholder="qwetrertuytyuitywerertyrtyrtueyrweteruirturty">
                 <button class="btn link--copy--button" onclick="CopyLink()">Copy</button>
             </div>
             <div class="home--link--details">

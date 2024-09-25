@@ -20,13 +20,14 @@
 <main class="mb-120">
     <div class="container-fluid">
         <div class="links--section">
+            @foreach($links as $key =>$value)
             <div class="links--section--inner">
                 <div class="mylink--section">
                     <div class="mylink--msg text-truncate">
-                        New Youtube Video Launch
+                        {{$value->title}}
                     </div>
                     <div class="mylink--links text-truncate">
-                        https://youtu.be/_1SGm0VsdoY?si=dRp2CS0TG6wouKuR
+                    {{$value->link}}
                     </div>
                 </div>
                 <div class="links--edit--delete--section">
@@ -34,105 +35,12 @@
                         <img src="{{ asset('assets/images/edit-blue-btn.jpg') }}" class="links--icon--img" alt="">
                     </div>
                     <div class="links--delete--icon--section">
-                        <img src="{{ asset('assets/images/delete-btn.jpg') }}" class="links--icon--img" alt="">
+                        <a href="{{ route('influencer.link.delete',$value->id) }}"><img src="{{ asset('assets/images/delete-btn.jpg') }}" class="links--icon--img" alt=""></a>
                     </div>
                 </div>
             </div>
-
-            <div class="links--section--inner">
-                <div class="mylink--section">
-                    <div class="mylink--msg text-truncate">
-                        New Youtube Video Launch
-                    </div>
-                    <div class="mylink--links text-truncate">
-                        https://youtu.be/_1SGm0VsdoY?si=dRp2CS0TG6wouKuR
-                    </div>
-                </div>
-                <div class="links--edit--delete--section">
-                    <div class="links--edit--icon--section">
-                        <img src="{{ asset('assets/images/edit-blue-btn.jpg') }}" class="links--icon--img" alt="">
-                    </div>
-                    <div class="links--delete--icon--section">
-                        <img src="{{ asset('assets/images/delete-btn.jpg') }}" class="links--icon--img" alt="">
-                    </div>
-                </div>
-            </div>
-
-            <div class="links--section--inner">
-                <div class="mylink--section">
-                    <div class="mylink--msg text-truncate">
-                        New Youtube Video Launch
-                    </div>
-                    <div class="mylink--links text-truncate">
-                        https://youtu.be/_1SGm0VsdoY?si=dRp2CS0TG6wouKuR
-                    </div>
-                </div>
-                <div class="links--edit--delete--section">
-                    <div class="links--edit--icon--section">
-                        <img src="{{ asset('assets/images/edit-blue-btn.jpg') }}" class="links--icon--img" alt="">
-                    </div>
-                    <div class="links--delete--icon--section">
-                        <img src="{{ asset('assets/images/delete-btn.jpg') }}" class="links--icon--img" alt="">
-                    </div>
-                </div>
-            </div>
-
-            <div class="links--section--inner">
-                <div class="mylink--section">
-                    <div class="mylink--msg text-truncate">
-                        New Youtube Video Launch
-                    </div>
-                    <div class="mylink--links text-truncate">
-                        https://youtu.be/_1SGm0VsdoY?si=dRp2CS0TG6wouKuR
-                    </div>
-                </div>
-                <div class="links--edit--delete--section">
-                    <div class="links--edit--icon--section">
-                        <img src="{{ asset('assets/images/edit-blue-btn.jpg') }}" class="links--icon--img" alt="">
-                    </div>
-                    <div class="links--delete--icon--section">
-                        <img src="{{ asset('assets/images/delete-btn.jpg') }}" class="links--icon--img" alt="">
-                    </div>
-                </div>
-            </div>
-
-            <div class="links--section--inner">
-                <div class="mylink--section">
-                    <div class="mylink--msg text-truncate">
-                        New Youtube Video Launch
-                    </div>
-                    <div class="mylink--links text-truncate">
-                        https://youtu.be/_1SGm0VsdoY?si=dRp2CS0TG6wouKuR
-                    </div>
-                </div>
-                <div class="links--edit--delete--section">
-                    <div class="links--edit--icon--section">
-                        <img src="{{ asset('assets/images/edit-blue-btn.jpg') }}" class="links--icon--img" alt="">
-                    </div>
-                    <div class="links--delete--icon--section">
-                        <img src="{{ asset('assets/images/delete-btn.jpg') }}" class="links--icon--img" alt="">
-                    </div>
-                </div>
-            </div>
-
-            <div class="links--section--inner">
-                <div class="mylink--section">
-                    <div class="mylink--msg text-truncate">
-                        New Youtube Video Launch
-                    </div>
-                    <div class="mylink--links text-truncate">
-                        https://youtu.be/_1SGm0VsdoY?si=dRp2CS0TG6wouKuR
-                    </div>
-                </div>
-                <div class="links--edit--delete--section">
-                    <div class="links--edit--icon--section">
-                        <img src="{{ asset('assets/images/edit-blue-btn.jpg') }}" class="links--icon--img" alt="">
-                    </div>
-                    <div class="links--delete--icon--section">
-                        <img src="{{ asset('assets/images/delete-btn.jpg') }}" class="links--icon--img" alt="">
-                    </div>
-                </div>
-            </div>
+            @endforeach
+           
         </div>
     </div>
 </main>
@@ -148,20 +56,21 @@
 
         <div class="btn-change-cover-section"></div>
 
-        <form>
+        <form method="post" action="{{ route('influencer.links.post') }}" class="create-link-form">
+            
             @csrf
             <div class="form-group pl-3 pr-3">
                 <label for="Input1">Link Title</label>
-                <input type="text" class="form-control live-stram-input" id="Input1" placeholder="What is it for?">
+                <input type="text" name="title" class="form-control live-stram-input" id="Input1" placeholder="What is it for?">
             </div>
             
             <div class="form-group pl-3 pr-3">
                 <label for="Input1">URL</label>
-                <input type="text" class="form-control live-stram-input" id="Input1" placeholder="https://abc.com">
+                <input type="text" name="url" class="form-control live-stram-input" id="Input1" placeholder="https://abc.com">
             </div>
             
             <div class="btn-change-cover-section">
-                <button type="button" class="btn btn-cancel-create stream--btn--bg">
+                <button type="submit" class="btn btn-cancel-create stream--btn--bg">
                     Save
                 </button>
             </div>
@@ -186,6 +95,32 @@
             $("#create-link-model").css('display', 'none');
             
         })
+
+        $('.create-link-form').validate({
+            rules: {
+                title: {
+                    required: true
+                },
+                url: {
+                    required: true
+
+                },
+                
+
+            },
+            // errorElement: 'span',
+            // errorLabelContainer: '.error_message_post',
+            messages: {
+                title: {
+                    required: "Please enter the  title",
+                },
+                url: {
+                    required: "Please Enter Link",
+                   
+                }
+
+            }
+        });
     })
 </script>
 @endpush
