@@ -13,9 +13,9 @@
                                 <div class="col-md-6">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="commission">Default Commission</label>
+                                            <label for="commission">Default Commission <span class="text-danger">*</span></label>
                                             <input type="number" class="form-control mb-3" id="Name"
-                                                name="default_commission" value="{{ $data->Influancer_default_commission }}">
+                                                name="default_commission" value="{{ $data->Influancer_default_commission ?? 0 }}">
                                         </div>
                                     </div>
                                 </div>
@@ -23,7 +23,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <input type="radio" value="all" name="influncer" id="input1">
-                                        <label for="input1"> All Influncer</label><br>
+                                        <label for="input1"> All Influncer </label><br>
                                         <input type="radio" value="new" name="influncer" id="input2">
                                         <label for="input2"> Only For Upcoming Influncer</label><br>
                                     </div>

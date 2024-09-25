@@ -41,17 +41,17 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Gift Logo</label>
+                        <label for="exampleFormControlInput1">Gift Logo <span class="text-danger">*</span></label>
                         <input type="file" name="giftlogo" class="form-control" id="customFileEg1" accept="image/*">
                     </div>
                     <br>
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Gift Name</label>
+                        <label for="exampleFormControlInput1">Gift Name <span class="text-danger">*</span></label>
                         <input type="text" name="name" class="form-control" id="exampleFormControlInput1">
                     </div>
                     <br>
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Price</label>
+                        <label for="exampleFormControlInput1">Price <span class="text-danger">*</span></label>
                         <input type="number" name="price" class="form-control" id="exampleFormControlInput1">
                     </div>
                 </div>
@@ -167,17 +167,17 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Gift Logo</label>
+                        <label for="exampleFormControlInput1">Gift Logo <span class="text-danger">*</span></label>
                         <input type="file" name="newgiftlogo" class="form-control" id="customFileEg2" accept="image/*">
                     </div>
                     <br>
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Gift Name</label>
+                        <label for="exampleFormControlInput1">Gift Name <span class="text-danger">*</span></label>
                         <input type="text" name="newname" class="form-control" id="newname">
                     </div>
                     <br>
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Price</label>
+                        <label for="exampleFormControlInput1">Price <span class="text-danger">*</span></label>
                         <input type="number" name="newprice" class="form-control" id="newprice">
                     </div>
                 </div>

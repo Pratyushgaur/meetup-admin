@@ -23,12 +23,14 @@
                             <th class="text-center">Name</th>
                             <th class="text-center">Avatar</th>
                             <th class="text-center">Pending Order</th>
+                            <th class="text-center">Total Order</th>
                             <th class="text-center">View Orders</th>
                         </tr>
                     </thead>
                     <tbody>
                         @php($sn = 1)
                         @foreach($influencer_list as $value)
+                        
                         <tr>
                             <td class="checkbox-column">
                                 {{ $sn }}
@@ -38,11 +40,15 @@
                             </td>
                             <td class="text-center">
                                 <div class="avatar avatar-xl">
-                                    <img alt="avatar" src="{{ asset('gift/').'/'.$value->image }}" class="rounded" id="viewer" />
+                                    <img alt="avatar" src="{{ asset('avator/').'/'.$value->avtar }}"  id="viewer"  onerror="this.src='{{asset('avator/default_avator.png')}}'"
+                                    class="rounded-circle"  />
                                 </div>
                             </td>
                             <td class="text-center">
                                 {{ $value->pending_order }}
+                            </td>
+                            <td class="text-center">
+                                {{ $value->total_order }}
                             </td>
                             <td class="text-center">
                                 <a class="badge badge-light-primary text-start me-2 action-edit edit-btn" href="{{ route('admin.influncers.pending.order.view' , $value->id) }}">

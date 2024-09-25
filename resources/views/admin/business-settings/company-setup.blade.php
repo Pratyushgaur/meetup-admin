@@ -56,27 +56,27 @@
                                                 <div class="row">
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label for="Name">Company Name</label>
+                                                            <label for="Name">Company Name <span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control mb-3" id="Name" placeholder="Enter your company name" value="{{ $data->name ?? null }}" name="company_name">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label for="phone">Email</label>
+                                                            <label for="phone">Email <span class="text-danger">*</span></label>
                                                             <input type="email" class="form-control mb-3" id="email"
                                                                 placeholder="Enter your email" name="email" value="{{ $data->email ?? null }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label for="phone">Phone</label>
+                                                            <label for="phone">Phone <span class="text-danger">*</span></label>
                                                             <input type="number" class="form-control mb-3" name="phone"
                                                                 placeholder="Enter your phone number" value="{{ $data->mobile_no ?? null }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="country">Country</label>
+                                                            <label for="country">Country <span class="text-danger">*</span></label>
                                                             <select class="form-select mb-3" id="country" name="country">
                                                                 <option value="india" {{ $data->country ?? null == 'india'? 'selected' : '' }}>India</option>
                                                                 <option value="united_state" {{ $data->country ?? null == 'united_state'? 'selected' : '' }}>United States</option>
@@ -90,34 +90,34 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="address">Address</label>
+                                                            <label for="address">Address <span class="text-danger">*</span></label>
                                                             <textarea name="address" id="" class="form-control mb-3" cols="30" rows="1">{{ $data->address ?? null }}</textarea>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="phone">Facebook URL</label>
+                                                            <label for="phone">Facebook URL <span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control mb-3" name="facebook"
                                                                 placeholder="https://www.facebook.com/" value="{{ $data->facebook_url ?? null }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="phone">Instagram URL</label>
+                                                            <label for="phone">Instagram URL <span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control mb-3" name="insta"
                                                                 placeholder="https://www.instagram.com/" value="{{ $data->instagram_url ?? null }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="phone">Twitter URL</label>
+                                                            <label for="phone">Twitter URL <span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control mb-3" name="twitter"
                                                                 placeholder="https://www.twitter.com/" value="{{ $data->X_url ?? null }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="phone">Linkedin URL</label>
+                                                            <label for="phone">Linkedin URL <span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control mb-3" name="linkedin"
                                                                 placeholder="https://www.linkedin.com/" value="{{ $data->linkedin_url ?? null }}">
                                                         </div>
@@ -128,7 +128,7 @@
                                                     <div class="col-md-6">
                                                         <div class="col-md-12">
                                                             <div class="form-group">
-                                                                <label for="customFileEg1">Logo</label>
+                                                                <label for="customFileEg1">Logo <span class="text-danger">*</span></label>
                                                                 <input type="file" class="form-control mb-3"
                                                                     id="customFileEg1" name="logo" accept="image/*">
                                                             </div>
@@ -137,7 +137,7 @@
                                                     <div class="col-md-6">
                                                         <div class="col-md-12">
                                                             <div class="form-group">
-                                                                <label for="customFileEg1">Fevicon</label>
+                                                                <label for="customFileEg1">Fevicon <span class="text-danger">*</span></label>
                                                                 <input type="file" class="form-control mb-3"
                                                                     id="customFileEg2" name="fevicon" accept="image/*">
                                                             </div>

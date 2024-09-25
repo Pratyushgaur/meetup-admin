@@ -27,6 +27,7 @@ return new class extends Migration
             $table->longtext('term_condition')->nullable();
             $table->longtext('privacy_policy')->nullable();
             $table->integer('Influancer_default_commission')->default(0);
+            $table->decimal('total_income', 20,2)->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

@@ -275,14 +275,14 @@ window.addEventListener("load", function(){
           colors: ['transparent']
       },
       series: [{
-          name: 'Direct',
+          name: 'Influancer Commission',
           data: [58, 44, 55, 57, 56, 61, 58, 63, 60, 66, 56, 63]
       }, {
-          name: 'Organic',
+          name: 'Admin Income',
           data: [91, 76, 85, 101, 98, 87, 105, 91, 114, 94, 66, 70]
       }],
       xaxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          categories: Months,
       },
       fill: {
         type: 'gradient',
@@ -767,14 +767,14 @@ window.addEventListener("load", function(){
           colors: ['transparent']
       },
       series: [{
-          name: 'Direct',
+          name: 'Influancer Commission',
           data: [58, 44, 55, 57, 56, 61, 58, 63, 60, 66, 56, 63]
       }, {
-          name: 'Organic',
+          name: 'Admin Income',
           data: [91, 76, 85, 101, 98, 87, 105, 91, 114, 94, 66, 70]
       }],
       xaxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          categories: Months,
       },
       fill: {
         type: 'gradient',

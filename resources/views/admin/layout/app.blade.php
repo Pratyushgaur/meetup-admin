@@ -100,6 +100,12 @@
 
     <link href="{{ asset('admin/src/assets/css/light/components/media_object.css')}}" rel="stylesheet" type="text/css">
     <link href="{{ asset('admin/src/assets/css/dark/components/media_object.css')}}" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css" integrity="sha512-UTNP5BXLIptsaj5WdKFrkFov94lDx+eBvbKyoe1YAfjeRPC+gT5kyZ10kOHCfNZqEui1sxmqvodNUx3KbuYI/A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.green.min.css" integrity="sha512-C8Movfk6DU/H5PzarG0+Dv9MA9IZzvmQpO/3cIlGIflmtY3vIud07myMu4M/NTPJl8jmZtt/4mC9bAioMZBBdA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/src/plugins/src/splide/splide.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/src/plugins/css/light/splide/custom-splide.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/src/plugins/css/dark/splide/custom-splide.min.css')}}">
 
     @stack('css')
     <style>
@@ -147,6 +153,9 @@
     <!-- END MAIN CONTAINER -->
 
 
+    <script type="text/javascript">
+        var Months = <?php echo json_encode(Helpers_get_previous_months()) ?>;
+    </script>
     <script src="{{ asset('admin/src/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{ asset('admin/src/plugins/src/perfect-scrollbar/perfect-scrollbar.min.js')}}"></script>
     <script src="{{ asset('admin/src/plugins/src/mousetrap/mousetrap.min.js')}}"></script>
@@ -160,14 +169,16 @@
     <script src="{{ asset('admin/src/plugins/src/table/datatable/datatables.js')}}"></script>
 
     <script src="{{ asset('admin/src/plugins/src/highlight/highlight.pack.js')}}"></script>
-    <script src="{{ asset('admin/src/assets/js/scrollspyNav.js')}}"></script>
+    <!-- <script src="{{ asset('admin/src/assets/js/scrollspyNav.js')}}"></script> -->
 
     <script src="{{ asset('admin/src/plugins/src/sweetalerts2/sweetalerts2.min.js')}}"></script>
-    <script src="{{ asset('admin/src/plugins/src/sweetalerts2/custom-sweetalert.js')}}"></script>
+    <!-- <script src="{{ asset('admin/src/plugins/src/sweetalerts2/custom-sweetalert.js')}}"></script> -->
 
-    <script src="{{ asset('admin/src/plugins/src/assets/js/scrollspyNav.js')}}"></script>
+
+    <!-- <script src="{{ asset('admin/src/plugins/src/assets/js/scrollspyNav.js')}}"></script> -->
+
     <script src="{{ asset('admin/src/plugins/src/editors/markdown/simplemde.min.js')}}"></script>
-    <script src="{{ asset('admin/src/plugins/src/plugins/src/editors/markdown/custom-markdown.js')}}"></script>
+    <!-- <script src="{{ asset('admin/src/plugins/src/plugins/src/editors/markdown/custom-markdown.js')}}"></script> -->
 
     <script src="{{ asset('admin/src/plugins/src/filepond/filepond.min.js')}}"></script>
     <script src="{{ asset('admin/src/plugins/src/filepond/FilePondPluginFileValidateType.min.js')}}"></script>
@@ -179,10 +190,17 @@
     <script src="{{ asset('admin/src/plugins/src/filepond/filepondPluginFileValidateSize.min.js')}}"></script>
     <script src="{{ asset('admin/src/plugins/src/notification/snackbar/snackbar.min.js')}}"></script>
     <script src="{{ asset('admin/src/plugins/src/sweetalerts2/sweetalerts2.min.js')}}"></script>
-    <script src="{{ asset('admin/src/assets/js/users/account-settings.js')}}"></script>
+    <!-- <script src="{{ asset('admin/src/assets/js/users/account-settings.js')}}"></script> -->
+
+    <script src="{{ asset('admin/src/plugins/src/splide/splide.min.js')}}"></script>
+    <script src="{{ asset('admin/src/plugins/src/splide/custom-splide.js')}}"></script>
+    <script src="{{ asset('admin/src/plugins/src/zoom/jquery.zoom.js')}}"></script>
     
     <script type="text/javascript" src="{{ asset('admin/richtexteditor/rte.js')}}"></script>
     <script type="text/javascript" src="{{ asset('admin/richtexteditor/plugins/all_plugins.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
     @stack('js')
 

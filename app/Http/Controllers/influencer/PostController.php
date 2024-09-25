@@ -13,7 +13,7 @@ class PostController extends Controller
           'description' => 'required',
           'price'     => 'required_if:post_type,0|numeric|min:0',
           'post_type' => 'required|in:0,1',
-          'plan'     => 'required_if:post_type,1|numeric|min:0',
+          // 'plan'     => 'required_if:post_type,1|numeric|min:0',
         ]);
       
         $imagePath = [];

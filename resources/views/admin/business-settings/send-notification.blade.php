@@ -76,7 +76,7 @@ body.dark .avatar-xl {
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
-                                                                    <label for="Name">Title</label>
+                                                                    <label for="Name">Title <span class="text-danger">*</span></label>
                                                                     <input type="text" class="form-control mb-3"
                                                                         id="title" placeholder="Enter Title"
                                                                         name="title">
@@ -84,7 +84,7 @@ body.dark .avatar-xl {
                                                             </div>
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
-                                                                    <label for="phone">Description</label>
+                                                                    <label for="phone">Description <span class="text-danger">*</span></label>
                                                                     <textarea type="text" class="form-control mb-3"
                                                                         id="description" name="description"></textarea>
                                                                 </div>
@@ -106,7 +106,7 @@ body.dark .avatar-xl {
                                                         <div class="col-md-6">
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
-                                                                    <label for="email">Select Box</label>
+                                                                    <label for="email">Notification 2 <span class="text-danger">*</span></label>
                                                                     <select name="user_influncer"
                                                                         class="form-control mb-3" selected>
                                                                         <option selected disabledvalue="user">User
@@ -119,7 +119,7 @@ body.dark .avatar-xl {
                                                         <div class="col-md-6">
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
-                                                                    <label for="customFileEg1">Image</label>
+                                                                    <label for="customFileEg1">Image <span class="text-danger">*</span></label>
                                                                     <input type="file" class="form-control mb-3"
                                                                         id="customFileEg1" name="image">
                                                                 </div>
@@ -182,9 +182,9 @@ body.dark .avatar-xl {
 
                                                         <td class="text-center">
                                                             <a class="badge badge-light-primary text-start me-2 action-edit edit-btn"
-                                                                href="javascript:void(0);" data-name="{{$value->name}}"
-                                                                data-price="{{$value->price}}"
-                                                                data-logo="{{$value->image}}" data-id="{{$value->id}}">
+                                                                href="javascript:void(0);" data-title="{{$value->title}}"
+                                                                data-description="{{$value->description}}"
+                                                                data-image="{{$value->image}}" data-id="{{$value->id}}">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                                     height="24" viewBox="0 0 24 24" fill="none"
                                                                     stroke="currentColor" stroke-width="2"
@@ -196,7 +196,7 @@ body.dark .avatar-xl {
                                                                     </path>
                                                                 </svg>
                                                             </a>
-                                                            <form action="#" method="post" style="display:inline-block"
+                                                            <form action="{{ route('admin.business-setup.send.notification.delete') }}" method="post" style="display:inline-block"
                                                                 class="DeletePrice">
                                                                 @method('delete') @csrf
                                                                 <input type="hidden" name="id" value="{{$value->id}}">
@@ -254,6 +254,58 @@ body.dark .avatar-xl {
         </div>
     </div>
 </div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="EditNotificationModalCenter" tabindex="-1" role="dialog" aria-labelledby="EditPriceModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="EditPriceModalCenterTitle">Edit Send Notification</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <form action="{{ route('admin.business-setup.edit.send.notification.submit') }}" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="w-100 d-flex justify-content-center">
+                        <div class="avatar avatar-xl">
+                            <img alt="avatar" src="" class="rounded" id="viewer2" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1">NewImage<span class="text-danger">*</span></label>
+                        <input type="file" name="newimage" class="form-control" id="customFileEg2" accept="image/*">
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1">Title <span class="text-danger">*</span></label>
+                        <input type="text" name="newtitle" class="form-control" id="newtitle">
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1">Description <span class="text-danger">*</span></label>
+                        <textarea  name="newdescription" class="form-control" id="newdescription"></textarea>
+                    </div>
+                </div>
+                <input type="hidden" name="editid" id="editid">
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-bs-dismiss="modal">
+                        <i class="flaticon-cancel-12"></i>
+                        Discard
+                    </button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<!-- /Edit Modal -->
+
 @endsection
 
 @push('js')
@@ -297,6 +349,21 @@ $(document).ready(function() {
     $("#customFileEg1").change(function() {
         readURL(this, 'viewer');
     });
+
+    $("#customFileEg2").change(function() {
+            readURL(this, 'viewer2');
+        });
+
+    $(document).on('click', '.edit-btn', function() {
+            $('#newtitle').val($(this).attr('data-title'));
+            $('#newdescription').val($(this).attr('data-description'));
+            var notification_img = $(this).attr('data-image');
+            console.log(notification_img);
+            $('#viewer2').attr('src', "{{ asset('notification-image/') }}" + '/' + notification_img);
+            $('#editid').val($(this).attr('data-id'));
+            $('#EditNotificationModalCenter').modal('show');
+        })
+
 })
 </script>
 @endpush

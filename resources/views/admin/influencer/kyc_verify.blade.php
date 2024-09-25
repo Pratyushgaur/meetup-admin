@@ -22,13 +22,15 @@
                             <th class="checkbox-column dt-no-sorting">S.No.</th>
                             <th class="text-center">Name</th>
                             <th class="text-center">Avatar</th>
-                            <th class="text-center">KYC Submission</th>
+                            <th class="text-center">KYC Status</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @php($sn = 1)
                         @foreach($influencer_list as $value)
+                        @if(!empty($value->kyc))
+                    
                         <tr>
                             <td class="checkbox-column">
                                 {{ $sn }}
@@ -38,11 +40,33 @@
                             </td>
                             <td class="text-center">
                                 <div class="avatar avatar-xl">
-                                    <img alt="avatar" src="{{ asset('gift/').'/'.$value->image }}" class="rounded" id="viewer" />
+                                    <img alt="avatar" src="{{ asset('avator/').'/'.$value->avtar }}"
+                                        onerror="this.src='{{asset('avator/default_avator.png')}}'"
+                                        class="rounded-circle" id="viewer" />
                                 </div>
+                               
                             </td>
                             <td class="text-center">
-                                {{ $value->pending_order }}
+                                @if( $value->kyc->status == '0')
+                                <a href="javascript: void(0)">
+                                    <span class="badge outline-badge-warning mb-2 me-4">
+                                        pending
+                                    </span>
+                                </a>
+                                @elseif( $value->kyc->status == '1' ) 
+                                <a href="javascript: void(0)">
+                                    <span class="badge outline-badge-success mb-2 me-4">
+                                        approve
+                                    </span>
+                                </a>
+                                @elseif( $value->kyc->status == '2' ) 
+                                <a href="javascript: void(0)">
+                                    <span class="badge outline-badge-danger mb-2 me-4">
+                                        Rejected
+                                    </span>
+                                </a>
+                                @endif
+                                
                             </td>
                             <td class="text-center">
                                 <a class="badge badge-light-primary text-start me-2 action-edit edit-btn" href="{{ route('admin.influncers.kyc.verification.view' , $value->id) }}">
@@ -53,6 +77,7 @@
                                 </a>
                             </td>
                         </tr>
+                        @endif
                         @php($sn++)
                         @endforeach
                     </tbody>
