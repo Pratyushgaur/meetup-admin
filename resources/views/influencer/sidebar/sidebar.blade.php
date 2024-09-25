@@ -21,7 +21,7 @@
             </div>
 
             <div class="sidebar--point--section">
-                <a href="#" class="sidebar--point">
+                <a href="{{route('influencer.payout.setting')}}" class="sidebar--point">
                     <img src="{{ asset('assets/images/payout_settings.png') }}" alt="" class="sidebar--img--icon" height="18px" width="19px"> 
                     <span class="sidebar--span--content">Payout settings</span>
                 </a>

@@ -25,9 +25,10 @@ return new class extends Migration
             $table->string('bank_name')->nullable();  
             $table->string('account_no')->nullable();  
             $table->string('account_holder')->nullable();  
-            $table->string('account_ifsc')->nullable();
-            $table->text('docs')->nullable();
-            $table->tinyInteger('status')->default(0)->comment('0 = pending | 1= approve | 2 = Rejected ');
+            $table->string('account_ifsc')->nullable();  
+            $table->text('docs')->nullable();  
+            $table->enum('status',["0","1","2"])->default("0");  
+            $table->text('reject_reason')->nullable();  
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

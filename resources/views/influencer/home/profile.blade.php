@@ -149,27 +149,38 @@
     <div class="container-fluid feature--section">
         <div class="feature--heading mt-1">
             My Links
-            <img src="{{ asset('assets/images/Edit.png') }}" alt="" class="feature--edit">
+            <a href="{{ route('influencer.links') }}"> <img src="{{ asset('assets/images/Edit.png') }}" alt="" class="feature--edit"></a>
         </div>
 
         <div class="feature--dispaly">
             <div id="carouselExampleControls2" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="feature--display--body feature--display--body--links">
-                            New Youtube Video Launch
-                            <br>
-                            <a href="javascript:viod(0)" class="feature--links text-truncate">link</a>
+                @forelse ($links as $key => $user)
+                <div class="carousel-item @if($key == 0) active @endif">
+                            <div class="feature--display--body feature--display--body--links">
+                                {{$user->title}}
+                                <br>
+                                <a href="javascript:viod(0)" class="feature--links text-truncate"></a>
+                            </div>
                         </div>
-                    </div>
+                @empty
+                        <div class="carousel-item active">
+                            <div class="feature--display--body feature--display--body--links">
+                                No Links Exist Please Create New
+                                <br>
+                                <a href="javascript:viod(0)" class="feature--links text-truncate"></a>
+                            </div>
+                        </div>
+                @endforelse
+                    
 
-                    <div class="carousel-item">
+                    <!-- <div class="carousel-item">
                         <div class="feature--display--body feature--display--body--links">
                             New Youtube Video Launch
                             <br>
                             <a href="javascript:viod(0)" class="feature--links text-truncate">link</a>
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
                 <button class="carousel-control-prev" type="button" data-target="#carouselExampleControls2"

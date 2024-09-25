@@ -75,6 +75,16 @@
             padding: 5px 10px;
             overflow-X: scroll;
         }
+        .video-preview-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 20px;
+            height: 100px;
+            padding: 5px 10px;
+           
+
+        }
 
         .createPostImg {
             width: 79px;
@@ -190,18 +200,90 @@
                             </div>
                             <div class="image-preview-section">
                                 <div class="row" id="imagePreviewContainer">
-                                    <div class="mainSectioncreate">
+                                    <!-- <div class="mainSectioncreate">
                                         <span class="deletecreatepost">
                                             <span>x</span>
                                         </span>
                                         <img src="http://127.0.0.1:8000/assets/images/visitors.png" class="createPostImg" alt="">
-                                    </div>
+                                    </div> -->
 
                                 </div>
                             </div>
                             <div class="addmorecontiner" onclick="createImagetrigger()">
                                 <img src="{{asset('assets/images/camera.png')}}" width="20" style="margin-bottom: 4px;" alt=""> Add More
                             </div>
+                            <div class="form-group pl-3 pr-3">
+                                <label for="Select1">Post Type</label>
+                                <select name="posttype" class="form-control live-stram-input post_type" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
+                                    <option value="0">Exclusive</option>
+                                    <option value="1">Subscription</option>
+                                </select>
+                            </div>
+                            <div class="form-group pl-3 pr-3 price-section">
+                                <label for="Select1">Price</label>
+                                <select name="price" class="form-control live-stram-input price" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
+                                    <?php
+                                    $price = \App\Models\Price::get();
+
+
+                                    ?>
+                                    @foreach($price as $key =>$value)
+                                    <option value="{{ $value->prices }}">{{$value->prices}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group pl-3 pr-3 plan-section" style="display:none">
+                                <label for="Select1">Choose Subscription</label>
+                                <select name="plan" class="form-control live-stram-input plans" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
+                                    <?php
+                                    if (auth()->check()) {
+                                        $plans = \App\Models\Influencerplan::where('user_id', '=', auth()->user()->id)->get();
+                                    } else {
+                                        $plans = [];
+                                    }
+
+                                    ?>
+                                    @foreach($plans as $key =>$value)
+                                    <option value="{{ $value->id }}">{{$value->title}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+
+
+                            <div class="btn-change-cover-section">
+                                <button type="button" class="btn btn-cancel-create stream--btn--bg create-post-btn">
+                                    Post
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div style="display:none; margin-top:20px;" class="create-video-post-form-section">
+                        <span class="text-danger text-center error_message_post" style="display:block; "></span>
+                        <form class="create-post-form" method="post" action="{{ route('influencer.membership.edit') }}" enctype="multipart/form-data">
+                            @csrf
+                            <input type="file" name="coverimage" class="edit-cover-image" style="display:none;">
+
+
+                            <div class="form-group pl-3 pr-3">
+                                <label for="Input1">Post Title</label>
+                                <textarea class="form-control live-stram-input description" name="description" rows="3" id="Input2" placeholder="Post Title "></textarea>
+                            </div>
+                            <div class="video-preview-section">
+                                <div class="row" id="imagePreviewContainer">
+                                <video id="videoPreview" width="100%" height="250" controls>
+                                    Your browser does not support the video tag.
+                                </video>
+                                    <!-- <div class="mainSectioncreate">
+                                        <span class="deletecreatepost">
+                                            <span>x</span>
+                                        </span>
+                                        <img src="http://127.0.0.1:8000/assets/images/visitors.png" class="createPostImg" alt="">
+                                    </div> -->
+
+                                </div>
+                            </div>
+                            
                             <div class="form-group pl-3 pr-3">
                                 <label for="Select1">Post Type</label>
                                 <select name="posttype" class="form-control live-stram-input post_type" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
@@ -287,6 +369,18 @@
             }
             previewImage();
             document.getElementById('loader').classList.remove('loader-visible');
+        })
+        $("#createVideo").change(function(event) {
+            $(".create-post-image-section").hide();
+            $(".create-post-form-section").hide();
+            $(".create-video-post-form-section").show();
+            const file = event.target.files[0];
+            if (file) {
+                const videoPreview = document.getElementById('videoPreview');
+                videoPreview.src = URL.createObjectURL(file);
+                videoPreview.load();
+                videoPreview.play();
+            }
         })
         $(".post_type").change(function() {
             if ($(this).val() == '0') {

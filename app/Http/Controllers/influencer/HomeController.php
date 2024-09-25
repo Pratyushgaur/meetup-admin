@@ -66,11 +66,14 @@ class HomeController extends Controller
         
         $service = \App\Models\Service::where('influencer_id',\Auth::id())->latest()->get();
         $plans = \App\Models\Influencerplan::where('user_id',\Auth::id())->latest()->get();
+        $links = \App\Models\InfluencerLink::where('user_id',\Auth::id())->latest()->get();
        
-        return view('influencer.home.profile',compact('service','plans'));
+        return view('influencer.home.profile',compact('service','plans','links'));
     }
     function profile_preview(){
-        return view('influencer.home.profile_view');
+        $plans = \App\Models\Influencerplan::where('user_id',\Auth::id())->latest()->get();
+       
+        return view('influencer.home.profile_view',compact('plans'));
 
     }
 }

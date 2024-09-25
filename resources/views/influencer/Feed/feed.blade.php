@@ -163,11 +163,14 @@
                 <img src="{{ asset('posts/') }}/{{ $value->main_file }}" alt="" class="image_fit">
                 <div class="video-blur-section">
                     <div class="video-blur-execlusive">
+                        @if($value->post_type == 0)
                         <div class="font-style">Move to prime</div>
+                        @endif
                     </div>
                     <div class="video-blur-playbtn">
                         
                     </div>
+                    @if($value->post_type == 0)
                     <div class="video-like-icon">
                         <button class="feed--prime--details">
                             <img src="{{ asset('assets/images/like-feed.png') }}" alt="" height="22px" width="22px">
@@ -188,20 +191,24 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
             <div class="video-detail-section">
                 <div class="video-type">
+                    @if($value->post_type == 0)
                     <div class="feed--prime--btn">
                         <div class="feed--prime--btn--content">
                             Exclusive
                         </div>
                     </div>
+                    @else
                     <div class="feed--prime--btn">
                         <div class="feed--prime--btn--content">
-                            Silver
+                            {{$value->plan_name}}
                         </div>
                     </div>
+                    @endif
                 </div>
                 <div class="video-type">
                     <div class="post--content">

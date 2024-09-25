@@ -15,7 +15,7 @@ class PostController extends Controller
           'post_type' => 'required|in:0,1',
           // 'plan'     => 'required_if:post_type,1|numeric|min:0',
         ]);
-        
+      
         $imagePath = [];
         $mainImage = '';
         if($request->hasFile('images')){
@@ -38,6 +38,7 @@ class PostController extends Controller
           'file_type' => 'image',
           'main_file' => $mainImage,
           'more_files' => (!empty($imagePaths)) ? json_encode($imagePaths): null, 
+          'plan_id' => (int) $request->plan
         ]);
         echo json_encode(array('status' => '1' ,'message' => 'Post updated'));
     }
@@ -46,9 +47,12 @@ class PostController extends Controller
       $posts  = Post::where('userid','=',\Auth::id())
       ->when($postype == 'exclusive',function($posts){
         $posts->where('post_type','=',"0");
+        
       })
       ->when($postype == 'premium',function($posts){
         $posts->where('post_type','=',"1");
+        $posts->join('influencer_plans','posts.plan_id','=','influencer_plans.id');
+        $posts->select('posts.*','influencer_plans.title as plan_name');
       })
       ->get();
         return view("influencer.Feed.feed",compact('posts','postype'));

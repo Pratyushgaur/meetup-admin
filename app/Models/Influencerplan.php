@@ -10,4 +10,6 @@ class Influencerplan extends Model
     use HasFactory;
 
     protected $table = 'influencer_plans';
+
+    protected $fillable = ["user_id","title","description","price","image"];
 }
