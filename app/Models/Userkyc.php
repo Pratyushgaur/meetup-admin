@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Userkyc extends Model
+class UserKyc extends Model
 {
     use HasFactory;
 
-    protected $table = 'user_kycs';
+    public function kyc()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
 }
