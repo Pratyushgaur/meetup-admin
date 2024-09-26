@@ -157,19 +157,27 @@
         @foreach($posts as $key =>$value)
         <div class="video-container">
             <div class="video-section mb-3">
-                <!-- <video class="video-clip" onclick="this.paused?this.play():this.pause();">
-                    <source src="{{ asset('assets/videos/private.mp4') }}" type="video/ogg">
-                </video> -->
-                <img src="{{ asset('posts/') }}/{{ $value->main_file }}" alt="" class="image_fit">
+                @if($value->file_type == 'video')
+                    <img src="{{ asset('thumbnails/') }}/{{ $value->video_thumbnail }}" alt="" class="image_fit" id="thumbnails-{{$value->id}}">
+                    <video class="video-clip" id="video-{{$value->id}}" onclick="this.paused?this.play():this.pause();"></video>
+                @else
+                    <img src="{{ asset('posts/') }}/{{ $value->main_file }}" alt="" class="image_fit">
+                @endif
                 <div class="video-blur-section">
                     <div class="video-blur-execlusive">
                         @if($value->post_type == 0)
                         <div class="font-style">Move to prime</div>
                         @endif
                     </div>
-                    <div class="video-blur-playbtn">
-                        
-                    </div>
+                    @if($value->file_type == 'video')
+                        <div class="video-blur-playbtn video-blur-playbtn-edit" data-video="video-{{$value->id}}" data-id="{{$value->id}}" data-src="{{ asset('posts/') }}/{{ $value->main_file }}">
+                            <img src="{{ asset('assets/images/prime-play.png') }}" alt="" height="90px" width="90px">
+                        </div>
+                    @else
+                        <div class="video-blur-playbtn">
+                            
+                        </div>
+                    @endif
                     @if($value->post_type == 0)
                     <div class="video-like-icon">
                         <button class="feed--prime--details">
@@ -254,6 +262,19 @@
     $(document).ready(function(){
         $('.shiftPost').click(function(){
             window.location.href = $(this).attr('data-href');
+        })
+
+        $('.video-blur-playbtn-edit').click(function(){
+            var VideoId = $(this).attr('data-video');
+            var id = $(this).attr('data-id');
+            var src = $(this).attr('data-src');
+
+            $(this).parent('.video-blur-section').addClass('d-none');
+            $('#thumbnails-'+id).addClass('d-none');
+            $('#'+VideoId).attr("src" , src);
+            $('#'+VideoId).click();
+
+            console.log($(this).attr('data-video'));
         })
     })
 </script>

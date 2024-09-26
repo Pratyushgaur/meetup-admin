@@ -117,6 +117,7 @@ body {
         background-color: rgba(255, 255, 255, 0.4);
         -webkit-backdrop-filter: blur(15px);
         backdrop-filter: blur(15px);
+        overflow-x: scroll;
     }
 
     #createmodel--live {
@@ -191,9 +192,11 @@ body {
 
     .modelbox {
         border-radius: 10px;
-        min-height: 330px;
+        min-height: 320px;
         width: 350px;
         background-color: white;
+        max-height: 100vh;
+        overflow-x: scroll;
     }
 
     input[type="color"] {
@@ -403,6 +406,7 @@ body {
         background-color: rgba(255, 255, 255, 0.4);
         -webkit-backdrop-filter: blur(15px);
         backdrop-filter: blur(15px);
+        overflow-x: scroll;
     }
 
     #createmodel--live {
@@ -480,6 +484,8 @@ body {
         min-height: 320px;
         width: 80vw;
         background-color: white;
+        max-height: 100vh;
+        overflow-x: scroll;
     }
 
     input[type="color"] {
