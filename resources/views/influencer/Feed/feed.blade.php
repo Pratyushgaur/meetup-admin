@@ -183,19 +183,19 @@
                         <button class="feed--prime--details">
                             <img src="{{ asset('assets/images/like-feed.png') }}" alt="" height="22px" width="22px">
                             <div class="feed--prime--details--content">
-                                139
+                                {{$value->like_count}}
                             </div>
                         </button>
                         <div class="feed--prime--details">
                             <img src="{{ asset('assets/images/earned-btn.png') }}" alt="" height="22px" width="22px">
                             <div class="feed--prime--details--content">
-                                5000
+                            {{$value->total_earn}}
                             </div>
                         </div>
                         <div class="feed--prime--details">
                             <img src="{{ asset('assets/images/feed-lock.png') }}" alt="" height="22px" width="22px">
                             <div class="feed--prime--details--content">
-                                5000
+                            {{$value->total_unlock}}
                             </div>
                         </div>
                     </div>
@@ -203,13 +203,21 @@
                 </div>
             </div>
             <div class="video-detail-section">
-                <div class="video-type">
+                <div class="video-type" >
                     @if($value->post_type == 0)
                     <div class="feed--prime--btn">
                         <div class="feed--prime--btn--content">
                             Exclusive
                         </div>
+                        
                     </div>
+                    <div class="feed--prime--btn">
+                        <div class="feed--prime--btn--content">
+                            ₹{{number_format($value->price,2)}}
+                        </div>
+                        
+                    </div>
+                    <!-- <h6 style="margin-top:10px;margin-left:20px;" >₹100.00</h6> -->
                     @else
                     <div class="feed--prime--btn">
                         <div class="feed--prime--btn--content">

@@ -1,6 +1,15 @@
 @extends('influencer.login_pages.app')
 
-
+@push('css')
+<style>
+    .suggetionbtn{
+        border:1px solid black;
+        background:black;
+        color:#fff;
+        border-radius:4px;
+    }
+</style>
+@endpush
 @section('content')
 <header>
     <nav class="navbar navbar--login">
@@ -40,6 +49,18 @@
                 @error('fullname')
                 <span class="text-danger">{{ $message }}</span>
                 @enderror
+            </div>
+            <div class="input--section">
+                <input type="text" class="form-control form--input username" name="username" placeholder="Username">
+                @error('username')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+                <span class="text-success username_indigate " style="font-weight:bold"></span>
+                <span class="text-danger username_indigate_error " style="font-weight:bold"></span>
+                
+                <div class="usrenamecontainer">
+                    
+                </div>
             </div>
             
             <div class="input--section">
@@ -91,3 +112,45 @@
     <!-- /Sign up form -->
 </main>
 @endsection
+
+@push("js")
+<script>
+    $(document).ready(function(){
+        $(".username").focusout(function(){ 
+            if($(this).val()!=''){
+               
+                let data  = {username:$(this).val()};
+                console.log(data);
+                let csrfToken = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: "{{ route('influencer.checkUsername') }}",
+                    method: "post",
+                   
+                    data: data,
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the request headers
+                    },
+                    success: function(response) {
+                        let d = JSON.parse(response);
+                        if(d.status == "1"){
+                            $(".username_indigate").html("Available");
+                            $(".username_indigate_error").html("");
+                        }else{
+                            d.suggestions.forEach(element => {
+                                console.log(element);
+                            });
+                            //<button type="button" class="suggetionbtn">dsf</button>
+                            $(".username_indigate_error").html("Not Available");
+                            $(".username_indigate").html("");
+                            
+                        }
+                    },
+
+
+                });
+            }
+                
+        })
+    })
+</script>
+@endpush

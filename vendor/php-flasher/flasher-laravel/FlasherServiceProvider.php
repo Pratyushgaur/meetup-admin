@@ -35,9 +35,9 @@ use Flasher\Prime\Storage\Storage;
 use Flasher\Prime\Storage\StorageManager;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Console\AboutCommand;
-use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\View\Compilers\BladeCompiler;
 use Laravel\Octane\Events\RequestReceived;
 use Livewire\LivewireManager;
@@ -210,7 +210,7 @@ final class FlasherServiceProvider extends PluginServiceProvider
 
         AboutCommand::add('PHPFlasher', [
             'Version' => Flasher::VERSION,
-            'Factories' => implode(' <fg=gray;options=bold>/</> ', array_map(fn ($factory) => sprintf('<fg=yellow;options=bold>%s</>', $factory), $factories)),
+            'Factories' => implode(' <fg=gray;options=bold>/</> ', array_map(fn ($factory) => \sprintf('<fg=yellow;options=bold>%s</>', $factory), $factories)),
         ]);
     }
 
@@ -236,23 +236,6 @@ final class FlasherServiceProvider extends PluginServiceProvider
         $this->pushMiddlewareToGroup(FlasherMiddleware::class);
     }
 
-    private function registerCspHandler(): void
-    {
-        $this->app->singleton('flasher.csp_handler', static function () {
-            return new ContentSecurityPolicyHandler(new NonceGenerator());
-        });
-    }
-
-    private function registerAssetManager(): void
-    {
-        $this->app->singleton('flasher.asset_manager', static function () {
-            $publicDir = public_path('/');
-            $manifestPath = public_path('vendor'.\DIRECTORY_SEPARATOR.'flasher'.\DIRECTORY_SEPARATOR.'manifest.json');
-
-            return new AssetManager($publicDir, $manifestPath);
-        });
-    }
-
     private function registerSessionMiddleware(): void
     {
         if (!$this->getConfig('flash_bag')) {
@@ -275,6 +258,23 @@ final class FlasherServiceProvider extends PluginServiceProvider
     {
         $this->callAfterResolving(HttpKernel::class, function (HttpKernel $kernel) use ($middleware) {
             $kernel->appendMiddlewareToGroup('web', $middleware);
+        });
+    }
+
+    private function registerCspHandler(): void
+    {
+        $this->app->singleton('flasher.csp_handler', static function () {
+            return new ContentSecurityPolicyHandler(new NonceGenerator());
+        });
+    }
+
+    private function registerAssetManager(): void
+    {
+        $this->app->singleton('flasher.asset_manager', static function () {
+            $publicDir = public_path('/');
+            $manifestPath = public_path('vendor'.\DIRECTORY_SEPARATOR.'flasher'.\DIRECTORY_SEPARATOR.'manifest.json');
+
+            return new AssetManager($publicDir, $manifestPath);
         });
     }
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\influencer;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Models\User;
 
 class HomeController extends Controller
 {
@@ -72,8 +72,24 @@ class HomeController extends Controller
     }
     function profile_preview(){
         $plans = \App\Models\Influencerplan::where('user_id',\Auth::id())->latest()->get();
-       
-        return view('influencer.home.profile_view',compact('plans'));
+        $plans = [];
+        $posts = \App\Models\Post::where('userid','=',\Auth::id())->where('post_type','=','0')->latest()->get();
+        
+        return view('influencer.home.profile_view',compact('plans','posts'));
+
+    }
+
+    function insights(){
+        return view('influencer.insights');
+    }
+
+    function show(User $user ,Request $request){
+        
+        dd($user->toArray());
+        // Route::prefix('influencer')->middleware('auth')->group(function () {
+        //     Route::get('/{influencer:username}', [InfluencerController::class, 'show'])->name('influencer.show');
+        //     // Other routes...
+        // });
 
     }
 }

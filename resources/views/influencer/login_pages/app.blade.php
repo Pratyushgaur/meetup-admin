@@ -125,13 +125,15 @@
             position: absolute;
             height: 15px;
             width: 15px;
-            background-color:#ffffff;
+            background-color:red;
             border-radius: 50%;
             top: 3px;
             right: 3px;
             display: flex;
             justify-content: center;
             align-items: center;
+            color:white;
+            border:1px solid red;
         }
 
         .deletecreatepost span{
@@ -200,7 +202,7 @@
 
                             <div class="form-group pl-3 pr-3">
                                 <label for="Input1">Post Title</label>
-                                <textarea class="form-control live-stram-input description" name="description" rows="3" id="Input2" placeholder="Post Title "></textarea>
+                                <textarea class="form-control live-stram-input post_description" name="description" rows="3" id="Input2" placeholder="Post Title "></textarea>
                             </div>
                             <div class="image-preview-section">
                                 <div class="row" id="imagePreviewContainer">
@@ -225,7 +227,7 @@
                             </div>
                             <div class="form-group pl-3 pr-3 price-section">
                                 <label for="Select1">Price</label>
-                                <select name="price" class="form-control live-stram-input price" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
+                                <select name="price" class="form-control live-stram-input post_price" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
                                     <?php
                                     $price = \App\Models\Price::get();
 
@@ -238,7 +240,7 @@
                             </div>
                             <div class="form-group pl-3 pr-3 plan-section" style="display:none">
                                 <label for="Select1">Choose Subscription</label>
-                                <select name="plan" class="form-control live-stram-input plans" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
+                                <select name="plan" class="form-control live-stram-input post_plans" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
                                     <?php
                                         if (auth()->check()) {
                                             $plans = \App\Models\Influencerplan::where('user_id', '=', auth()->user()->id)->get();
@@ -350,6 +352,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
     <script src="{{asset('OwlCarousel/dist/owl.carousel.min.js')}}"></script>
+    @vite('resources/js/app.js')
     @stack('js')
     <script>
         var canvas = document.getElementById('thumbnailCanvas');
@@ -368,13 +371,13 @@
                 $.each(files, function(index, file) {
                     if (file instanceof Blob) {
                         imageFiles.push(file);
-                        previewImage(file);
+                        previewImage(file,imageFiles.length - 1);
                     } else {
                         console.error('The selected file is not a valid Blob or File.');
                     }
                 });
             }
-            previewImage();
+           // previewImage();
             document.getElementById('loader').classList.remove('loader-visible');
         })
         $("#createVideo").change(function(event) {
@@ -441,10 +444,11 @@
                 $.each(imageFiles, function(index, file) {
                     formData.append('images[]', file);
                 });
-                formData.append('description', $('.description').val());
-                formData.append('price', $('.price').val());
+                
+                formData.append('description', $('.post_description').val());
+                formData.append('price', $('.post_price').val());
                 formData.append('post_type', $('.post_type').val());
-                formData.append('plan', $('.plans').val());
+                formData.append('plan', $('.post_plans').val());
 
                 $.ajax({
                     url: "{{ route('influencer.post.submit') }}",
@@ -592,6 +596,9 @@
             // $("#createmodel").animate({
             //     display:"flex"
             // },3000);
+            $(".create-post-image-section").show();
+            $(".create-post-form-section").hide();
+            $(".create-video-post-form-section").hide();
 
             $('#createmodel').fadeIn(300).css('display', 'flex');
             //alert('hello');
@@ -613,13 +620,13 @@
             document.getElementById("mySidebar").style.width = "0";
         }
 
-        function previewImage(file) {
+        function previewImage(file,index) {
             const reader = new FileReader();
 
             reader.onload = function(e) {
 
                 let src = e.target.result;
-                html = '<div class="mainSectioncreate"><span class="deletecreatepost"><span>x</span></span><img src="' + src + '" class="createPostImg" alt="">';
+                html = '<div class="mainSectioncreate"><span class="deletecreatepost" data-index="'+index+'"><span>x</span></span><img src="' + src + '" class="createPostImg" alt="">';
 
                 $('#imagePreviewContainer').append(html);
             };
@@ -633,7 +640,13 @@
         }
 
         $(document).on('click','.deletecreatepost',function(){
-            $(this).parent('.mainSectioncreate').remove();
+            const index = $(this).data('index');
+            imageFiles.splice(index, 1);
+            $(this).closest('.mainSectioncreate').remove();
+            $('#imagePreviewContainer .mainSectioncreate').each(function(i) {
+                $(this).attr('data-index', i);
+                $(this).find('.deletecreatepost').attr('data-index', i);
+            });
         })
     </script>
 </body>

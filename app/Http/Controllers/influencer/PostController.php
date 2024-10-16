@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use FFMpeg;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class PostController extends Controller
 {
@@ -27,6 +29,19 @@ class PostController extends Controller
             $imagePath = $imageName;
             if($key == 0){
               $mainImage  = $imageName ;
+              $manager = ImageManager::withDriver(new Driver());
+              $image_blue_read = $manager->read('posts/'.$imageName);
+              $thumbimage = $image_blue_read->blur(100);
+              $thumbimage = $thumbimage->pixelate(8);
+              $newName = time() . auth()->user()->id.$key.'_blue_' . $image->getClientOriginalName();
+              $thumbimage->save(public_path('posts/'.$newName));
+
+             
+
+
+
+
+
             }else{
               $imagePaths[] = $imagePath;
             }
@@ -40,7 +55,8 @@ class PostController extends Controller
           'file_type' => 'image',
           'main_file' => $mainImage,
           'more_files' => (!empty($imagePaths)) ? json_encode($imagePaths): null, 
-          'plan_id' => (int) $request->plan
+          'plan_id' => (int) $request->plan,
+          'main_image_blur' =>$newName
         ]);
         echo json_encode(array('status' => '1' ,'message' => 'Post updated'));
     }

@@ -10,7 +10,7 @@
             <img src="{{ asset('assets/images/bottom-nav-add.png') }}" alt="" class="bottom--nav--image">
         </div>
         <div class="bottom--nav--item">
-            <img src="{{ asset('assets/images/bottom-nav-notification.png') }}" alt="" class="bottom--nav--image">
+            <a href="{{ route('influencer.notification') }}"><img src="{{ asset('assets/images/bottom-nav-notification.png') }}" alt="" class="bottom--nav--image"></a>
         </div>
         <div class="bottom--nav--item bottom--nav--active">
             <a href="{{ route('influencer.profile') }}"><img src="{{ asset('assets/images/bottom-nav-user.png') }}" alt="" class="bottom--nav--image"></a>

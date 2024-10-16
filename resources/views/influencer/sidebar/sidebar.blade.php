@@ -7,14 +7,14 @@
 
         <div class="point--section">
             <div class="sidebar--point--section">
-                <a href="#" class="sidebar--point">
+                <a href="{{ route('influencer.orders.pending') }}" class="sidebar--point">
                     <img src="{{ asset('assets/images/pending_order.png') }}" alt="" height="18px" width="18px" class="sidebar--img--icon">
                     <span class="sidebar--span--content">Pending orders</span>
                 </a>
             </div>
 
             <div class="sidebar--point--section">
-                <a href="#" class="sidebar--point">
+                <a href="{{route('influencer.orders.history')}}" class="sidebar--point">
                     <img src="{{ asset('assets/images/order_history.png') }}" alt="" class="sidebar--img--icon" height="23px" width="18px">
                     <span class="sidebar--span--content">Order history</span>
                 </a>
@@ -28,14 +28,14 @@
             </div>
 
             <div class="sidebar--point--section">
-                <a href="#" class="sidebar--point">
+                <a href="{{route('influencer.insights')}}" class="sidebar--point">
                     <img src="{{ asset('assets/images/insights.png') }}" alt="" class="sidebar--img--icon" height="19px" width="19px">
                     <span class="sidebar--span--content">Insights</span>
                 </a>
             </div>
 
             <div class="sidebar--point--section">
-                <a href="#" class="sidebar--point">
+                <a href="{{route('influencer.notification.send')}}" class="sidebar--point">
                     <img src="{{ asset('assets/images/send_notification.png') }}" alt="" class="sidebar--img--icon" height="20px" width="20px">
                     <span class="sidebar--span--content">Send notifications</span>
                 </a>

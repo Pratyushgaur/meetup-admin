@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('main_file')->comment('main file path will be store here and only file name will store');
             $table->string('more_files')->nullable()->comment('Other multiple file will store here with in json');
             $table->string('video_thumbnail')->nullable()->comment('video thumbnail img if post type video');
+            $table->string('main_image_blur')->nullable()->comment('main image blue path');
             $table->integer("like_count")->default(0);
             $table->decimal("total_earn")->default(0);
             $table->integer("total_unlock")->default(0);

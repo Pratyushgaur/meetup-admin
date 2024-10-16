@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string("username")->nullable();
-            $table->string('mobile')->unique();
-            $table->string('country_code');
-            $table->string('email')->unique();
+            $table->string('mobile');
+            $table->string('country_code')->nullable();
+            $table->string('email');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->enum('gender',["male","female"]);
@@ -40,8 +40,9 @@ return new class extends Migration
             $table->text('youtube_url')->nullable();
             $table->text('facebook_url')->nullable();
             $table->text('linkedin_url')->nullable();
+            $table->decimal('per_msg_charge')->default(10);
             $table->timestamp('last_settlement')->nullable();
-
+            
 
             
 

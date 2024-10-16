@@ -10,6 +10,9 @@ use Auth;
 use App\Models\User;
 use Session;
 use App\Events\InfluencerSetup;
+use Illuminate\Validation\Rule;
+use App\Rules\UniqueEmailWithRole;
+
 class LoginController extends Controller
 {
     function sendOtp(Request $request){
@@ -20,9 +23,15 @@ class LoginController extends Controller
         $request->validate([
             'fullname' => 'required',
             'gender' => 'required',
-            'email' => 'required|unique:users,email',
+            'email' =>['required|email',new UniqueEmailWithRole("1",'email')],
+            'mobile' => ['required',new UniqueEmailWithRole("1",'mobile')],
             'country_code' => 'required',
-            'mobile' => 'required|unique:users,mobile',
+            'username' => 'required',
+            
+            
+            Rule::unique('users')->where(function ($query) use ($request) {
+                return $query->where('role', '1');
+            }),
         ]);
         UserOtp::updateOrCreate(
             [
@@ -108,12 +117,13 @@ class LoginController extends Controller
         if(!session()->has('registerData'))
             return redirect()->route("influencer.signup");
 
-
+        
+        $Influancer_default_commission = BusinessSetting::first()->Influancer_default_commission;
         $userSession = session()->get('registerData');
         $name = str_replace(' ', '', $userSession['fullname']); // Replaces all spaces with hyphens.
         $name = preg_replace('/[^A-Za-z0-9\-]/', '', $name);
-        $username = $this->generateUsername($name);
-   
+        $username = $userSession['username']; //$this->generateUsername($name);
+        
         $user = new User;
         $user->name =  $userSession['fullname'];
         $user->mobile = $userSession['mobile'];
@@ -125,6 +135,7 @@ class LoginController extends Controller
         $user->role = '1';
         $user->service_label_name = "Fan Connect";
         $user->plan_label_name = "Membership";
+        $user->commission = $Influancer_default_commission;
         $user->save();
         
         Auth::login($user);
@@ -162,6 +173,7 @@ class LoginController extends Controller
             return redirect()->back()->withInput($request->input())->with('error',"invalid Username");
         }
 
+        
     }
     function verify_log_otp_post(Request $request){
         if(!session()->has('loginData')){
@@ -216,6 +228,27 @@ class LoginController extends Controller
             
             
         }
+    }
+    function check_username(Request $request){
+        
+        $check = User::where('username','=',$request->username)->exists();
+        if($check){
+            $suggestions = $this->generateUsernameSuggestions($request->username);
+            echo json_encode(array('status' => '0','suggestions' =>$suggestions));
+        }else{
+            echo json_encode(array('status' => '1')); 
+        }
+    }
+    function generateUsernameSuggestions($baseUsername) {
+        $suggestions = [];
+        
+        // Simple logic to generate 5 alternative usernames
+        for ($i = 1; $i <= 5; $i++) {
+            $suggestions[] = $baseUsername . rand(100, 999);
+        }
+    
+        // Return the suggestions as a formatted list
+        return $suggestions;
     }
     
 }

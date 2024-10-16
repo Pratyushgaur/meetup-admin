@@ -5,6 +5,9 @@
 <header>
     <nav class="navbar navbar--login">
         <ul class="navbar-nav">
+        <a href="javascript:void(0)" onclick="history.back()"  class="back--btn">
+                    <img src="{{ asset('assets/images/back-arrow.png') }}" alt="" class="back--arrow">
+                </a>
             <li class="nav-item">
                 <span class="header-text">Edit Profile</span>
             </li>

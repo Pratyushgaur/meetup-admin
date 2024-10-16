@@ -33,6 +33,10 @@
         </form>
         <div class="membership--section--ft">
             @foreach($plans as $key =>$value)
+            <?php 
+                $count = \App\Models\Post::where('plan_id','=',$value->id)->count();
+                $date = \App\Models\Post::where('plan_id','=',$value->id)->orderBy('id','desc')->limit(1)->first();
+            ?>
             <div class="membership--img--section">
                 <img src="{{ URL::TO('plans') }}/{{$value->image}}" onerror="this.onerror=null;this.src='{{ URL::TO("plans/default.webp") }}';" class="membership--img" alt="">
                 <div class="edit--delete--section">
@@ -55,10 +59,15 @@
                 </div>
                 <div class="membership--lebal">
                     <div class="membership--lebal--post">
-                        Total Post: 20
+                        Total Post: {{$count}}
                     </div>
                     <div class="membership--lebal--lastpost">
-                        Last Post: 20/06/24
+                        @if(empty($date))
+                        No Post
+                        @else
+                        Last Post: {{date('d/m/Y',strtotime($date->created_at))}}
+                        @endif
+                        
                     </div>
                 </div>
             </div>

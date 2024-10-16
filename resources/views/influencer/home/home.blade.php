@@ -14,15 +14,15 @@
                 </a>
             </div>
             <div class="navber--options--container">
-                <a href="javascript:void(0)" class="live--btn" style="background-color: #cb5eed;">
+                <a href="{{ route('influencer.chat.inbox') }}" class="live--btn" style="background-color: #cb5eed;">
                     <img src="{{ asset('assets/images/home-inbox.png') }}" alt="" class="inbox--icon">
                     Inbox
                 </a>
                 <span class="new--inbox--indicator"></span>
             </div>
-            <div class="navber--options--container">
+            <!-- <div class="navber--options--container">
                 <img src="{{ asset('assets/images/home-bell.png') }}" alt="" class="bell--icon">
-            </div>
+            </div> -->
             <div class="navber--options--container">
                 <img src="{{ asset('assets/images/home-bell2.png') }}" alt="" class="bell--icon">
             </div>
@@ -88,7 +88,7 @@
         <!-- Home Link Section -->
         <div class="home--profile--linkSection">
             <div class="home--link--input">
-                <input type="text" value="https://meetupme.com/{{ auth()->user()->username }}" name="" id="link--input" class="link--input text-truncate" placeholder="qwetrertuytyuitywerertyrtyrtueyrweteruirturty">
+                <input type="text" value="{{ URL::TO('/') }}/app/{{ auth()->user()->username }}" name="" id="link--input" class="link--input text-truncate" placeholder="qwetrertuytyuitywerertyrtyrtueyrweteruirturty">
                 <button class="btn link--copy--button" onclick="CopyLink()">Copy</button>
             </div>
             <div class="home--link--details">

@@ -4,7 +4,7 @@
 <header>
     <nav class="navbar--verify">
         <div class="back--nav">
-            <a href="javascript:void(0)" class="cross--btn">
+            <a href="javascript:history.back()" class="cross--btn">
                 <img src="{{ asset('assets/images/cross-icon.png') }}" alt="" class="back--arrow">
             </a>
             <span class="header-text verify--text--nav nav-link">Preview</span>
@@ -28,7 +28,7 @@
                     Hey, I'm Your {{auth()->user()->name}}
                 </h5>
                 <p class="preview--name--bio">
-                    {{auth()->user()->bio}}
+                {{strip_tags(auth()->user()->bio)}}
                 </p>
             </div>
         </div>
@@ -57,6 +57,26 @@
         <div class="feature--dispaly">
             <div id="carouselExampleControls1" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
+                    @forelse($plans as $key =>$value)
+                    <div class="carousel-item @if($key == 0) active @endif">
+                        <div class="feature--display--body membership--section">
+                            <div class="membership--image--section">
+                                <img src="{{ URL::TO('plans') }}/{{$value->image}}" onerror="this.onerror=null;this.src='{{ URL::TO("plans/default.webp") }}';" alt="" class="membership--image">
+                            </div>
+                            <div class="preview--membership--content">
+                                <h5>
+                                    {{$value->title }}
+                                </h5>
+                                <p>
+                                    {{$value->description }}
+                                </p>
+                            </div>
+                        </div>
+                        <a href="javascript:void(0)" class="btn preview--feature--button">
+                            Subscribe Now
+                        </a>
+                    </div>
+                    @empty
                     <div class="carousel-item active">
                         <div class="feature--display--body membership--section">
                             <div class="membership--image--section">
@@ -64,10 +84,10 @@
                             </div>
                             <div class="preview--membership--content">
                                 <h5>
-                                    PREMIUM MEMBERSHIP
+                                    No Plan Found 
                                 </h5>
                                 <p>
-                                    Exclusive Content that I will only post here 💞 Subscribr and see now
+                                    There are no plan found please create new
                                 </p>
                             </div>
                         </div>
@@ -75,26 +95,10 @@
                             Subscribe Now
                         </a>
                     </div>
+                    @endforelse
+                    
 
-                    <div class="carousel-item">
-                        <div class="feature--display--body membership--section">
-                            <div class="membership--image--section">
-                                <img src="{{ asset('assets/images/921e25252eebc6bf85b1836310e739ea.png') }}" alt=""
-                                    class="membership--image">
-                            </div>
-                            <div class="preview--membership--content">
-                                <h5>
-                                    PREMIUM MEMBERSHIP
-                                </h5>
-                                <p>
-                                    Exclusive Content that I will only post here 💞 Subscribr and see now
-                                </p>
-                            </div>
-                        </div>
-                        <a href="javascript:void(0)" class="btn preview--feature--button">
-                            Subscribe Now
-                        </a>
-                    </div>
+                    
                 </div>
                 <button class="carousel-control-prev" type="button" data-target="#carouselExampleControls1"
                     data-slide="prev">
