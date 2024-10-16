@@ -5,6 +5,7 @@
 /public/storage
 /public/posts
 /public/docs
+/public/thumbnails
 /storage/*.key
 /vendor
 .env
