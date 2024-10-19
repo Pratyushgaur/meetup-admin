@@ -1,5 +1,73 @@
 @extends('influencer.login_pages.app')
 
+@push('css')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    
+.video-call-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-color: black;
+}
+
+.remote-video {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.local-video {
+  position: absolute;
+  width: 120px;
+  height: 150px;
+  top: 20px;
+  right: 20px;
+  border: 2px solid white;
+  background-color: black;
+  z-index: 10;
+}
+
+.controls {
+  position: absolute;
+  bottom: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.control-btn {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  font-size: 24px;
+  padding: 15px;
+  border-radius: 50%;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.control-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.5);
+}
+
+.control-btn.end {
+  background-color: #ff3b3b;
+}
+
+.control-btn.end:hover {
+  background-color: #ff6161;
+}
+
+</style>
+@endpush
 @section('content')
 <header>
     <nav class="Chat--nav">
@@ -29,7 +97,7 @@
                         <div class="header--link--box" style="background-color: #22f14b;">
                             <img src="{{ asset('assets/images/call-chat.png') }}" alt="" class="header--link--box--image">
                         </div>
-                        <div class="header--link--box" style="background-color: #fff;">
+                        <div class="header--link--box make-call" data-id="{{ $userdata->id }}"  style="background-color: #fff;">
                             <img src="{{ asset('assets/images/video-chat.png') }}" alt="" class="header--link--box--image" style="width: 50% !important;height:35% !important;">
                         </div>
                     </div>
@@ -139,35 +207,78 @@
     </div>
 </div>
 
+<div id="videocall-model">
+<div class="video-call-container">
+    <!-- Remote User's Video -->
+    <div class="remote-video" id="remote-video"></div>
+
+    <!-- Local User's Video -->
+    <div class="local-video" id="local-video"></div>
+
+    <!-- Call Control Buttons -->
+    <div class="controls">
+      <button id="mute-audio" class="control-btn">
+        <i class="fas fa-microphone"></i>
+      </button>
+      <button id="camera-toggle" class="control-btn">
+        <i class="fas fa-video"></i>
+      </button>
+      <button id="switch-camera" class="control-btn">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+      <button id="end-call" class="control-btn end">
+        <i class="fas fa-phone-slash"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+
 @endsection
 
 @push('js')
-@vite('resources/js/app.js')
+
+<script src="https://cdn.agora.io/sdk/release/AgoraRTC_N.js"></script>
+<script src="{{URL::to('video-call/videocall.js')}}"></script>
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+     const socket = io('http://localhost:3000'); // Replace with your server address
+     let userId = "{{ auth()->id()}}";
+     socket.on('connect',()=>{
+        
+        socket.emit('client-connect',{userid:userId});
+     });
+</script>
     <script type="module">
+        //$("#videocall-model").css('display', 'flex');
+        
         $('html, body').animate({scrollTop : $('body').height()},100);
-        let userId = "{{ auth()->id()}}";
+        
         let receiver = "{{ $userdata->id}}";
+        
         document.addEventListener("DOMContentLoaded", function() {
-            Echo.channel('chat-room')
-                .listen('MessageSent', (e) => {
-                    console.log(e);
-                    if(e.message.receiver == userId){
+            socket.on("send-message-to-influencer",function(data){
+                console.log(data)
+                if(data.receiver == userId){
                         
-                        let html = '';
-                        if(e.message.type == 'message'){
-                            html = '<div class="message--receive"><div class="photo--receive" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);"><div class="online"></div></div><div class="message--text--receive">'+e.message.message+'<p class="message--time">30/07/24 10:23 PM</p></div></div>';  
-                        }
-                        if(e.message.type == 'gift'){
-                             html = '<div class="message--receive"><div class="photo--receive" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);"><div class="online"></div></div><div class="message--text--receive"><img src="'+e.message.image+'" alt="" width="50"><p class="message--time">30/07/24 10:23 PM</p></div></div>';  
-                        }
-                            
-                          $(".messages-chat").append(html);
-                          //$('.messages-chat').scrollTop($('.messages-chat')[0].scrollHeight);
-                          $('html, body').animate({scrollTop : $('body').height()},100);
+                    let html = '';
+                    if(data.type == 'message'){
+                        html = '<div class="message--receive"><div class="photo--receive" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);"><div class="online"></div></div><div class="message--text--receive">'+data.message+'<p class="message--time">'+currentDateTime()+'</p></div></div>';  
                     }
+                    if(data.type == 'gift'){
+                        html = '<div class="message--receive"><div class="photo--receive" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);"><div class="online"></div></div><div class="message--text--receive"><img src="'+data.url+'" alt="" width="50"><p class="message--time">'+currentDateTime()+'</p></div></div>';  
+                    }
+                        
+                    $(".messages-chat").append(html);
+                    //$('.messages-chat').scrollTop($('.messages-chat')[0].scrollHeight);
+                    $('html, body').animate({scrollTop : $('body').height()},100);
+                }
                 
-                    
-                });
+            })
+
+
+           
         });
 
         $("#btnRecordSound").click(function(){
@@ -178,6 +289,13 @@
                 $(".messages-chat").append(html);
                 $('html, body').animate({scrollTop : $('body').height()},100);
                 $(".write-message").val("");
+                var msgdata = {
+                    message:text,
+                    receiver:receiver,
+                    type:"message"
+                }
+                
+                socket.emit('send-message-to-user',msgdata);
                 $.ajax({
                     url: "{{ route('influencer.send.message') }}",
                     method: "post",
@@ -205,6 +323,52 @@
         $(".closeModel").click(function(){
             $("#createmodel").css('display', 'none');
         })
+        $(".make-call").click(function(){
+            let id = $(this).attr('data-id');
+            let url = $(this).attr('data-callurl');
+            $.ajax({
+                    url: "{{ route('influencer.chat.generateCall') }}",
+                    data: {id:id},
+                    success: function(response) {
+                        let data = JSON.parse(response);
+                        console.log(data)
+                        if(data.is_online){
+                            
+                           window.location.href = data.url;
+                        }else{
+                            Swal.fire({text:"User is offline ",confirmButtonColor: "#333",});
+                        }
+                        // $(".create-post-image-section").hide();
+                        // $(".create-post-form-section").show();
+                       // document.getElementById('loader').classList.remove('loader-visible');
+                        //window.location.href = "{{ route('influencer.success.page') }}";
+                    },
+
+
+                });
+        })
+        
+        function currentDateTime() {
+            const now = new Date();
+            
+            // Get date parts
+            const month = String(now.getMonth() + 1).padStart(2, '0');  // Months are 0-based
+            const day = String(now.getDate()).padStart(2, '0');
+            const year = String(now.getFullYear()).slice(-2);  // Get last 2 digits of year
+            
+            // Get time parts
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            
+            // Determine AM/PM
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            // Convert 24-hour time to 12-hour time
+            hours = hours % 12 || 12;  // Convert 0 to 12 for midnight
+            
+            // Format final output
+            return `${month}/${day}/${year} ${hours}:${minutes} ${ampm}`;
+        }
     </script>
 <script>
     $('#btnMediaUpload').click(function() {

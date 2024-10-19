@@ -46,6 +46,24 @@ class ChatController extends Controller
 
         
     }
+    
+
+    function generateVideoCall(Request $request){
+        $check = \DB::table('user_socket_ids')->where('userid','=',$request->id)->exists();
+        if($check){
+            $video = new \App\Models\VideoCall;
+            $video->sender = \Auth::id();
+            $video->receiver = $request->id;
+            $video->save();
+            $id = $video->id;
+            $video->token = Crypt::encryptString($id);
+            $video->save();
+
+            echo json_encode(array('is_online' => true,'url' =>  route('makecall',[$video->token,'sender'])));
+        }else{  
+            echo json_encode(array('is_online' => false));
+        }
+    }
     function sendMessage(Request $request){
         try{
             $request->validate([

@@ -74,11 +74,20 @@ Route::group(['prefix' => 'influencer','as' => 'influencer.','middleware' => Inf
     Route::post('send-message',[App\Http\Controllers\influencer\ChatController::class,'sendMessage'])->name('send.message');
     Route::post('per-msg-price-set',[App\Http\Controllers\influencer\ChatController::class,'UpdatePerMsgPrice'])->name('perMsgPrice.update');
     Route::post('custom-user-message-price-update/{id}',[App\Http\Controllers\influencer\ChatController::class,'UpdateUserPerMsgPrice'])->name('messagePrice.update');
+    // video call
+    Route::get('usre-videocall-generate',[App\Http\Controllers\influencer\ChatController::class,'generateVideoCall'])->name('chat.generateCall');
+    
+    
 
     Route::get('success-uploaded',function(){
         return view('influencer.success');
     })->name('success.page');
 });
+
+//  video cal route for usre and influancer 
+Route::get('make-call/{id}/{usertype}',[App\Http\Controllers\VideoCallController::class,'makeVideoCall'])->name('makecall');
+// 
+
 Route::get('videocall',function(){
     return view('videoskd');
 });
@@ -93,6 +102,9 @@ require "user.php";
 
 Route::get('/video-call', function () {
     return view('video-call');
+});
+Route::get('socket',function(){
+    return view("socket");
 });
 Route::get('/generate_token', function (Request $request) {
     $userID = $request->user_id;
