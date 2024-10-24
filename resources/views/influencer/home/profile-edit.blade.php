@@ -1,5 +1,12 @@
 @extends('influencer.login_pages.app')
 
+@push('css')
+<style>
+    main{
+        background-color: rgba(var(--feature-theme), .05);
+    }
+</style>
+@endpush
 
 @section('content')
 <header>
@@ -20,18 +27,17 @@
      <h6 class="text-danger text-center" style="margin-top:5px;">{{$message}}</h6>
     @enderror
     <div class="container-fluid edit--profile--cover">
-       
         <div class="edit--cover--background"></div>
-            <img src="{{ URL::TO('cover') }}/{{auth()->user()->cover}}" onerror="this.src='{{ asset('assets/images/cover-profile.jpg') }}'"  alt="" class="edit--profile--cover--image">
-            <button class="btn cover--change--btn">
-                Change cover
-            </button>
-        </div>
-     <form action="{{ route('influencer.profile.cover.post'); }}" id="cover-form" method="post" enctype="multipart/form-data">
+        <img src="{{ URL::TO('cover') }}/{{auth()->user()->cover}}" onerror="this.src='{{ asset('assets/images/cover-profile.jpg') }}'"  alt="" class="edit--profile--cover--image">
+        <button class="btn cover--change--btn">
+            Change cover
+        </button>
+    </div>
+    <form action="{{ route('influencer.profile.cover.post'); }}" id="cover-form" method="post" enctype="multipart/form-data">
+
         <input type="file" name="image" id="cover--change--input" accept="image/png, image/jpeg">    
         <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
-
-     </form>
+    </form>
    
     
     <!-- /Edit Profile Cover -->

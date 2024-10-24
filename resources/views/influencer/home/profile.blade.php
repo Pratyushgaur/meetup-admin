@@ -1,5 +1,12 @@
 @extends('influencer.login_pages.app')
 
+@push('css')
+<style>
+    main{
+        background-color: rgba(var(--feature-theme), .05);
+    }
+</style>
+@endpush
 
 @section('content')
 

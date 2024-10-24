@@ -13,6 +13,9 @@
     <nav class="navbar navbar--login">
         <ul class="navbar-nav">
             <li class="nav-item">
+                <a href="javascript:void(0)" onclick="history.back()"  class="back--btn">
+                    <img src="{{ asset('assets/images/back-arrow.png') }}" alt="" class="back--arrow">
+                </a>
                 <span class="header-text">Membership</span>
             </li>
         </ul>
@@ -77,7 +80,9 @@
 </main>
 
 <div class="create--btn--fixed">
-    <img src="{{ asset('assets/images/add-btn-member.png') }}" alt="" class="create--btn--icon create-new">
+    <div class="create-new create--btn--icon">
+        Add More
+    </div>
 </div>
 <!-- create Membership model -->
 <div id="edit-menbership-model" class="create-section-model">
