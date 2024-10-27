@@ -5,13 +5,16 @@ namespace App\Http\Controllers\influencer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-
+use App\Services\AgoraTokenService;
+use Illuminate\Support\Facades\Crypt;
 class HomeController extends Controller
 {
     //
 
     function home(Request $request)  {
-        return view("influencer.home.home");
+        $price = \App\Models\Price::get();
+   
+        return view("influencer.home.home",compact('price'));
     }
 
     function profile_edit(){
@@ -82,6 +85,30 @@ class HomeController extends Controller
     function insights(){
         return view('influencer.insights');
     }
+
+    function create_stream(Request $request){
+        $request->validate([
+            'price' => 'required'
+        ]);
+        $tokenService = new AgoraTokenService;
+        $token = $tokenService->generateToken("video-stream",0,1);
+        $liveStream = new \App\Models\LiveStream;
+        $liveStream->user_id = \Auth::id();
+        $liveStream->is_scheduled = "0";
+        $liveStream->price = $request->price;
+        $liveStream->token = $token;
+        $liveStream->save();
+        $encid = Crypt::encryptString($liveStream->id);
+        //
+        \App\Models\User::where('id','=',\Auth::id())->update([
+            'is_live' => '1'
+        ]);
+        return redirect()->route('video_stream',[$encid,"sender"]);
+
+
+
+    }
+
 
     function show(User $user ,Request $request){
         

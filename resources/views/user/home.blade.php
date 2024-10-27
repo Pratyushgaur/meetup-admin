@@ -11,6 +11,19 @@
         font-optical-sizing: auto;
 
     }
+    .live-section{
+        width:70px;
+        height:70px;
+        border:5px solid red;
+        margin:auto;
+        margin-top:10px;
+        border-radius:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        color:red;
+        font-weight:bold;
+    }
 </style>
 @endpush
 @section('content')
@@ -66,10 +79,22 @@
     <!-- /Profile Cover -->
 
     <!-- Profile Data -->
-    <div class="container-fluid profile--data">
+    <div class="container-fluid preview--data">
+        @if($user->is_live)
+        <div class="live-section" onclick="window.location.href='{{ route('user.view-stream',request()->segment(2)) }}'">
+            Live
+        </div>
+        @endif
         <div class="profile--info">
-            <div class="profile--image--section">
-                <img src="{{ URL::TO('avator') }}/{{auth()->user()->avtar}}" onerror="this.src='{{ asset('assets/images/verify-badge.png') }}'" alt="" class="profile--image">
+            
+            @if(Auth::guard('customer')->check())
+            <div class="preview--bio--section">
+                <h5 class="preview--name--heading">
+                    Hey, {{Auth::guard('customer')->user()->name}}
+                </h5>
+                <div class="amount-box" >
+                    <h2>{{auth()->guard('customer')->user()->balance}}</h2>
+                </div>
             </div>
 
             <div class="profile--bio--section">

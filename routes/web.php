@@ -74,18 +74,29 @@ Route::group(['prefix' => 'influencer','as' => 'influencer.','middleware' => Inf
     Route::post('send-message',[App\Http\Controllers\influencer\ChatController::class,'sendMessage'])->name('send.message');
     Route::post('per-msg-price-set',[App\Http\Controllers\influencer\ChatController::class,'UpdatePerMsgPrice'])->name('perMsgPrice.update');
     Route::post('custom-user-message-price-update/{id}',[App\Http\Controllers\influencer\ChatController::class,'UpdateUserPerMsgPrice'])->name('messagePrice.update');
+    // video call
+    Route::get('usre-videocall-generate',[App\Http\Controllers\influencer\ChatController::class,'generateVideoCall'])->name('chat.generateCall');
+    //
+    Route::post('send-audio-chat',[App\Http\Controllers\influencer\ChatController::class,'sendAudio'])->name('send.audio');
+    // live streaming 
+    Route::post('create-stream',[App\Http\Controllers\influencer\HomeController::class,'create_stream'])->name('stream.create');    
 
     Route::get('success-uploaded',function(){
         return view('influencer.success');
     })->name('success.page');
 });
+
+//  video cal route for usre and influancer 
+Route::get('make-call/{id}/{usertype}',[App\Http\Controllers\VideoCallController::class,'makeVideoCall'])->name('makecall');
+Route::get('live-stream/{id}/{usertype}',[App\Http\Controllers\VideoCallController::class,'makeLiveStream'])->name('video_stream');
+Route::get("update-user/{id}",[App\Http\Controllers\VideoCallController::class,'endLiveStream']);
+// 
+
 Route::get('videocall',function(){
     return view('videoskd');
 });
-Route::get('generate-token', [App\Http\Controllers\AgoraController::class, 'generateToken']);
 
-Route::get('/generate-videosdk-token', [App\Http\Controllers\VideoSDKController::class, 'generateToken']);
-Route::post('/create-room', [App\Http\Controllers\VideoSDKController::class, 'createRoom']); // Optional room creation
+
 
 require "Admin.php";
 require "user.php";
@@ -94,15 +105,10 @@ require "user.php";
 Route::get('/video-call', function () {
     return view('video-call');
 });
-Route::get('/generate_token', function (Request $request) {
-    $userID = $request->user_id;
-    $appID = env('ZEGO_APP_ID');
-    $appSecret = env('ZEGO_APP_SECRET');
-
-    // Call function to generate token
-    $token = generateZegoToken($userID, $appID, $appSecret);
-    return response()->json(['token' => $token]);
+Route::get('socket',function(){
+    return view("socket");
 });
+
 
 
  

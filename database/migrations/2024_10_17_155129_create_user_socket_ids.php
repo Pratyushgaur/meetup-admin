@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('chats', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('sender');
-            $table->integer('receiver');
-            $table->text('message');
-            $table->decimal('message_cost',16,2)->default(0);
-            $table->enum('message_type',["message","call","gift","image",'video','audio'])->default("message");
-            $table->string('message_file_path')->nullable();
+        Schema::create('user_socket_ids', function (Blueprint $table) {
+            $table->id();
+            $table->string('userid');
+            $table->string('socket_id');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
@@ -29,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('chats');
+        Schema::dropIfExists('user_socket_ids');
     }
 };

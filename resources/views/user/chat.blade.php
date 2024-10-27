@@ -31,6 +31,13 @@
         background-color:#1b1919 !important;
         min-height:325px !important;
     }
+    .audio-container{
+        width: 50%;
+    }
+    .audio-container audio{
+        width:220px; 
+        padding:5px 2px 5px 2px;
+    }
 </style>
 @endpush
 @section('content')
@@ -98,7 +105,20 @@
                         <div class="online"></div>
                     </div>
                     <div class="message--text--receive">
+                        @if($value->message_type == 'message')
+
                         {{$value->message}}
+
+                        @elseif($value->message_type == 'audio')
+                        <div class='audio-container'>
+                            <audio controls><source src='{{ URL::TO('chat-audio') }}/{{$value->message_file_path}}' type='audio/wav'></audio>
+                        </div>
+
+                        @else
+
+                        @endif
+
+
                         <p class="message--time">
                             {{ date('d/m/y h:i A',strtotime($value->created_at)) }}
                         </p>
@@ -279,28 +299,59 @@
 @push('js')
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-@vite('resources/js/app.js')
-    <script type="module">
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<script>
+     const socket = io('{{env('SOCKET_IO_SERVER_URL')}}'); // Replace with your server address
+    // const socket = io('{{ env('SOCKET_IO_SERVER_URL') }}', {
+    //     withCredentials: true, // This ensures that credentials like cookies are sent if needed
+    //     transports: ['polling', 'websocket']
+    // });
+    const userid = "{{ auth()->guard('customer')->user()->id }}";
+     socket.on('connect',()=>{
+        socket.emit('client-connect',{userid:userid});
+        
+        
+     });
+</script>
+    <script>
         $(document).ready(function(){
             let userId = "{{ auth()->guard('customer')->user()->id}}";
             let sendButton = '<button id="btnRecordSound"  class="btnSendMessage btn chat--input--btn" modifier="large" disable-auto-styling><img src="{{ asset("assets/images/send.png")}}" alt="" style="height: 24px;width: 24px;"></button>';
             let recordButton = '<button id="btnRecordSound" class="btn chat--input--btn" modifier="large" disable-auto-styling><img src="{{ asset("assets/images/chat-record.png")}}" alt="" style="height: 24px;width: 14px;"></button>';
-           
+            let influencer_id = "{{  $influencer_id }}";
             $('html, body').animate({
                         scrollTop: $(document).height() - $(window).height()
                     }, 100); 
-            document.addEventListener("DOMContentLoaded", function() {
-                Echo.channel('chat-room')
-                    .listen('MessageSent', (e) => {
-                        if(e.message.receiver == userId){
-                            let html = '<div class="message--receive"><div class="photo--receive" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);"><div class="online"></div></div><div class="message--text--receive">'+e.message.message+'<p class="message--time">30/07/24 10:23 PM</p></div></div>';  
-                            $(".messages-chat").append(html);
-                            $('html, body').animate({scrollTop : $('body').height()},100);
-                        }
+            socket.on("send-message-to-user",function(data){
                     
-                        
-                    });
+                if(data.receiver == userId){
+                    let html = '<div class="message--receive"><div class="photo--receive" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);"><div class="online"></div></div><div class="message--text--receive">'+data.message+'<p class="message--time">30/07/24 10:23 PM</p></div></div>';  
+                    $(".messages-chat").append(html);
+                    scrollToBottomSmooth()
+                }
+                    
             });
+
+            socket.on('request-to-connect',(data) =>{
+                if(data.requestUserId == userId){
+                    window.location.href = data.url;
+                }
+                
+            })
+            socket.on('receive-user-audio',(data) =>{
+                console.log("audi test " +data);
+                if(data.receiver == userId){
+                    const audioBlob = new Blob([data.audiodata], { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    console.log(audioUrl);
+                    let aud = "<div class='audio-container'><audio controls><source src='"+audioUrl+"' type='audio/wav'></audio></div>";
+                    let html = '<div class="message--receive"><div class="photo--receive" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);"><div class="online"></div></div><div class="message--text--receive">'+aud+'<p class="message--time">30/07/24 10:23 PM</p></div></div>';  
+                    $(".messages-chat").append(html);
+                    scrollToBottomSmooth()
+
+                   
+                }
+            })
             $('.write-message').on('keydown', function(event) {
                 
                 if($(this).val()  == ""){
@@ -332,10 +383,17 @@
                                
                                 let html = '<div class="message--response"><div class="message--text">'+text+'<p class="message--time">'+currentDateTime()+'</p></div><div class="photo--response" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);"><div class="online"></div></div></div> ';
                                 $(".messages-chat").append(html);
-                                $('html, body').animate({
-                                    scrollTop: $(document).height() - $(window).height()
-                                }, 100); 
+                                scrollToBottomSmooth()
                                 $(".write-message").val("");
+                                //
+                                var msgdata = {
+                                    message:text,
+                                    receiver:influencer_id,
+                                    type:"message"
+                                }
+                                socket.emit('send-message-to-influencer',msgdata);
+
+
                                 $.ajax({
                                     url: "{{ route('user.send.message',[request()->segment(2)]) }}",
                                     method: "post",
@@ -395,7 +453,18 @@
                                 headers: {
                                     'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the request headers
                                 },
-                                success: function(response) {},
+                                success: function(response) {
+                                    response = JSON.parse(response);
+                                    var msgdata = {
+                                        message:'-',
+                                        receiver:influencer_id,
+                                        type:"gift",
+                                        url:response.image
+                                    }
+                                    
+                                    socket.emit('send-message-to-influencer',msgdata);
+                                    
+                                },
                             });
                         }else{
                             $("#createmodel").css('display', 'none');
@@ -427,6 +496,12 @@
                 
                 // Format final output
                 return `${month}/${day}/${year} ${hours}:${minutes} ${ampm}`;
+            }
+            function scrollToBottomSmooth() {
+                const lastMessage = document.querySelector('.messages-chat').lastElementChild;
+                if (lastMessage) {
+                    lastMessage.scrollIntoView({ behavior: 'smooth' });
+                }
             }
             
         })

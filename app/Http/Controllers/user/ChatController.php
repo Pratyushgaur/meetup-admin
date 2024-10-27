@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Events\MessageSent;
 use App\Events\MessageSetup;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 
 class ChatController extends Controller
@@ -17,7 +19,8 @@ class ChatController extends Controller
         $list =  $list->reverse();
         $spent = \App\Models\Chat::where(['sender' =>auth()->guard('customer')->user()->id,'receiver' => $user->id])->sum('message_cost');
         $girf = \App\Models\Gift::get();
-        return view('user.chat',compact('list','spent','girf'));
+        $influencer_id = $user->id;
+        return view('user.chat',compact('list','spent','girf','influencer_id'));
     }
     function sendMessage(User $user ,Request $request){
         try{
@@ -42,7 +45,7 @@ class ChatController extends Controller
 
             \App\Models\Chat::CreateChat($data);
 
-            MessageSent::dispatch($data);
+            //MessageSent::dispatch($data);
             MessageSetup::dispatch($data);
             
             //\App\Models\Chat::insert($data);
@@ -82,7 +85,7 @@ class ChatController extends Controller
             //$sendData = json_encode($data);
             
 
-            MessageSent::dispatch($data);
+            //MessageSent::dispatch($data);
             MessageSetup::dispatch($data);
             
             //\App\Models\Chat::insert($data);
@@ -90,7 +93,7 @@ class ChatController extends Controller
                 'influencer_id' => $user->id,
                 'user_id' => auth()->guard('customer')->user()->id
             ]);
-            echo json_encode(array('success' => 1 ,'message' => 'success'));
+            echo json_encode(array('success' => 1 ,'message' => 'success','image' => $data['image']));
         }catch(\Exception $e){
             
             echo json_encode(array('success' => 0 ,'message' => $e->getMessage()));
@@ -140,5 +143,10 @@ class ChatController extends Controller
         
     }
 
+    function viewStream(User $user){
+        $stream = \App\Models\LiveStream::where('user_id','=',$user->id)->where('is_end','=',"0")->firstOrFail();
+        return redirect()->route('video_stream',[Crypt::encryptString($stream->id),'receiver']);
+
+    }
     
 }

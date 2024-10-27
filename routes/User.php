@@ -39,5 +39,6 @@ Route::prefix('app')->group(function () {
         Route::post('/{user:username}/user-send-gift-message',[ChatController::class,'sendGiftMessage'])->name('user.send.gift.message');
         Route::get('/{user:username}/chat', [ChatController::class, 'index'])->name('user.chat');
         Route::get('/{user:username}/check-for-message',[ChatController::class, 'checkBalance'])->name('user.send.message.check');
+        Route::get('/{user:username}/view-stream',[ChatController::class, 'viewStream'])->name('user.view-stream');
     });
 });

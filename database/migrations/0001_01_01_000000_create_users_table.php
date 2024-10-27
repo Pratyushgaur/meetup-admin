@@ -42,6 +42,7 @@ return new class extends Migration
             $table->text('linkedin_url')->nullable();
             $table->decimal('per_msg_charge')->default(10);
             $table->timestamp('last_settlement')->nullable();
+            $table->enum('is_live',["0","1"])->default('0');
             
 
             
