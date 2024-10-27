@@ -119,6 +119,20 @@ body {
         backdrop-filter: blur(15px);
         overflow-x: scroll;
     }
+    #recording-model {
+        z-index: 2000;
+        position: fixed;
+        height: 100vh;
+        width: 450px;
+        top: 0px;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.4);
+        -webkit-backdrop-filter: blur(15px);
+        backdrop-filter: blur(15px);
+        overflow-x: scroll;
+    }
 
     #createmodel--live {
         z-index: 2000;
@@ -397,6 +411,20 @@ body {
     }
 
     #createmodel {
+        position: fixed;
+        height: 100vh;
+        width: 100%;
+        top: 0px;
+        z-index: 2000;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.4);
+        -webkit-backdrop-filter: blur(15px);
+        backdrop-filter: blur(15px);
+        overflow-x: scroll;
+    }
+    #recording-model {
         position: fixed;
         height: 100vh;
         width: 100%;

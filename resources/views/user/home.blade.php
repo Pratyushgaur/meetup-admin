@@ -8,6 +8,19 @@
         font-optical-sizing: auto;
 
     }
+    .live-section{
+        width:70px;
+        height:70px;
+        border:5px solid red;
+        margin:auto;
+        margin-top:10px;
+        border-radius:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        color:red;
+        font-weight:bold;
+    }
 </style>
 @endpush
 @section('content')
@@ -68,8 +81,13 @@
 
     <!-- Profile Data -->
     <div class="container-fluid preview--data">
-
+        @if($user->is_live)
+        <div class="live-section" onclick="window.location.href='{{ route('user.view-stream',request()->segment(2)) }}'">
+            Live
+        </div>
+        @endif
         <div class="profile--info">
+            
             @if(Auth::guard('customer')->check())
             <div class="preview--bio--section">
                 <h5 class="preview--name--heading">

@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('chats', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('sender');
-            $table->integer('receiver');
-            $table->text('message');
-            $table->decimal('message_cost',16,2)->default(0);
-            $table->enum('message_type',["message","call","gift","image",'video','audio'])->default("message");
-            $table->string('message_file_path')->nullable();
+        Schema::create('live_streams', function (Blueprint $table) {
+            $table->id();
+            $table->integer('user_id');
+            $table->enum('is_scheduled',["0","1"])->default("0");
+            $table->datetime('scheduled_time')->nullable();
+            $table->decimal('price',16,2)->default(0);
+            $table->text('token')->nullable();
+            $table->enum('is_end',["0","1"])->default("0");
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('chats');
+        Schema::dropIfExists('live_streams');
     }
 };

@@ -148,14 +148,21 @@
       </button>
     </div>
   </div>
+  <input type="hidden" value="{{$agoratoken}}" id="agoraToken">
+  <input type="hidden" value="{{$uuid}}" id="uuid">
+<script>
   
-
-  <script src="https://cdn.agora.io/sdk/release/AgoraRTC_N.js"></script>
+</script>
+<script src="https://cdn.agora.io/sdk/release/AgoraRTC_N.js"></script>
 <script src="{{URL::to('video-call/videocall.js')}}"></script>
   <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
   <script>
     $("#join-modal").modal('show');
-     const socket = io('http://localhost:3000'); // Replace with your server address
+    const socket = io('{{env('SOCKET_IO_SERVER_URL')}}'); // Replace with your server address
+    //  const socket = io('{{ env('SOCKET_IO_SERVER_URL') }}', {
+    //     withCredentials: true, // This ensures that credentials like cookies are sent if needed
+    //     transports: ['polling', 'websocket']
+    // });
      let userId = "{{ $senderData->id}}";
      let requestId = "{{ $receiverData->id}}";
      let usertype = "{{ $usertype }}";
@@ -174,6 +181,6 @@
      });
 
 </script>
-  <script src="app.js"></script>
+  
 </body>
 </html>

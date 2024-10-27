@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Events\MessageSent;
 use App\Events\MessageSetup;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 
 class ChatController extends Controller
@@ -141,5 +143,10 @@ class ChatController extends Controller
         
     }
 
+    function viewStream(User $user){
+        $stream = \App\Models\LiveStream::where('user_id','=',$user->id)->where('is_end','=',"0")->firstOrFail();
+        return redirect()->route('video_stream',[Crypt::encryptString($stream->id),'receiver']);
+
+    }
     
 }

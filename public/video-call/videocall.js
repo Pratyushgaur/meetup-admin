@@ -1,4 +1,5 @@
 const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+
 let localTrack, remoteTrack;
 let isAudioMuted = false;
 let isVideoMuted = false;
@@ -6,21 +7,22 @@ let videoDevices = [];
 let currentCamera = 0; // Keeps track of which camera is currently active
 
 const appId = '196d749c65c242a880352e012bdc2724';
-const token = null;//"007eJxTYBBWvRQrGJz7c5vfaV4bTZE9Rg0hf+/7vxJTLlj2S0ZnqbwCg6GlWYq5iWWymWmykYlRooWFgbGpUaqBoVFSSrKRuZFJRJ1wekMgI8NZUXlWRgYIBPG5GMoyU1LzdUtSi0sYGAAWLR37"; // If you have a token, add it here.
-const channelName = 'video-test';
+const token = document.getElementById("agoraToken").value;
 
+const channelName = 'video-test';
+const uid = document.getElementById("uuid").value;
 
 document.getElementById("make-call").addEventListener('click', async () => {
     try {
         $(".join-container").remove();
-        const uid = await client.join(appId, channelName, token);
+        await client.join(appId, channelName, token,0);
         console.log('User ' + uid + ' joined channel successfully');
-
+        
         // Get all video devices (cameras)
         videoDevices = await AgoraRTC.getCameras();
 
         // Create local audio and video tracks
-        const [localAudioTrack, localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
+        const [localAudioTrack, localVideoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks(); 
 
         // Play local video
         localVideoTrack.play('local-video');
@@ -65,7 +67,8 @@ document.getElementById('end-call').onclick = async function () {
         // Leave the channel
         await client.leave();
         console.log('Left the channel successfully');
-        window.location.reload();
+        //window.location.reload();
+        window.history.back();
     } catch (error) {
         console.error('Error leaving the channel:', error);
     }

@@ -265,39 +265,41 @@
         </div>
 
         <div class="form-check radio-input">
-            <input class="form-check-input coolor-radio" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+            <input class="form-check-input coolor-radio" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
             <label class="form-check-label" for="flexRadioDefault1">
                 Now
             </label>
         </div>
         <div class="form-check radio-input">
             <input class="form-check-input coolor-radio" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
-                checked>
+                >
             <label class="form-check-label" for="flexRadioDefault2">
                 Schedule
             </label>
         </div>
 
-        <form>
-            <div class="form-group pl-3 pr-3">
+        <form method="post" action="{{ route('influencer.stream.create') }}">
+            @csrf
+            <!-- <div class="form-group pl-3 pr-3">
                 <label for="Input1">Create Schedule</label>
                 <input type="datetime-local" class="form-control live-stram-input" id="Input1"
                     placeholder="Enter your Schedule">
-            </div>
+            </div> -->
             <div class="form-group pl-3 pr-3">
                 <label for="Select1">Select Entry Price</label>
-                <select class="form-control live-stram-input" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right;background-size: 25px;">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+                <select name="price" class="form-control live-stram-input" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right;background-size: 25px;">
+                    <option value="0">Free</option>
+                    @foreach($price as $key =>$value)
+                        <option>{{$value->prices}}</option>
+                    @endforeach
+                    
+                   
                 </select>
             </div>
 
             <div class="stream--submit--button">
                 <a href="javascript:void(0)" class="btn btn-cancel-create live--model--close">Cancel</a>
-                <button type="button" class="btn btn-cancel-create stream--btn--bg">
+                <button type="submit" class="btn btn-cancel-create stream--btn--bg">
                     Create
                 </button>
             </div>

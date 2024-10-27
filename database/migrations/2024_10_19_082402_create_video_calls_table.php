@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('sender');
             $table->string('receiver');
             $table->text('token')->nullable();
+            $table->text('agora_token')->nullable();
             $table->enum('is_user_joined',["0","1"])->default("0");
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

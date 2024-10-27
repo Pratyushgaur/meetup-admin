@@ -65,6 +65,35 @@
 .control-btn.end:hover {
   background-color: #ff6161;
 }
+.button-box{
+    padding:10px;
+    display:flex;
+    gap:12px;
+    justify-content:center;
+}
+.animate-record{
+    animation: kreep 0.7s ease infinite alternate;
+    
+}
+.timer-counter{
+    display:flex;
+    justify-content:center;
+}
+.audio-container{
+    width: 50%;
+}
+.audio-container audio{
+    width:220px; 
+    padding:5px 2px 5px 2px;
+}
+
+@keyframes kreep {
+    0% {-webkit-transform: scale(1.1,.9);
+        transform: scale(1.1,.9);}
+   50% { -webkit-transform: scale(.9,1.1) translateY(-.5rem)}
+   70% { -webkit-transform: scale(1);
+         transform: scale(1);}
+}
 
 </style>
 @endpush
@@ -124,6 +153,12 @@
                         
                         {{$value->message}}
                         
+                        @elseif($value->message_type == 'audio')
+                        
+                        <div class='audio-container'>
+                            <audio controls><source src='{{ URL::TO('chat-audio') }}/{{$value->message_file_path}}' type='audio/wav'></audio>
+                        </div>
+
                         @else
                         <img src="{{URL::TO('/')}}/chat_files/{{ $value->message_file_path }}" alt="" width="50">
                         
@@ -159,18 +194,27 @@
                 </div>
                 @endif
             @endforeach  
-            </div>
-        </div>
 
+            
+        </div>
+        <div id="recordingIndicator" class="recording-indicator" style="display: none;">
+            <p>Recording...</p>
+        </div>
         <div class="footer-chat">
             <input type="text" class="write-message" placeholder="Type your message here" />
             <button id="btnMediaUpload" class="btn chat--input--btn">
                 <img src="{{ asset('assets/images/chat-attachment.png')}}" alt="" style="height: 24px;width: 24px;">
             </button>
-            <input type="file" id="attechment--input--chat" name="">
-            <button id="btnRecordSound" class="btn chat--input--btn" modifier="large" disable-auto-styling>
+            <input type="file" id="attechment--input--chat" name="" accept="video/*,image/*">
+            <!-- <button id="btnRecordSound" class="btn chat--input--btn" modifier="large" disable-auto-styling>
                 <img src="{{ asset('assets/images/chat-record.png')}}" alt="" style="height: 24px;width: 14px;">
-            </button>
+            </button> -->
+
+            <div class="btncbox">
+                <button id="btnRecordSound" class="btn chat--input--btn" modifier="large" disable-auto-styling>
+                    <img src="{{ asset('assets/images/chat-record.png')}}" alt="" style="height: 24px;width: 14px;">
+                </button>
+            </div>
         </div>
 
     </div>
@@ -206,45 +250,57 @@
         </form>
     </div>
 </div>
+<div id="recording-model">
+    <div class="modelbox stream-model" style="min-height:150px;">
+        <div class="modelnav">
+            <div class="model--nav--head">Record</div>
+            <div class="closeRecording">
+                <img src="{{ asset('assets/images/cross-icon.png') }}" class="model--close live--model--close closeModel" alt="" >
+            </div>
+        </div>
 
-<div id="videocall-model">
-<div class="video-call-container">
-    <!-- Remote User's Video -->
-    <div class="remote-video" id="remote-video"></div>
+        <div class="btn-change-cover-section">
+            <img class="recordicon" src="{{ URL::TO('/microphone.png') }}" alt="" width="50" style="display:block">
+            <img class="animate-record" src="{{ URL::TO('/rec-button.png') }}" alt="" width="50" style="display:none">
+            <audio id="previde-recording" style="display:none" controls></audio>
+            
 
-    <!-- Local User's Video -->
-    <div class="local-video" id="local-video"></div>
+        </div>
+        <div class="timer-counter">
+            
+        </div>
+        <div class="button-box">
+            <button class="btn btn-cancel-create stream--btn--bg " id="start-recording">Start</button>
+            <button class="btn btn-cancel-create stream--btn--bg " id="stop-recording" style="display:none">Stop</button>
+            <button class="btn btn-cancel-create stream--btn--bg " id="send-recording" style="display:none">Send</button>
+            <button class="btn btn-cancel-create stream--btn--bg closeRecording" >Cancel</button>
+            
+        </div>
 
-    <!-- Call Control Buttons -->
-    <div class="controls">
-      <button id="mute-audio" class="control-btn">
-        <i class="fas fa-microphone"></i>
-      </button>
-      <button id="camera-toggle" class="control-btn">
-        <i class="fas fa-video"></i>
-      </button>
-      <button id="switch-camera" class="control-btn">
-        <i class="fas fa-sync-alt"></i>
-      </button>
-      <button id="end-call" class="control-btn end">
-        <i class="fas fa-phone-slash"></i>
-      </button>
+        
     </div>
-  </div>
 </div>
+
 
 
 @endsection
 
 @push('js')
 
-<script src="https://cdn.agora.io/sdk/release/AgoraRTC_N.js"></script>
-<script src="{{URL::to('video-call/videocall.js')}}"></script>
+
+
 <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-     const socket = io('http://localhost:3000'); // Replace with your server address
+     const socket = io('{{env('SOCKET_IO_SERVER_URL')}}'); // Replace with your server address
+
+    // const socket = io('{{ env('SOCKET_IO_SERVER_URL') }}', {
+    //     withCredentials: true, // This ensures that credentials like cookies are sent if needed
+    //     transports: ['polling', 'websocket']
+    // });
      let userId = "{{ auth()->id()}}";
+     let sendButton = '<button id="btnRecordSound"  class="btnSendMessage btn chat--input--btn" modifier="large" disable-auto-styling><img src="{{ asset("assets/images/send.png")}}" alt="" style="height: 24px;width: 24px;"></button>';
+            let recordButton = '<button id="btnRecordSound" class="btn chat--input--btn" modifier="large" disable-auto-styling><img src="{{ asset("assets/images/chat-record.png")}}" alt="" style="height: 24px;width: 14px;"></button>';
      socket.on('connect',()=>{
         
         socket.emit('client-connect',{userid:userId});
@@ -253,10 +309,10 @@
     <script type="module">
         //$("#videocall-model").css('display', 'flex');
         
-        $('html, body').animate({scrollTop : $('body').height()},100);
+        scrollToBottomSmooth();
         
         let receiver = "{{ $userdata->id}}";
-        
+        let csrfToken = $('meta[name="csrf-token"]').attr('content');
         document.addEventListener("DOMContentLoaded", function() {
             socket.on("send-message-to-influencer",function(data){
                 console.log(data)
@@ -272,7 +328,8 @@
                         
                     $(".messages-chat").append(html);
                     //$('.messages-chat').scrollTop($('.messages-chat')[0].scrollHeight);
-                    $('html, body').animate({scrollTop : $('body').height()},100);
+                    //$('html, body').animate({scrollTop : $('body').height()},100);
+                    scrollToBottomSmooth();
                 }
                 
             })
@@ -281,42 +338,58 @@
            
         });
 
-        $("#btnRecordSound").click(function(){
-            let text = $(".write-message").val();
-            if(text){
-                let csrfToken = $('meta[name="csrf-token"]').attr('content');
-                let html = '<div class="message--response"><div class="message--text">'+text+'<p class="message--time">30/07/24 10:23 PM</p></div><div class="photo--response" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);"><div class="online"></div></div></div> ';
-                $(".messages-chat").append(html);
-                $('html, body').animate({scrollTop : $('body').height()},100);
-                $(".write-message").val("");
-                var msgdata = {
-                    message:text,
-                    receiver:receiver,
-                    type:"message"
-                }
+        $('.write-message').on('keyup', function(event) {
                 
-                socket.emit('send-message-to-user',msgdata);
-                $.ajax({
-                    url: "{{ route('influencer.send.message') }}",
-                    method: "post",
-                    
-                    data: {message:text,receiver:receiver},
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the request headers
-                    },
-                    success: function(response) {
-                        
-                        // $(".create-post-image-section").hide();
-                        // $(".create-post-form-section").show();
-                       // document.getElementById('loader').classList.remove('loader-visible');
-                        //window.location.href = "{{ route('influencer.success.page') }}";
-                    },
-
-
-                });
             
+            if (event.key === 'Enter' || event.keyCode === 13) {
+                event.preventDefault(); // Prevent default behavior (like submitting a form)
+                sendMessage();
             }
-        })
+            if($(this).val()  == ""){
+                $(".btncbox").html(recordButton);
+            }else{
+                $(".btncbox").html(sendButton);
+
+            }
+        });
+
+        // $("#btnRecordSound").click(function(){
+        //     let text = $(".write-message").val();
+        //     if(text){
+        //         let csrfToken = $('meta[name="csrf-token"]').attr('content');
+        //         let html = '<div class="message--response"><div class="message--text">'+text+'<p class="message--time">30/07/24 10:23 PM</p></div><div class="photo--response" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);"><div class="online"></div></div></div> ';
+        //         $(".messages-chat").append(html);
+        //         //$('html, body').animate({scrollTop : $('body').height()},100);
+        //         scrollToBottomSmooth();
+        //         $(".write-message").val("");
+        //         var msgdata = {
+        //             message:text,
+        //             receiver:receiver,
+        //             type:"message"
+        //         }
+                
+        //         socket.emit('send-message-to-user',msgdata);
+        //         $.ajax({
+        //             url: "{{ route('influencer.send.message') }}",
+        //             method: "post",
+                    
+        //             data: {message:text,receiver:receiver},
+        //             headers: {
+        //                 'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the request headers
+        //             },
+        //             success: function(response) {
+                        
+        //                 // $(".create-post-image-section").hide();
+        //                 // $(".create-post-form-section").show();
+        //                // document.getElementById('loader').classList.remove('loader-visible');
+        //                 //window.location.href = "{{ route('influencer.success.page') }}";
+        //             },
+
+
+        //         });
+            
+        //     }
+        // })
         $(".changeMsgPriceBtn").click(function(){
             $("#createmodel").css('display', 'flex');
         })
@@ -347,6 +420,35 @@
 
                 });
         })
+
+        function sendMessage(){
+            let text = $(".write-message").val();
+            if(text){
+                
+                let html = '<div class="message--response"><div class="message--text">'+text+'<p class="message--time">30/07/24 10:23 PM</p></div><div class="photo--response" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);"><div class="online"></div></div></div> ';
+                $(".messages-chat").append(html);
+                //$('html, body').animate({scrollTop : $('body').height()},100);
+                scrollToBottomSmooth();
+                $(".write-message").val("");
+                var msgdata = {
+                    message:text,
+                    receiver:receiver,
+                    type:"message"
+                }
+                
+                socket.emit('send-message-to-user',msgdata);
+                $.ajax({
+                    url: "{{ route('influencer.send.message') }}",
+                    method: "post",
+                    
+                    data: {message:text,receiver:receiver},
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the request headers
+                    }
+                });
+            
+            }
+        }
         
         function currentDateTime() {
             const now = new Date();
@@ -369,48 +471,232 @@
             // Format final output
             return `${month}/${day}/${year} ${hours}:${minutes} ${ampm}`;
         }
-    </script>
-<script>
-    $('#btnMediaUpload').click(function() {
-       // $('#attechment--input--chat').trigger("click");
-    })
+        function scrollToBottomSmooth() {
+            const lastMessage = document.querySelector('.messages-chat').lastElementChild;
+            if (lastMessage) {
+                lastMessage.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+       
+        $('#btnMediaUpload').click(function() {
+         $('#attechment--input--chat').trigger("click");
+        })
+        $(".closeRecording").click(function(){
+            $("#recording-model").css('display', 'none');
+            resetAudioForm();
+            
+           
+          
+        })
 
-    const startButton = document.getElementById('btnRecordSound');
+         
 
-    let audioRecorder;
-    let audioChunks = [];
-    navigator.mediaDevices.getUserMedia({
-        audio: true
-    })
-    .then(stream => {
+        const startButton = document.getElementById('btnRecordSound');
+        const recordingIndicator = document.getElementById('recordingIndicator'); // The recording indicator
+        const startRecButton = document.getElementById("start-recording");
+        const sendRecording = document.getElementById("send-recording");
+        const stopRecording = document.getElementById("stop-recording");
+        let audioBlob;
+        let audioRecorder;
+        let audioChunks = [];
+        let timerInterval ;
+        let isModelClose = false;
+        function startRecordingTimer() {
+            let recordingTime = 0;
+            timerInterval = setInterval(() => {
+                recordingTime++;
+                const minutes = Math.floor(recordingTime / 60);
+                const seconds = recordingTime % 60;
 
-        // Initialize the media recorder object
-        audioRecorder = new MediaRecorder(stream);
+                // Format minutes and seconds to be two digits
+                const formattedMinutes = String(minutes).padStart(2, '0');
+                const formattedSeconds = String(seconds).padStart(2, '0');
+                $(".timer-counter").html(`<h4>${formattedMinutes}:${formattedSeconds}</h4>`);
+                //recordingTimer.textContent = `Recording: ${formattedMinutes}:${formattedSeconds}`;
+            }, 1000); // Update timer every second
+        }
+        function stopRecordingTimer(){
+            clearInterval(timerInterval);
+        }
+        function resetAudioForm(){
+            $("#start-recording").show();
+            $("#send-recording").hide();
+            $("#stop-recording").hide();
+            $("#previde-recording").attr("src", "");
+            $("#previde-recording").hide();
+            $(".animate-record").hide();
+            $(".recordicon").show();
+            stopRecordingTimer();
+            $(".timer-counter").html('');
+            isModelClose = true;
+            if (audioRecorder.state !== 'inactive') {
+                audioRecorder.stop();
+                console.log('Recording stopped...');
+                // socket.emit('sendAudio', audioBlob);
+            }
+            
+        }
+        
 
-        // dataavailable event is fired when the recording is stopped
-        audioRecorder.addEventListener('dataavailable', e => {
-            audioChunks.push(e.data);
-        });
+        navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+            //audio initilize
+                audioRecorder = new MediaRecorder(stream);
+                audioRecorder.addEventListener('dataavailable', e => {
+                if(isModelClose == false){
+                    audioChunks.push(e.data);
+                    if (audioChunks.length > 0) { // Check if audioChunks is not empty
+                        audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        stopRecordingTimer();
+                        // Ensure the audio element is properly updated and displayed after a small delay
+                        setTimeout(() => {
+                            $("#previde-recording").attr("src", audioUrl);  // Update the audio source
+                            $("#previde-recording").show();  // Show the audio player
+                            $(".animate-record").hide();
+                            $("#send-recording").show();
+                            $("#stop-recording").hide();
+                            $("#previde-recording")[0].play();
+                        }, 500); // Small delay to let the audio blob process
+                    } else {
+                        console.log("No audio data recorded.");
+                    }
+                }
+                
+            
+            });
+            const startRecording =  () => {
+                isModelClose = false;
+                audioRecorder.start();
+                console.log('Recording started');
+                
+                                                                                                                                                                                                                                                                                                                                                                                                                                
+            };
+            
+            startButton.addEventListener('click', () =>{
+                
+                $("#recording-model").css('display', 'flex');
+            });
+            //
+            startRecButton.addEventListener('click', ()=>{
+                startRecording();
+                startRecordingTimer();
+                
+                $(".recordicon").hide();
+                $(".animate-record").show();
+                
+                $("#start-recording").hide();
+                $("#stop-recording").show();
+            });
+            //
+            stopRecording.addEventListener('click',() => {
+                //previde-recording
+                if (audioRecorder.state !== 'inactive') {
+                    audioRecorder.stop();
+                    console.log('Recording stopped...');
+                    // socket.emit('sendAudio', audioBlob);
+                }
+            })
+            sendRecording.addEventListener('click',() =>{
+                $("#previde-recording")[0].pause();
+                $("#previde-recording")[0].currentTime = 0;
+                $("#recording-model").css('display', 'none');
+                let aud = "<div class='audio-container'><audio controls><source src='"+$("#previde-recording").attr("src")+"' type='audio/wav'></audio></div>";
+                let html = '<div class="message--response"><div class="message--text">'+aud+'<p class="message--time">30/07/24 10:23 PM</p></div><div class="photo--response" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);"><div class="online"></div></div></div> ';
+                $(".messages-chat").append(html);
+                scrollToBottomSmooth();
+                //
+                const reader = new FileReader();
+                reader.readAsArrayBuffer(audioBlob);
+                reader.onloadend = () => {
+                    const audioBuffer = reader.result;
+                    socket.emit('send_audio', {audiodata:audioBuffer,receiver:receiver});
+                }
+                //
 
-        // start recording when the start button is clicked
-        startButton.addEventListener('touchstart', () => {
-            console.log('check');
-            audioChunks = [];
-            audioRecorder.start();
+                const formData = new FormData();
+                formData.append('audioFile', audioBlob, 'audio_recording.wav'); // Append the blob with a filename
+                formData.append('receiver', receiver); 
+
+                $.ajax({
+                    url: "{{ route('influencer.send.audio') }}",
+                    method: "post",
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the request headers
+                    }
+                });
+                resetAudioForm();
+
+
+            })
 
             
+        })
+        .catch(err => {
+            console.error('Error accessing microphone: ' + err);
         });
+    </script>
+<script>
+    
+    
+    
 
-        // stop recording when the stop button is clicked
-        startButton.addEventListener('touchend mouseup', () => {
-            audioRecorder.stop();
-            console.log('check');
+    // Get the user's microphone input
+    // navigator.mediaDevices.getUserMedia({ audio: true })
+    //     .then(stream => {
 
-        });
-    }).catch(err => {
+    //         // Initialize the MediaRecorder object
+    //         audioRecorder = new MediaRecorder(stream);
 
-        // If the user denies permission to record audio, then display an error.
-        console.log('Error: ' + err);
-    });
+    //         // Event listener for when audio data is available
+    //         audioRecorder.addEventListener('dataavailable', e => {
+    //             audioChunks.push(e.data);
+    //         });
+
+    //         // Start recording when the button is pressed (either touch or click)
+    //         const startRecording = () => {
+    //             audioChunks = [];
+    //             setTimeout(() => {
+    //                 audioRecorder.start();
+    //                 console.log('Recording started');
+    //             }, 2000); // 2000 milliseconds = 2 seconds
+               
+                                                                                                                                                                                                                                                                                                                                                                                                                                
+    //         };
+
+    //         // Stop recording when the button is released
+    //         const stopRecording = () => {
+    //             if (audioRecorder.state !== 'inactive') {
+    //                 audioRecorder.stop();
+    //                 console.log('Recording stopped...');
+
+    //                 // After stopping, create the audio blob and send or use it
+    //                 const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+    //                 const audioUrl = URL.createObjectURL(audioBlob);
+    //                 console.log(audioUrl);  // You can play or send this URL
+                    
+    //                 // For example, to send via Socket.IO:
+    //                 // socket.emit('sendAudio', audioBlob);
+    //             }
+    //         };
+
+    //         // Add event listeners for both touch and mouse events
+    //         startButton.addEventListener('touchstart', startRecording);
+    //         startButton.addEventListener('mousedown', startRecording);
+
+    //         // Add listeners to stop recording
+    //         startButton.addEventListener('touchend', stopRecording);
+    //         startButton.addEventListener('mouseup', stopRecording);
+
+    //         // Prevent event overlap on touch devices
+    //         startButton.addEventListener('touchcancel', stopRecording);
+    //         document.body.addEventListener('mouseleave', stopRecording);  // Stops recording if the mouse leaves the button
+    //     })
+    //     .catch(err => {
+    //         console.error('Error accessing microphone: ' + err);
+    //     });
 </script>
 @endpush

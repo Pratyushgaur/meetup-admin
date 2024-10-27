@@ -8,7 +8,7 @@ use App\Models\Chat;
 use App\Models\InfluencerInbox;
 use App\Models\Price;
 use App\Models\User;
-
+use App\Services\AgoraTokenService;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use App\Events\MessageSent;
@@ -51,9 +51,13 @@ class ChatController extends Controller
     function generateVideoCall(Request $request){
         $check = \DB::table('user_socket_ids')->where('userid','=',$request->id)->exists();
         if($check){
+            $tokenService = new AgoraTokenService;
+            $token = $tokenService->generateToken("video-test",0,1);
+            
             $video = new \App\Models\VideoCall;
             $video->sender = \Auth::id();
             $video->receiver = $request->id;
+            $video->agora_token  = $token;
             $video->save();
             $id = $video->id;
             $video->token = Crypt::encryptString($id);
@@ -80,9 +84,6 @@ class ChatController extends Controller
                 'message_cost' => 1,
                 
             ]; 
-            //\App\Models\Chat::CreateChat($data);
-            MessageSent::dispatch($data);
-            //MessageSetup::dispatch($data);
             \App\Models\Chat::insert($data);
             \App\Models\InfluencerInbox::firstOrCreate([
                 'influencer_id' => \Auth::id(),
@@ -95,6 +96,48 @@ class ChatController extends Controller
         }
         
 
+    }
+    function sendAudio(Request $request){
+        try{
+            $request->validate([
+                'audioFile' => 'required',
+                'receiver' => 'required',
+            ]);
+            if ($request->hasFile('audioFile')) {
+                $file = $request->file('audioFile');
+                $filename = time().rand(1000,9999).\Auth::id() . '_audio.wav';  // Generate a unique filename
+                $filePath = 'chat-audio/';  // Folder to store audio files
+        
+                // Store the audio file
+                $file->move(public_path($filePath), $filename);
+                //
+               
+                $receiver = $request->receiver;
+            
+                $data = [
+                    "sender" => \Auth::id(),
+                    "receiver" => $receiver,
+                    'message' => "-",
+                    'message_cost' => 1,
+                    'message_type' => 'audio',
+                    'message_file_path' => $filename,
+                    
+                ]; 
+                \App\Models\Chat::insert($data);
+                \App\Models\InfluencerInbox::firstOrCreate([
+                    'influencer_id' => \Auth::id(),
+                    'user_id' => $receiver
+                ]);
+               
+            } else {
+                return response()->json(['error' => 'No audio file provided'], 400);
+            }
+            
+            echo json_encode(array('success' => 1 ,'message' => 'success'));
+        }catch(\Exception $e){
+            
+            echo json_encode(array('success' => 0 ,'message' => $e->getMessage()));
+        }
     }
     function UpdatePerMsgPrice(Request $request){
         try{
