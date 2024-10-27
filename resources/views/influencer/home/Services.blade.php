@@ -11,6 +11,9 @@
     <nav class="navbar navbar--login">
         <ul class="navbar-nav">
             <li class="nav-item">
+                <a href="javascript:void(0)" onclick="history.back()"  class="back--btn">
+                    <img src="{{ asset('assets/images/back-arrow.png') }}" alt="" class="back--arrow">
+                </a>
                 <span class="header-text">Services</span>
             </li>
         </ul>
@@ -19,43 +22,45 @@
 
 <main class="mb-120">
     <div class="container-fluid">
-        <div class="services--heading--page mt-3 service-lable" contenteditable="true">{{auth()->user()->service_label_name}}</div>
+        <div class="services--heading--page mt-3 service-lable" contenteditable="true">
+            {{auth()->user()->service_label_name}}
+        </div>
         <a href="javascript:void(0)" class="services--update--button update-service-lable">
-                Update
+            Update
         </a>
         <form id="service-form" action="{{ route('influencer.services.name.post') }}" style="display:none;" method="post">
-        @csrf
-        <input type="text" name="service_name" class="service_name">
+            @csrf
+            <input type="text" name="service_name" class="service_name">
         </form>
         @foreach($service as $key =>$value)
-        <div class="services--detail--section">
-            <div class="services--section">
-                <div class="services--msg">
-                   {{$value->service_type}}
+            <div class="services--detail--section">
+                <div class="services--section">
+                    <div class="services--msg">
+                    {{$value->service_type}}
+                    </div>
+                    <div class="services--price">
+                        Price: <b>{{number_format($value->price,2)}}</b>
+                    </div>
                 </div>
-                <div class="services--price">
-                    Price: <b>{{number_format($value->price,2)}}</b>
+                <div class="services--edit--delete--section">
+                    <div class="services--delete--icon--section">
+                        <img src="{{ asset('assets/images/delete-btn.jpg') }}" class="services--delete--icon--img" alt="">
+                    </div>
+                    <div class="services--edit--icon--section">
+                        <a  data-id="{{ $value->id }}" data-title="{{$value->service_type}}" data-price="{{ $value->price }}" class="edit-btn">
+                            <img src="{{ asset('assets/images/edit-icon.png') }}" class="services--edit--icon--img " alt="">
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="services--edit--delete--section">
-                <div class="services--delete--icon--section">
-                    <img src="{{ asset('assets/images/delete-btn.jpg') }}" class="services--delete--icon--img" alt="">
-                </div>
-                <div class="services--edit--icon--section">
-                    <a  data-id="{{ $value->id }}" data-title="{{$value->service_type}}" data-price="{{ $value->price }}" class="edit-btn"><img src="{{ asset('assets/images/edit-blue-btn.jpg') }}" class="services--edit--icon--img " alt=""></a>
-                </div>
-            </div>
-        </div>
         @endforeach
-        
-
-        
-
     </div>
 </main>
 
-<div class="create--btn--fixed ">
-    <img src="{{ asset('assets/images/add-btn-member.png') }}" alt="" class="create-new create--btn--icon">
+<div class="create--btn--fixed">
+    <div class="create-new create--btn--icon">
+        Add More
+    </div>
 </div>
 <!-- Edit Section model -->
 <div id="edit-section-model" class="edit-section-model">

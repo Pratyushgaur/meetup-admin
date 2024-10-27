@@ -86,6 +86,22 @@
         <!-- /Home Profile Details -->
 
         <!-- Home Link Section -->
+        
+        <div class="row">
+            <div class="col-12 option--section--header">
+                Customized Tag line
+            </div>
+        </div>
+
+        <div class="profile--links--section mt-3">
+            <a href="" class="btn preview--link" style="width: 42%;">
+                Send Notification
+            </a>
+            <a href="{{ route('user.chat',request()->segment(2)) }}" class="btn preview--link">
+                Broadcast
+            </a>
+        </div>
+        
         <div class="home--profile--linkSection">
             <div class="home--link--input">
                 <input type="text" value="{{ URL::TO('/') }}/app/{{ auth()->user()->username }}" name="" id="link--input" class="link--input text-truncate" placeholder="qwetrertuytyuitywerertyrtyrtueyrweteruirturty">
@@ -137,7 +153,94 @@
         <!-- /Home Link Section -->
 
         <!-- Account Detials -->
-        <div>
+        
+        <div class="row">
+            <div class="col-12 option--section--header">
+                Profile insights
+            </div>
+            <div class="col-4 option--section--home">
+                <div class="option--logo--section--home">
+                    <div class="option--logo--home" style="background-color: #7ebaff;">
+                        <img src="{{ asset('assets/images/pending.png') }}" alt="" height="32" width="32">
+                    </div>
+                </div>
+                <div class="option--text1--home">
+                    10
+                </div>
+                <div class="option--text2--home text-truncate">
+                    pending orders
+                </div>
+            </div>
+            <div class="col-4 option--section--home">
+                <div class="option--logo--section--home">
+                    <div class="option--logo--home" style="background-color: #f84c4c;">
+                        <img src="{{ asset('assets/images/add-post.png') }}" alt="" height="27" width="30">
+                    </div>
+                </div>
+                <div class="option--text1--home">
+                    9 Mon. ago
+                </div>
+                <div class="option--text2--home text-truncate">
+                    Last Post
+                </div>
+            </div>
+            <div class="col-4 option--section--home">
+                <div class="option--logo--section--home">
+                    <div class="option--logo--home" style="background-color: #9cb2bf;">
+                        <img src="{{ asset('assets/images/visitors.png') }}" alt="" height="32" width="32">
+                    </div>
+                </div>
+                <div class="option--text1--home">
+                    10
+                </div>
+                <div class="option--text2--home text-truncate">
+                    Profile Visitors
+                </div>
+            </div>
+
+            <div class="col-4 option--section--home">
+                <div class="option--logo--section--home">
+                    <div class="option--logo--home" style="background-color: #f22828;">
+                        <img src="{{ asset('assets/images/home-notification.png') }}" alt="" height="27" width="27">
+                    </div>
+                </div>
+                <div class="option--text1--home">
+                    266 Fans
+                </div>
+                <div class="option--text2--home text-truncate">
+                    Notification Enabled
+                </div>
+            </div>
+
+            <div class="col-4 option--section--home">
+                <div class="option--logo--section--home">
+                    <div class="option--logo--home" style="background-color: #bcbee7;">
+                        <img src="{{ asset('assets/images/analytics.png') }}" alt="" height="27" width="27">
+                    </div>
+                </div>
+                <div class="option--text1--home">
+                    Click to view
+                </div>
+                <div class="option--text2--home text-truncate">
+                    Yesterday Insights
+                </div>
+            </div>
+
+            <div class="col-4 option--section--home">
+                <div class="option--logo--section--home">
+                    <div class="option--logo--home" style="background-color: #ed9df2;">
+                        <img src="{{ asset('assets/images/analytics.png') }}" alt="" height="27" width="27">
+                    </div>
+                </div>
+                <div class="option--text1--home">
+                    Click to view
+                </div>
+                <div class="option--text2--home text-truncate">
+                    Last week Analytics
+                </div>
+            </div>
+        </div>
+        <!-- <div>
             <a href="javascript:void(0)" class="account--details--section">
                 <div class="detail--bar" style="background-image: linear-gradient( 90deg,#eddfdf, #edb5e6);">
                     <p class="detail--bar--heading">
@@ -231,11 +334,11 @@
                     <img src="{{ asset('assets/images/analytics.png') }}" alt="" height="40" width="40">
                 </div>
             </a>
-        </div>
+        </div> -->
         <!-- /Account Detials -->
 
         <!-- Whatsapp Notification -->
-        <div class="whatsapp--notification--section border">
+        <!-- <div class="whatsapp--notification--section border">
             <div class="whatsapp--notification--container" style="background-image: url({{ asset('assets/images/whatsapp-icon.png') }})">
                 <p class="whatsapp--notification--heading">
                     WhatsApp Notifications
@@ -247,7 +350,7 @@
                     Know more
                 </a>
             </div>
-        </div>
+        </div> -->
         <!-- /Whatsapp Notification -->
     </div>
 </main>

@@ -11,6 +11,9 @@
     <nav class="navbar navbar--login">
         <ul class="navbar-nav">
             <li class="nav-item">
+                <a href="javascript:void(0)" onclick="history.back()"  class="back--btn">
+                    <img src="{{ asset('assets/images/back-arrow.png') }}" alt="" class="back--arrow">
+                </a>
                 <span class="header-text">My Link</span>
             </li>
         </ul>
@@ -32,10 +35,11 @@
                 </div>
                 <div class="links--edit--delete--section">
                     <div class="links--edit--icon--section">
-                        <img src="{{ asset('assets/images/edit-blue-btn.jpg') }}" class="links--icon--img" alt="">
+                        <img src="{{ asset('assets/images/edit-icon.png') }}" class="links--icon--img" alt="">
                     </div>
                     <div class="links--delete--icon--section">
-                        <a href="{{ route('influencer.link.delete',$value->id) }}"><img src="{{ asset('assets/images/delete-btn.jpg') }}" class="links--icon--img" alt=""></a>
+                        <a href="{{ route('influencer.link.delete',$value->id) }}">
+                            <img src="{{ asset('assets/images/delete-btn.jpg') }}" class="links--icon--img" alt=""></a>
                     </div>
                 </div>
             </div>
@@ -80,7 +84,9 @@
 <!-- /Create New Link model -->
 
 <div class="create--btn--fixed">
-    <img src="{{ asset('assets/images/add-btn-member.png') }}" alt="" class="create--btn--icon add_link">
+    <div class="create-new create--btn--icon">
+        Add More
+    </div>
 </div>
 
 @include('influencer.footer.footer')

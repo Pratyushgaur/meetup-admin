@@ -1,7 +1,11 @@
 :root {
     --text-color: #727272;
-    --profile-theme: #e40cdd;
-    --feature-theme: 228, 12, 221;
+    --profile-theme: #000000;
+    --feature-theme: 0, 0, 0;
+}
+
+*{
+    font-family: Montserrat;
 }
 
 .border-5 {
@@ -16,12 +20,18 @@ body {
     margin: 0px;
     padding: 0px;
     background-color: rgb(245, 236, 225);
-    overflow-y: scroll
+    overflow-y: scroll;
+    position: relative;
 }
 
 .image_fit{
     width: 100%;
     height: 100%;
+}
+
+.post--images{
+    vertical-align: middle;
+    display: flex;
 }
 
 .fw-6 {
@@ -309,11 +319,21 @@ body {
         background-color: rgba(255, 255, 255, 0.4);
         -webkit-backdrop-filter: blur(15px);
         overflow-x: hidden;
-        transition: 0.5s;
+    }
+
+    .sidebar--container {
+        width: 255px;
+        height: 100%;
+        background-image: linear-gradient(180deg, white, black);
+        position: fixed;
+        left: 300px;
+        visibility: collapse;
+        transition: .8s;
+        z-index: 2500;
     }
 
     .preview--link {
-        width: 32%;
+        width: 38%;
         background-color: var(--profile-theme);
         color: #fff;
         text-decoration: none;
@@ -329,17 +349,22 @@ body {
     .create--btn--fixed{
         position: fixed;
         background-color: black;
-        height: 65px;
-        width: 65px;
-        border-radius: 50%;
+        height: 40px;
+        width: 105px;
+        border-radius: 20px;
         bottom: 80px;
         right: calc(50% - 200px);
         z-index: 1000;
+        text-align: center;
+        font-size: 17px;
+        font-weight: 700;
+        padding: 7px 0px;
     }
 
     .create--btn--icon{
         height: 100%;
         width: 100%;
+        color: #ffffff;
     }
 }
 
@@ -614,11 +639,20 @@ body {
         -webkit-backdrop-filter: blur(15px);
         backdrop-filter: blur(10px);
         overflow-x: hidden;
-        transition: 0.5s;
+    }
+
+    .sidebar--container {
+        width: 60%;
+        height: 100%;
+        background-image: linear-gradient(180deg, white, black);
+        position: fixed;
+        left: -250px;
+        transition: .8s;
+        z-index: 2500;
     }
 
     .preview--link {
-        width: 32%;
+        width: 38%;
         background-color: var(--profile-theme);
         color: #fff;
         text-decoration: none;
@@ -634,17 +668,22 @@ body {
     .create--btn--fixed{
         position: fixed;
         background-color: black;
-        height: 65px;
-        width: 65px;
-        border-radius: 50%;
+        height: 40px;
+        width: 105px;
+        border-radius: 20px;
         bottom: 80px;
         right: 15px;
         z-index: 1000;
+        text-align: center;
+        font-size: 17px;
+        font-weight: 700;
+        padding: 7px 0px;
     }
 
     .create--btn--icon{
         height: 100%;
         width: 100%;
+        color: #ffffff;
     }
 }
 
@@ -674,7 +713,7 @@ body {
     }
 
     .preview--link {
-        width: 32%;
+        width: 38%;
         background-color: var(--profile-theme);
         color: #fff;
         text-decoration: none;
@@ -815,8 +854,8 @@ input[type=number]::-webkit-outer-spin-button {
 
 .back--arrow {
     position: absolute;
-    left: 5px;
-    top: 5%;
+    left: 8px;
+    top: 10%;
     height: 40px;
     width: 40px;
 }
@@ -831,8 +870,8 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .profile--cover--image {
-    max-height: 100%;
-    max-width: 100%;
+    height: 100%;
+    min-width: 100%;
 }
 
 .profile--data {
@@ -841,9 +880,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 .profile--info {
     min-height: 100px;
-    max-height: 250px;
-    display: flex;
-    justify-content: space-evenly;
+    max-height: 450px;
 }
 
 .profile--image--section {
@@ -855,6 +892,7 @@ input[type=number]::-webkit-outer-spin-button {
     top: -26px;
     overflow: hidden;
     object-fit: fill;
+    margin: auto;
 }
 
 .profile--image {
@@ -864,28 +902,31 @@ input[type=number]::-webkit-outer-spin-button {
 
 .profile--bio--section {
     height: 100%;
-    width: 50%;
-    padding-top: 6%;
+    width: 90%;
     padding-bottom: 2%;
     text-overflow: ellipsis;
     overflow: hidden;
+    margin: auto;
+    text-align: center;
 }
 
 .profile--bio--section h5 {
     color: var(--profile-theme);
-    font-weight: 700 !important;
-    margin-bottom: 6px;
+    font-weight: 500 !important;
+    margin-bottom: 10px;
+    font-size: 26px;
 }
 
 .profile--bio--section p {
     color: var(--text-color);
-    line-height: 19px;
-    font-size: 14px;
+    line-height: 30px;
+    font-size: 18px;
 }
 
 .profile--links--section {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
 }
 
 .profile--links {
@@ -909,6 +950,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .feature--heading {
+    background-color: #ffffff;
     width: 100%;
     height: 47px;
     border: 2px solid rgb(0, 0, 0, .4);
@@ -936,7 +978,7 @@ input[type=number]::-webkit-outer-spin-button {
 .feature--display--body {
     height: 133px;
     border-radius: 10px;
-    background-color: rgba(174, 174, 174, 0.2);
+    background-color: #ffffff;
     color: black;
     display: flex;
     justify-content: center;
@@ -985,6 +1027,20 @@ input[type=number]::-webkit-outer-spin-button {
     height: 38px;
 }
  
+#feed--nav{
+    height: 38px;
+    width: 38px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#feed--nav--icon{
+    height: 23px;
+}
+
 .overider_css_for_navitem{
     height: 80%;
     width: 16%;
@@ -1169,8 +1225,8 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .edit--profile--cover--image {
-    height: 93%;
-    max-width: 95%;
+    height: 100%;
+    min-width: 100%;
 }
 
 .edit--cover--background {
@@ -2099,6 +2155,54 @@ input[type=radio].coolor-radio {
     margin-bottom: 8px;
 }
 
+.option--section--header{
+    height: 30px;
+    font-weight: 900;
+    font-size: 18px;
+    margin-bottom: 8px;
+    margin-top: 5px;
+}
+
+.option--section--home{
+    min-height: 100px;
+    margin: 5px 0px;
+}
+
+.option--logo--section--home{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 5px;
+    
+}
+
+.option--logo--home{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+    border-radius: 10px;
+}
+
+.option--text1--home{
+    min-height: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.option--text2--home{
+    min-height: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
+    overflow: visible;
+}
+
 .account--details--section {
     display: flex;
     height: 90px;
@@ -2285,17 +2389,9 @@ input[type=radio].coolor-radio {
 
 /* sidebar page css */
 
-.sidebar--container {
-    width: 60%;
-    height: 100%;
-    background-image: linear-gradient(180deg, white, black);
-    position: fixed;
-}
-
 .sideber--close {
-    width: 40%;
+    width: 100%;
     height: 100%;
-    margin-left: 60%;
 }
 
 .logo-sidebar {
@@ -2569,8 +2665,8 @@ input[type=radio].coolor-radio {
     height: 20px;
     padding: 2px 8px;
     border-radius: 4px;
-    font-size: 11px;
-    width: 88px;
+    font-size: 10px;
+    width: 89px;
 }
 
 .video-blur-playbtn {
@@ -3013,7 +3109,7 @@ input[type=radio].coolor-radio {
     font-size: 14px;
     font-weight: bold;
     top: -14px;
-    left: calc(50% - 82px);
+    left: calc(50% - 70px);
     border-radius: 10px;
     width: 41%;
     height: 32px;
@@ -3783,4 +3879,75 @@ input[type=radio].coolor-radio {
 
 .feed--prime--btn--content {
     font-weight: 600;
+}
+
+.post {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 90%;
+    margin: 20px auto;
+    padding: 16px;
+}
+.post-header {
+    display: flex;
+    align-items: center;
+}
+.post-header img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+.post-header .username {
+    font-weight: bold;
+}
+.post-header .verified {
+    color: #3897f0;
+    margin-left: 5px;
+}
+.post-header .time {
+    color: #8e8e8e;
+    font-size: 12px;
+}
+.post-header .globe {
+    margin-left: 5px;
+}
+.post-content {
+    margin-top: 10px;
+}
+
+.post-content--image {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.post-content video {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.post--image{
+    max-height: 450px;
+    width: 100%;
+}
+
+.image--lock{
+    height: 350px;
+    width: 100%;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+}
+
+.post-footer {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+.post-footer .icon {
+    margin-right: 10px;
+}
+.post-footer .likes,
+.post-footer .comments {
+    margin-right: 20px;
 }

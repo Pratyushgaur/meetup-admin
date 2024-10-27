@@ -5,11 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('OwlCarousel/dist/assets/owl.carousel.min.css')}}">
     <link rel="stylesheet" href="{{asset('OwlCarousel/dist/assets/owl.theme.default.min.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" integrity="sha512-UtLOu9C7NuThQhuXXrGwx9Jb/z9zPQJctuAgNUBK3Z6kkSYT9wJ+2+dh6klS+TDBCV9kNPBbAxbVD+vCcfGPaA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
@@ -352,7 +353,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
     <script src="{{asset('OwlCarousel/dist/owl.carousel.min.js')}}"></script>
-   
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js" integrity="sha512-JyCZjCOZoyeQZSd5+YEAcFgz2fowJ1F1hyJOXgtKu4llIa0KneLcidn5bwfutiehUTiOuK87A986BZJMko0eWQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     @stack('js')
     <script>
         var canvas = document.getElementById('thumbnailCanvas');
@@ -609,15 +610,27 @@
             const screenWidth = window.screen.width;
 
             if (screenWidth <= 425) {
-                document.getElementById("mySidebar").style.width = "100%";
+                document.getElementById("mySidebarContainer").style.width = "100%";
+                document.getElementById("mySidebar").style.left = "0px";
             } else {
-                document.getElementById("mySidebar").style.width = "425px";
+                document.getElementById("mySidebarContainer").style.width = "425px";
+                document.getElementById("mySidebar").style.left = "555px";
+                document.getElementById("mySidebar").style.visibility = "visible";
             }
-
         }
 
         function CloseMenu() {
-            document.getElementById("mySidebar").style.width = "0";
+            const screenWidth = window.screen.width;
+
+            if (screenWidth <= 425) {
+                document.getElementById("mySidebarContainer").style.width = "0";
+                document.getElementById("mySidebar").style.left = "-250px";
+            } else {
+                document.getElementById("mySidebarContainer").style.width = "0";
+                document.getElementById("mySidebar").style.left = "300px";
+                document.getElementById("mySidebar").style.visibility = "collapse";
+            }
+            
         }
 
         function previewImage(file,index) {

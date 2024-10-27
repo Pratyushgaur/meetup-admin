@@ -1,13 +1,29 @@
 @extends('influencer.login_pages.app')
 
+@push('css')
+<style>
+    main {
+        background-color: rgba(var(--feature-theme), .05);
+    }
+
+    .modal-backdrop {
+        display: none;
+    }
+
+    #CopperImg{
+        width: 100%;
+        max-height: 400px;
+    }
+</style>
+@endpush
 
 @section('content')
 <header>
     <nav class="navbar navbar--login">
         <ul class="navbar-nav">
-        <a href="javascript:void(0)" onclick="history.back()"  class="back--btn">
-                    <img src="{{ asset('assets/images/back-arrow.png') }}" alt="" class="back--arrow">
-                </a>
+            <a href="javascript:void(0)" onclick="history.back()" class="back--btn">
+                <img src="{{ asset('assets/images/back-arrow.png') }}" alt="" class="back--arrow">
+            </a>
             <li class="nav-item">
                 <span class="header-text">Edit Profile</span>
             </li>
@@ -17,23 +33,22 @@
 <main>
     <!-- Edit Profile Cover -->
     @error('image')
-     <h6 class="text-danger text-center" style="margin-top:5px;">{{$message}}</h6>
+    <h6 class="text-danger text-center" style="margin-top:5px;">{{$message}}</h6>
     @enderror
     <div class="container-fluid edit--profile--cover">
-       
         <div class="edit--cover--background"></div>
-            <img src="{{ URL::TO('cover') }}/{{auth()->user()->cover}}" onerror="this.src='{{ asset('assets/images/cover-profile.jpg') }}'"  alt="" class="edit--profile--cover--image">
-            <button class="btn cover--change--btn">
-                Change cover
-            </button>
-        </div>
-     <form action="{{ route('influencer.profile.cover.post'); }}" id="cover-form" method="post" enctype="multipart/form-data">
-        <input type="file" name="image" id="cover--change--input" accept="image/png, image/jpeg">    
-        <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+        <img src="{{ URL::TO('cover') }}/{{auth()->user()->cover}}" onerror="this.src='{{ asset('assets/images/cover-profile.jpg') }}'" alt="" class="edit--profile--cover--image">
+        <button class="btn cover--change--btn">
+            Change cover
+        </button>
+    </div>
+    <form action="{{ route('influencer.profile.cover.post'); }}" id="cover-form" method="post" enctype="multipart/form-data">
 
-     </form>
-   
-    
+        <input type="file" name="image" id="cover--change--input" accept="image/png, image/jpeg">
+        <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+    </form>
+
+
     <!-- /Edit Profile Cover -->
 
     <!-- Edit Profile Data -->
@@ -61,19 +76,19 @@
                 <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
 
             </form>
-            
+
         </div>
     </div>
     <!-- /Edit Profile Data -->
 
     <!-- Edit Profile Form -->
-    
+
     <form action="" method="post" id="">
-        
+
         @csrf
         <div class="container-fluid profile--form">
             @if(Session::has('success'))
-                <div  class="alert alert-success text-center">{{  Session::get('success') }}</div>
+            <div class="alert alert-success text-center">{{ Session::get('success') }}</div>
             @endif
             <div class="row">
                 <div class="col-12 input--group">
@@ -83,7 +98,7 @@
 
                 <div class="col-12 input--group">
                     <label for="name">Your Bio</label>
-                    <textarea name="bio"  id="bio" class="form-control profile--form--input" rows="5">{{ auth()->user()->bio }}</textarea>
+                    <textarea name="bio" id="bio" class="form-control profile--form--input" rows="5">{{ auth()->user()->bio }}</textarea>
                 </div>
 
                 <div class="col-12 input--group">
@@ -100,7 +115,7 @@
                     </div>
                 </div>
 
-               
+
 
                 <div class="col-12 input--group">
                     <label for="name">Instagram username</label>
@@ -140,6 +155,43 @@
         </button>
     </form>
     <!-- /Edit Profile Form -->
+    
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary d-none" id="exampleModalLongbtn" data-toggle="modal" data-target="#exampleModalLong">
+        Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:black">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="docs-demo">
+                                    <div class="img-container">
+                                        <img id="CopperImg" src="" alt="Picture">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="crop" class="btn btn-primary">Crop</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </main>
 @endsection
 
@@ -151,7 +203,56 @@
     });
 
     $('#cover--change--input').change(function() {
-        $("#cover-form").submit();
+        let cropper;
+        let imageInput = document.getElementById('cover--change--input');
+        
+        // Destroy previous CropperJS instance if it exists
+        if (typeof cropper != 'undefined') {
+            console.log("Destroy previous");
+            cropper.destroy();
+            cropper = null;
+        }
+        const file = imageInput.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                // console.log(e,e.target);
+                const imgResult = e.target.result;
+
+                const image = document.getElementById('CopperImg');
+                image.src = imgResult;
+                cropper = new Cropper(image, {
+                    aspectRatio: 2/1,
+                    minContainerHeight  : 300,
+                    minContainerWidth   : 350,
+                    dragMode            : 'move',
+                    crop(event) {
+                        $("#submit").attr('disabled', true);
+                    },
+                    preview: '.preview'
+                });
+                cropper.setData({"width":821,"height":461.81249999999994})
+                $("#exampleModalLongbtn").click();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        $("#crop").click(function() {
+            let canvas = cropper.getCroppedCanvas();
+
+            canvas.toBlob(function(blob) {
+
+                const file = new File([blob], 'croppedImage.png', {
+                    type: blob.type
+                });
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                const croppedImageInput = document.getElementById('cover--change--input');
+                croppedImageInput.files = dataTransfer.files;
+                $("#cover-form").submit();
+            });
+        });
+        
         // var formData = new FormData(this);
 
         // $.ajax({
@@ -178,7 +279,56 @@
     });
 
     $('#profile--change--input').change(function() {
-        $('#profile-form').submit();
+        let cropper;
+        let imageInput = document.getElementById('profile--change--input');
+        
+        // Destroy previous CropperJS instance if it exists
+        if (typeof cropper != 'undefined') {
+            console.log("Destroy previous");
+            cropper.destroy();
+            cropper = null;
+        }
+        const file = imageInput.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                // console.log(e,e.target);
+                const imgResult = e.target.result;
+
+                const image = document.getElementById('CopperImg');
+                image.src = imgResult;
+                cropper = new Cropper(image, {
+                    aspectRatio: 1,
+                    minContainerHeight  : 300,
+                    minContainerWidth   : 350,
+                    dragMode            : 'move',
+                    crop(event) {
+                        $("#submit").attr('disabled', true);
+                    },
+                    preview: '.preview'
+                });
+                cropper.setData({"width":821,"height":461.81249999999994})
+                $("#exampleModalLongbtn").click();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        $("#crop").click(function() {
+            let canvas = cropper.getCroppedCanvas();
+
+            canvas.toBlob(function(blob) {
+
+                const file = new File([blob], 'croppedImage.png', {
+                    type: blob.type
+                });
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                const croppedImageInput = document.getElementById('profile--change--input');
+                croppedImageInput.files = dataTransfer.files;
+                $('#profile-form').submit();
+            });
+        });
+        
         console.log('submitting Profile Image');
     });
 
@@ -224,18 +374,18 @@
 
     // Function to update preview body color input and store value in localStorage
     function updateColor() {
-        
+
         const colorValue = this.value;
-        
+
         //console.log(colorValue);
         colorCodeSelectionInput.innerHTML = colorValue;
-        
+
         rgbColor = hex2rgb(colorValue);
         const root = document.querySelector(':root');
 
         // set css variable
         root.style.setProperty('--profile-theme', colorValue);
-        root.style.setProperty('--feature-theme',rgbColor);
+        root.style.setProperty('--feature-theme', rgbColor);
 
         // to get css variable from :root
         // localStorage.setItem("bodyColor", colorValue);
@@ -245,11 +395,10 @@
         const r = parseInt(hex.slice(1, 3), 16);
         const g = parseInt(hex.slice(3, 5), 16);
         const b = parseInt(hex.slice(5, 7), 16);
-        
-        return  r +","+ g +","+ b;
+
+        return r + "," + g + "," + b;
     }
-    
+
     colorCodePreviewInput.addEventListener("input", updateColor);
-    
 </script>
 @endpush

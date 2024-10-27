@@ -22,8 +22,8 @@
     <div class="notification--main--content">
 
         <div class="notification--image--section">
-            <div class="main--notification--image" style="background-color: #aed6f1;">
-                <img src="{{ asset('assets/images/lock.png') }}" alt="" width="35" height="40" >
+            <div class="main--notification--image" style="background-color: #c6c2ff;">
+                <img src="{{ asset('assets/images/padlock.png') }}" alt="" width="35" height="40" >
             </div> 
         </div>
 
@@ -46,8 +46,8 @@
 
         <div class="notification--image--section">
 
-            <div class="main--notification--image" style="background-color: #f9c1fe;">
-                <img src="{{ asset('assets/images/gift-chat.png') }}" alt="">
+            <div class="main--notification--image" style="background-color: #c6c2ff;">
+                <img src="{{ asset('assets/images/4f41576fb530f59339aaa1acc7d0043d@2x.png') }}" alt="">
             </div> 
         </div>
 
@@ -67,7 +67,7 @@
         <div class="notification--image--section">
 
             <div class="main--notification--image" style="background-color: #c6c2ff;">
-                <img src="{{ asset('assets/images/VIP.png') }}" alt="">
+                <img src="{{ asset('assets/images/crown.png') }}" alt="">
             </div> 
         </div>
 
