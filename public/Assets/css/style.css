@@ -333,7 +333,7 @@ body {
     }
 
     .preview--link {
-        width: 38%;
+        width: 32%;
         background-color: var(--profile-theme);
         color: #fff;
         text-decoration: none;
@@ -713,7 +713,7 @@ body {
     }
 
     .preview--link {
-        width: 38%;
+        width: 32%;
         background-color: var(--profile-theme);
         color: #fff;
         text-decoration: none;
