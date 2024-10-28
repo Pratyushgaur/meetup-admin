@@ -367,19 +367,19 @@
             </div>
         </div>
 
-        <div class="form-check radio-input">
+        <div class="form-check radio-input" style="display:none; ">
             <input class="form-check-input coolor-radio" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
             <label class="form-check-label" for="flexRadioDefault1">
                 Now
             </label>
         </div>
-        <div class="form-check radio-input">
+        <!-- <div class="form-check radio-input">
             <input class="form-check-input coolor-radio" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
                 >
             <label class="form-check-label" for="flexRadioDefault2">
                 Schedule
             </label>
-        </div>
+        </div> -->
 
         <form method="post" action="{{ route('influencer.stream.create') }}">
             @csrf
@@ -388,7 +388,7 @@
                 <input type="datetime-local" class="form-control live-stram-input" id="Input1"
                     placeholder="Enter your Schedule">
             </div> -->
-            <div class="form-group pl-3 pr-3">
+            <div class="form-group pl-3 pr-3" style="margin-top:10px;">
                 <label for="Select1">Select Entry Price</label>
                 <select name="price" class="form-control live-stram-input" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right;background-size: 25px;">
                     <option value="0">Free</option>

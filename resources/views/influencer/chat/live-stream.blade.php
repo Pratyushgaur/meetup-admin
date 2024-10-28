@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <style>
     ::-webkit-scrollbar {
         display: none;
@@ -199,6 +199,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction:column;
       z-index: 1000;
     }
 
@@ -277,17 +278,14 @@
     </div>
     @if($usertype == 'sender')
     <!-- options  -->
-    <div class="options-menu">
-      <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="optionsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-ellipsis-v"></i> 
-      </button> -->
-      <i class="fas fa-ellipsis-v dropdown-toggle" id="optionsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i> <!-- The options icon (3 dots) -->
+    <!-- <div class="options-menu">
+      <i class="fas fa-ellipsis-v dropdown-toggle" id="optionsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i> 
       <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="optionsDropdown">
         <li><a class="dropdown-item" href="#">Viewing Users</a></li>
         <li><a class="dropdown-item" href="#">Option 2</a></li>
         <li><a class="dropdown-item" href="#">Option 3</a></li>
       </ul>
-    </div>
+    </div> -->
     @endif
     @if($usertype == 'sender')
     <!-- Call Control Buttons -->
@@ -326,7 +324,11 @@
       @endif
     
     @else
-    <button id="confirmJoin">Join  Live Stream</button>
+      @if($is_paid == "1")
+        <h2 style="color:#fff;">Joining Fee</h2>      
+        <h2 style="color:#fff;">₹{{ $price }}</h2>      
+      @endif
+    <button id="confirmJoin" data-is_paid="{{ $is_paid }}" style="margin-top:20px;">Join  Live Stream</button>
     @endif
    
   </div>
@@ -334,7 +336,7 @@
   <script src="https://cdn.agora.io/sdk/release/AgoraRTC_N.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 
 //const socket = io('{{env('SOCKET_IO_SERVER_URL')}}'); 
@@ -354,7 +356,8 @@ const usertype = document.getElementById("usertype").value;
 const channelName = 'video-stream';
 const uid = document.getElementById("uuid").value;
 const roomid = "live-stream-"+"{{ $id }}";
-
+const streamId = "{{ $id }}";
+const userID = "{{$uuid}}";
 const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 var beforeUnloadTimeout = 0;
 var isCancel = false; // Flag to check if the user canceled the action
@@ -445,8 +448,43 @@ setInterval(autoScrollComments, 2000);
 
 
 $("#confirmJoin").click(function() {
+  let isPaid = $(this).attr('data-is_paid');
+  if(isPaid == "1"){
+    let csrfToken = $('meta[name="csrf-token"]').attr('content');
+    const formData = new FormData();
+    formData.append('user_id', userID);
+    formData.append('streamId', streamId);
+    
+    $.ajax({
+            url: "{{ route('livestream.check.user') }}",
+            method: "post",
+            contentType: false,
+            processData: false,
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the request headers
+            },
+            success: function(response) {
+              let resp = JSON.parse(response);
+              if(resp.error == "1"){
+                Swal.fire({text:resp.message,confirmButtonColor: "#333"});
+              }else if(resp.success == '1'){
+                $(".fullscreen-popup").css("display", "none");
+                startStream();
+              }else{
+                
+              }
+            },
+
+
+          });
+
+  }else{
     $(".fullscreen-popup").css("display", "none");
     startStream();
+  }
+ 
+    
 });
 
 $("#comment-input").keyup(function(){
@@ -473,16 +511,47 @@ $("#comment-input").keyup(function(){
     function updateUserStatusOnline() {
       socket.emit('user_is_live',{userId:uid});
     }
+    // Mute/Unmute Audio
+    document.getElementById('mute-audio').onclick = function () {
+        if (!isAudioMuted) {
+            localTrack.audioTrack.setMuted(true);
+            isAudioMuted = true;
+            document.querySelector('#mute-audio i').classList.replace('fa-microphone', 'fa-microphone-slash');
+        } else {
+            localTrack.audioTrack.setMuted(false);
+            isAudioMuted = false;
+            document.querySelector('#mute-audio i').classList.replace('fa-microphone-slash', 'fa-microphone');
+        }
+    };
+
+    // Mute/Unmute Video
     document.getElementById('camera-toggle').onclick = function () {
-      if (!isVideoMuted) {
-          localTrack.videoTrack.setMuted(true);
-          isVideoMuted = true;
-          document.querySelector('#camera-toggle i').classList.replace('fa-video', 'fa-video-slash');
-      } else {
-          localTrack.videoTrack.setMuted(false);
-          isVideoMuted = false;
-          document.querySelector('#camera-toggle i').classList.replace('fa-video-slash', 'fa-video');
-      }
+        if (!isVideoMuted) {
+            localTrack.videoTrack.setMuted(true);
+            isVideoMuted = true;
+            document.querySelector('#camera-toggle i').classList.replace('fa-video', 'fa-video-slash');
+        } else {
+            localTrack.videoTrack.setMuted(false);
+            isVideoMuted = false;
+            document.querySelector('#camera-toggle i').classList.replace('fa-video-slash', 'fa-video');
+        }
+    };
+
+    // Switch Camera
+    document.getElementById('switch-camera').onclick = async function () {
+        if (videoDevices.length > 1) {
+            currentCamera = (currentCamera + 1) % videoDevices.length; // Toggle between cameras
+
+            try {
+                // Switch to the next camera
+                await localTrack.videoTrack.setDevice(videoDevices[currentCamera].deviceId);
+                console.log('Switched to camera:', videoDevices[currentCamera].label);
+            } catch (error) {
+                console.error('Error switching camera:', error);
+            }
+        } else {
+            console.log('No alternative camera to switch to.');
+        }
     };
 
     const beforeUnloadListener = (event) => {

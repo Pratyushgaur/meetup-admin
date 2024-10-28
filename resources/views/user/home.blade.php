@@ -74,7 +74,7 @@
 <main class="mb-70">
     <!-- Profile Cover -->
     <div class="container-fluid profile--cover">
-        <img src="{{ URL::TO('cover') }}/{{auth()->user()->cover}}" onerror="this.src='{{ asset('assets/images/cover-profile.jpg') }}'" alt="" class="profile--cover--image">
+        <img src="{{ URL::TO('cover') }}/{{$user->cover}}" onerror="this.src='{{ asset('assets/images/cover-profile.jpg') }}'" alt="" class="profile--cover--image">
     </div>
     <!-- /Profile Cover -->
 
@@ -96,15 +96,16 @@
                     <h2>{{auth()->guard('customer')->user()->balance}}</h2>
                 </div>
             </div>
-
+            @else
             <div class="profile--bio--section">
                 <h5>
-                    Hi, I'm {{auth()->user()->name}}
+                    Hi, I'm {{$user->name}}
                 </h5>
                 <p>
-                    {{strip_tags(auth()->user()->bio)}} Message Me Message Me Message Me Message Me Message Me Message Me Message Me Message Me Message Me
+                    {{strip_tags($user->bio)}} 
                 </p>
             </div>
+            @endif
         </div>
 
         <div class="profile--links--section mt-3">

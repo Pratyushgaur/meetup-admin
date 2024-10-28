@@ -90,6 +90,7 @@ Route::group(['prefix' => 'influencer','as' => 'influencer.','middleware' => Inf
 Route::get('make-call/{id}/{usertype}',[App\Http\Controllers\VideoCallController::class,'makeVideoCall'])->name('makecall');
 Route::get('live-stream/{id}/{usertype}',[App\Http\Controllers\VideoCallController::class,'makeLiveStream'])->name('video_stream');
 Route::get("update-user/{id}",[App\Http\Controllers\VideoCallController::class,'endLiveStream']);
+Route::post("check-user-for-live",[App\Http\Controllers\VideoCallController::class,'checkUserForLivestream'])->name('livestream.check.user');
 // 
 
 Route::get('videocall',function(){
