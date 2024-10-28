@@ -6,6 +6,8 @@
 /public/posts
 /public/docs
 /public/thumbnails
+/public/chat-audio
+/public/chat_files
 /storage/*.key
 /vendor
 .env
