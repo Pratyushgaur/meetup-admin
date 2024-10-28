@@ -171,7 +171,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="padding: 0px;">
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
@@ -197,34 +197,36 @@
 
 @push('js')
 <script>
+    let cropper;
     //Submitting Cover Image
     $('.cover--change--btn').click(function() {
         $('#cover--change--input').trigger("click");
     });
 
     $('#cover--change--input').change(function() {
-        let cropper;
-        let imageInput = document.getElementById('cover--change--input');
         
+        let imageInput = document.getElementById('cover--change--input');
+
         // Destroy previous CropperJS instance if it exists
         if (typeof cropper != 'undefined') {
             console.log("Destroy previous");
             cropper.destroy();
             cropper = null;
         }
-        const file = imageInput.files[0];
+
+        let file = imageInput.files[0];
         if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
+            let reader = new FileReader();
             reader.onload = (e) => {
                 // console.log(e,e.target);
-                const imgResult = e.target.result;
+                let imgResult = e.target.result;
 
-                const image = document.getElementById('CopperImg');
+                let image = document.getElementById('CopperImg');
                 image.src = imgResult;
                 cropper = new Cropper(image, {
                     aspectRatio: 2/1,
                     minContainerHeight  : 300,
-                    minContainerWidth   : 350,
+                    minContainerWidth   : 340,
                     dragMode            : 'move',
                     crop(event) {
                         $("#submit").attr('disabled', true);
@@ -242,12 +244,12 @@
 
             canvas.toBlob(function(blob) {
 
-                const file = new File([blob], 'croppedImage.png', {
+                let file = new File([blob], 'croppedImage.png', {
                     type: blob.type
                 });
-                const dataTransfer = new DataTransfer();
+                let dataTransfer = new DataTransfer();
                 dataTransfer.items.add(file);
-                const croppedImageInput = document.getElementById('cover--change--input');
+                let croppedImageInput = document.getElementById('cover--change--input');
                 croppedImageInput.files = dataTransfer.files;
                 $("#cover-form").submit();
             });
@@ -279,7 +281,7 @@
     });
 
     $('#profile--change--input').change(function() {
-        let cropper;
+        
         let imageInput = document.getElementById('profile--change--input');
         
         // Destroy previous CropperJS instance if it exists
@@ -300,7 +302,7 @@
                 cropper = new Cropper(image, {
                     aspectRatio: 1,
                     minContainerHeight  : 300,
-                    minContainerWidth   : 350,
+                    minContainerWidth   : 340,
                     dragMode            : 'move',
                     crop(event) {
                         $("#submit").attr('disabled', true);
@@ -328,8 +330,6 @@
                 $('#profile-form').submit();
             });
         });
-        
-        console.log('submitting Profile Image');
     });
 
     $('#color--picker').click(function() {
