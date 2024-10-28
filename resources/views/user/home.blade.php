@@ -46,7 +46,7 @@
             </div>
             @endif
             @if(auth()->guard('customer')->check())
-            <div class="navber--options--container">
+            <div class="navber--options--container mx-3">
                 <a href="{{ route('user.logout',request()->segment(2)) }}" class="flex items-center bg-white text-black font-semibold py-1 px-2 rounded-full">
                     <i class="fas fa-sign-in-alt mr-2"></i>
                     Logout
