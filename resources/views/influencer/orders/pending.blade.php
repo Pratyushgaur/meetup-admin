@@ -45,7 +45,7 @@
                         <b>399.0</b>
                     </div>
                 </div>
-                <div class="row deliver--section--row">
+                <!-- <div class="row deliver--section--row">
                     <div class="col-3 p-0">
                         Earning :
                     </div>
@@ -60,7 +60,7 @@
                     <div class="col-9 p-0">
                         <b>3.99</b>
                     </div>
-                </div>
+                </div> -->
 
                 <a href="javascript:void(0)" class="btn-chat">
                     Chat

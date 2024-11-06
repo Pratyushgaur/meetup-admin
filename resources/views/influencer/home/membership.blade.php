@@ -88,60 +88,60 @@
             @csrf
             <input type="text" name="service_name" class="service_name">
         </form>
-        <div class="membership--section--ft">
-            @foreach($plans as $key =>$value)
-            <?php 
-                $count = \App\Models\Post::where('plan_id','=',$value->id)->where('post_type','=','1')->count();
-                $date = \App\Models\Post::where('plan_id','=',$value->id)->where('post_type','=','1')->orderBy('id','desc')->limit(1)->first();
-                $isSub = \App\Models\UserSubscription::where('plan_id','=',$value->id)->exists();
-            ?>
-            <div class="membership--img--section">
-                <img src="{{ URL::TO('plans') }}/{{$value->image}}" onerror="this.onerror=null;this.src='{{ URL::TO("plans/default.webp") }}';" class="membership--img" alt="">
-                <div class="edit--delete--section">
-                    @if($count > 0)
-                    <div class="membership--delete--icon" onclick="alertMessage('You cant delete this plan because some post is you have submited in plan')">
-                        <img src="{{ asset('assets/images/delete-btn.jpg') }}"  alt="" class="edit--delete--icons"  height="100%" width="100%">
-                    </div>
-                    @elseif($isSub)
-                    <div class="membership--delete--icon" onclick="alertMessage('You cant delete this plan because User are used')">
-                        <img src="{{ asset('assets/images/delete-btn.jpg') }}"  alt="" class="edit--delete--icons"  height="100%" width="100%">
-                    </div>
-                    @else
-                    <div class="membership--delete--icon" onclick="deleteConfirm('{{ route('influencer.membership.influencer.delete',$value->id) }}')">
-                        <img src="{{ asset('assets/images/delete-btn.jpg') }}"  alt="" class="edit--delete--icons"  height="100%" width="100%">
-                    </div>
-                    @endif
-                    
-                    <div class="membership--edit--icon edit-plan" data-id="{{ $value->id }}" data-image="{{ $value->image  }}" data-name="{{$value->title}}" data-desc="{{$value->description}}" data-price="{{ $value->price }}">
-                        <img src="{{ asset('assets/images/edit-icon.png') }}" alt="" class="edit--delete--icons" height="30px" width="30px" data-id="{{ $value->id }}" data-name="{{$value->title}}" data-desc="{{$value->description}}" data-price="{{ $value->price }}">
-                    </div>
-                </div>
-            </div>
-            <div class="membership--content--section">
-                <div class="membership--content--ft">
-                    <p class="membership--card--content--heading">{{$value->title}}</p>
-                    <a href="#" class="subscriber--list view_subscriber" data-id="{{ $value->id }}" >Subscriber List</a>
-                    <p class="membership--card--price--section">
-                        Price
-                        <b>{{number_format($value->price,2)}} Per Month</b>
-                    </p>
-                </div>
-                <div class="membership--lebal">
-                    <div class="membership--lebal--post">
-                        Total Post: {{$count}}
-                    </div>
-                    <div class="membership--lebal--lastpost">
-                        @if(empty($date))
-                        No Post
+        @foreach($plans as $key =>$value)
+            <div class="membership--section--ft">
+                <?php 
+                    $count = \App\Models\Post::where('plan_id','=',$value->id)->where('post_type','=','1')->count();
+                    $date = \App\Models\Post::where('plan_id','=',$value->id)->where('post_type','=','1')->orderBy('id','desc')->limit(1)->first();
+                    $isSub = \App\Models\UserSubscription::where('plan_id','=',$value->id)->exists();
+                ?>
+                <div class="membership--img--section">
+                    <img src="{{ URL::TO('plans') }}/{{$value->image}}" onerror="this.onerror=null;this.src='{{ URL::TO("plans/default.webp") }}';" class="membership--img" alt="">
+                    <div class="edit--delete--section">
+                        @if($count > 0)
+                        <div class="membership--delete--icon" onclick="alertMessage('You cant delete this plan because some post is you have submited in plan')">
+                            <img src="{{ asset('assets/images/delete-btn.jpg') }}"  alt="" class="edit--delete--icons"  height="100%" width="100%">
+                        </div>
+                        @elseif($isSub)
+                        <div class="membership--delete--icon" onclick="alertMessage('You cant delete this plan because User are used')">
+                            <img src="{{ asset('assets/images/delete-btn.jpg') }}"  alt="" class="edit--delete--icons"  height="100%" width="100%">
+                        </div>
                         @else
-                        Last Post: {{date('d/m/Y',strtotime($date->created_at))}}
-                        @endif  
+                        <div class="membership--delete--icon" onclick="deleteConfirm('{{ route('influencer.membership.influencer.delete',$value->id) }}')">
+                            <img src="{{ asset('assets/images/delete-btn.jpg') }}"  alt="" class="edit--delete--icons"  height="100%" width="100%">
+                        </div>
+                        @endif
                         
+                        <div class="membership--edit--icon edit-plan" data-id="{{ $value->id }}" data-image="{{ $value->image  }}" data-name="{{$value->title}}" data-desc="{{$value->description}}" data-price="{{ $value->price }}">
+                            <img src="{{ asset('assets/images/edit-icon.png') }}" alt="" class="edit--delete--icons" height="30px" width="30px" data-id="{{ $value->id }}" data-name="{{$value->title}}" data-desc="{{$value->description}}" data-price="{{ $value->price }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="membership--content--section">
+                    <div class="membership--content--ft">
+                        <p class="membership--card--content--heading">{{$value->title}}</p>
+                        <a href="#" class="subscriber--list view_subscriber" data-id="{{ $value->id }}" >Subscriber List</a>
+                        <p class="membership--card--price--section">
+                            Price
+                            <b>{{number_format($value->price,2)}} Per Month</b>
+                        </p>
+                    </div>
+                    <div class="membership--lebal">
+                        <div class="membership--lebal--post">
+                            Total Post: {{$count}}
+                        </div>
+                        <div class="membership--lebal--lastpost">
+                            @if(empty($date))
+                            No Post
+                            @else
+                            Last Post: {{date('d/m/Y',strtotime($date->created_at))}}
+                            @endif  
+                            
+                        </div>
                     </div>
                 </div>
             </div>
-            @endforeach
-        </div>
+        @endforeach
     </div>
 </main>
 

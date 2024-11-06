@@ -52,7 +52,7 @@
             @if(auth()->guard('customer')->check())
             <div class="navber--options--container">
                 <a href="{{ route('user.logout',request()->segment(2)) }}" class="flex items-center bg-white text-black font-semibold py-1 px-2 rounded-full">
-                    <img src="{{ asset('assets/images/profile-user.png') }}" alt="" class="live--icon">
+                    <img src="{{ asset('assets/images/profile-user.png') }}" alt="" class="live--icon" style="margin-right: 5px;height:18px">
                     Profile
                 </a>
             </div>
@@ -163,7 +163,7 @@
                                 </p>
                             </div>
                         </div>
-                        <a href="{{ route('user.plan.view',[request()->segment(2),$value->id]) }}" class="btn preview--feature--button">
+                        <a href="{{ route('user.plan.view',[request()->segment(2),$value->id]) }}" class="btn preview--feature--button" style="background-color: black;color:#ffffff;">
                             Subscribe Now
                         </a>
                     </div>
@@ -182,14 +182,11 @@
                                 </p>
                             </div>
                         </div>
-                        <a href="javascript:void(0)" class="btn preview--feature--button">
+                        <a href="javascript:void(0)" class="btn preview--feature--button" style="background-color: black;color:#ffffff;">
                             Subscribe Now
                         </a>
                     </div>
                     @endforelse
-
-
-
                 </div>
                 <button class="carousel-control-prev" type="button" data-target="#carouselExampleControls1"
                     data-slide="prev">
@@ -213,17 +210,17 @@
         <div class="exclusives--cards--section mt-1">
             <div class="owl-carousel owl-theme loopscards">
                 @foreach($services->get() as $key => $value)
-                <div class="max-w-36 mx-auto" >
+                <div class="max-w-36 mx-auto">
                     <div class="grid grid-cols-1 sm:grid-cols-1 gap-4 border">
                         <!-- Card -->
-                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden h-52 relative">
                             <div class="relative">
                                 <img alt="Person taking a selfie in a mirror" class="w-full h-24 object-cover" height="400"
                                     src="{{URL::TO('services_images')}}/{{ $value->image }}" onerror="this.src='{{URL::TO('services_images/noimage.jpg')}}';" class="posting-logo-img" 
                                     width="280" />
                                 <div class="absolute top-2 right-2 bg-white rounded-full px-2 py-1 text-sm font-semibold text-gray-700 flex items-center">
-                                    <img src="{{ asset('assets/images/58c4274d9028aa1790c58509601e92b8.png') }}" alt="" style="height: 15px;margin-right:5px">
-                                    {{$value->price}}
+                                    <!-- <img src="{{ asset('assets/images/58c4274d9028aa1790c58509601e92b8.png') }}" alt="" style="height: 15px;margin-right:5px"> -->
+                                    ₹ {{$value->price}}
                                 </div>
                             </div>
                             <div class="p-1">
@@ -231,9 +228,9 @@
                                     {{ Str::limit($value->service_type, 15, '...') }}
                                 </h2>
                                 <p class="text-xs mb-4">
-                                {{ Str::limit($value->service_type, 30, '...') }}
+                                    {{ Str::limit($value->service_type, 30, '...') }}
                                 </p>
-                                <button data-image="{{URL::TO('services_images')}}/{{ $value->image }}" data-id="{{ $value->id }}" data-price="{{  $value->price }}" data-service_type="{{ $value->service_type }}" data class="bg-gray-200 text-sm text-gray-700 font-semibold py-1 px-2 rounded book_now">
+                                <button data-image="{{URL::TO('services_images')}}/{{ $value->image }}" data-id="{{ $value->id }}" data-price="{{  $value->price }}" data-service_type="{{ $value->service_type }}" data class="bg-gray-200 text-sm text-gray-700 font-semibold py-1 px-2 rounded book_now absolute bottom-1 left-1">
                                     Book Now
                                 </button>
                             </div>
@@ -399,6 +396,10 @@
                 Create your Profile
             </span>
         </button>
+    </div>
+
+    <div class="Home-footer">
+        Copyright by @MeetMeUp
     </div>
 </main>
 <div id="edit-section-model" class="service-detail-model">

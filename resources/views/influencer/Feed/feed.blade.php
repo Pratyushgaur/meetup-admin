@@ -1,5 +1,7 @@
 @extends('influencer.login_pages.app')
 @push('css')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
     .active{
         background-color: black;
@@ -176,14 +178,16 @@
 
         @foreach($posts as $key =>$value)
         <div class="video-container">
-            <div class="video-section mb-3">
+            <div class="video-section mb-3 owl-carousel owl-theme">
                 @if($value->file_type == 'video')
                     <img src="{{ asset('thumbnails/') }}/{{ $value->video_thumbnail }}" alt="" class="image_fit" id="thumbnails-{{$value->id}}">
                     <video class="video-clip" id="video-{{$value->id}}" onclick="this.paused?this.play():this.pause();"></video>
                 @else
-                    <img src="{{ asset('posts/') }}/{{ $value->main_file }}" alt="" class="image_fit">
+                    <img src="{{ asset('cover/default_cover.jpg') }}" alt="" class="image_fit item">
+                    <img src="{{ asset('cover/pratyushgaur.jpg') }}" alt="" class="image_fit item">
+                    <img src="{{ asset('cover/pratyushgaur.jpeg') }}" alt="" class="image_fit item">
                 @endif
-                <div class="video-blur-section">
+                <!-- <div class="video-blur-section">
                     <div class="video-blur-execlusive">
                         @if($value->post_type == 0)
                         <div class="font-style">Move to prime</div>
@@ -220,7 +224,7 @@
                         </div>
                     </div>
                     @endif
-                </div>
+                </div> -->
             </div>
             <div class="video-detail-section">
                 <div class="video-type" >
@@ -279,9 +283,6 @@
             </div>
         </div>
         @endforeach
-        
-
-
     </div>
 </main>
  <!-- crea Membership model -->
@@ -387,8 +388,27 @@
 
 @push('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $(document).ready(function(){
+        $('.owl-carousel').owlCarousel({
+            loop:true,
+            margin:0,
+            nav:false,
+            dots:true,
+            autoHeight:false,
+            responsive:{
+                0:{
+                    items:1
+                },
+                600:{
+                    items:1
+                },
+                1000:{
+                    items:1
+                }
+            }
+        })
         $(".price_sector").change(function(){
             
             let $customPriceInput = $(this).closest('.form-group').next('#customPriceInput');
