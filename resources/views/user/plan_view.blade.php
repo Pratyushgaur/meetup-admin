@@ -54,6 +54,9 @@
     <nav class="navbar navbar--login">
         <ul class="navbar-nav">
             <li class="nav-item">
+            <a href="javascript:void(0)" onclick="history.back()" class="back--btn">
+                <img src="{{ asset('assets/images/back-arrow.png') }}" alt="" class="back--arrow">
+            </a>
                 <span class="header-text">Plan</span>
             </li>
         </ul>
@@ -61,24 +64,46 @@
 </header>
 <main class="mb-70">
     <div class="container-fluid">
-        @if($plan->image !='')
-       <div class="imageBox">
-            <img src="{{ URL::TO('plans') }}/{{ $plan->image }}" alt="" widht="100%;">
-       </div>
-        @endif
-        <div class="planTitle">
-             <h4>{{ $plan->title }}</h4>
-        </div>
-        <div class="planDesc">
-             <p>{{ $plan->description }}</p>
-        </div>
-        <div class="pricebox text-center">
-             <b>{{ $plan->price }}/- Month</b>
-        </div>
-        <div class="add_money-box" >
-           <a href="#" class="buy_now" @if($plan->price <= auth()->guard('customer')->user()->balance) data-eligble="true" @else data-eligble="false" @endif>Buy Now</a>
+
+    <div class="membership--section--ft">
+            
+            <?php 
+                $count = \App\Models\Post::where('plan_id','=',$plan->id)->count();
+                $date = \App\Models\Post::where('plan_id','=',$plan->id)->orderBy('id','desc')->limit(1)->first();
+            ?>
+            <div class="membership--img--section">
+                <img src="{{ URL::TO('plans') }}/{{$plan->image}}" onerror="this.onerror=null;this.src='{{ URL::TO("plans/default.webp") }}';" class="membership--img" alt="">
+                
+            </div>
+            <div class="membership--content--section">
+                <div class="membership--content--ft">
+                    <p class="membership--card--content--heading">{{$plan->title}}</p>
+                    
+                    <p class="membership--card--price--section">
+                        Price
+                        <b>{{number_format($plan->price,2)}} Per Month</b>
+                    </p>
+                </div>
+                <div class="membership--lebal">
+                    <div class="membership--lebal--post">
+                        Total Post: {{$count}}
+                    </div>
+                    <div class="membership--lebal--lastpost">
+                        @if(empty($date))
+                        No Post
+                        @else
+                        Last Post: {{date('d/m/Y',strtotime($date->created_at))}}
+                        @endif
+                        
+                    </div>
+                </div>
+            </div>
+           
         </div>
 
+    </div>
+    <div class="add_money-box" >
+        <a href="#" class="buy_now" @if($plan->price <= auth()->guard('customer')->user()->balance) data-eligble="true" @else data-eligble="false" @endif>Buy Now</a>
     </div>
     
 </main>

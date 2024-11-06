@@ -326,7 +326,7 @@ body {
         height: 100%;
         background-image: linear-gradient(180deg, white, black);
         position: fixed;
-        left: 300px;
+        left: calc(50% - 468px);
         visibility: collapse;
         transition: .8s;
         z-index: 2500;
@@ -2744,7 +2744,7 @@ input[type=radio].coolor-radio {
     justify-content: start;
     align-items: flex-end;
     height: 35px;
-    width: 85%;
+    width: 70%;
 }
 
 .comment--input {

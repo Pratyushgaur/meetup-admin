@@ -33,6 +33,7 @@ class InfluencerSetupListener
                 'influencer_id' => $event->userId,
                 'service_type' => $value->service_type,
                 'price' => $value->price,
+                
             ]);
         }
 

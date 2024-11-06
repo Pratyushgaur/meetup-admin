@@ -40,5 +40,8 @@ Route::prefix('app')->group(function () {
         Route::get('/{user:username}/chat', [ChatController::class, 'index'])->name('user.chat');
         Route::get('/{user:username}/check-for-message',[ChatController::class, 'checkBalance'])->name('user.send.message.check');
         Route::get('/{user:username}/view-stream',[ChatController::class, 'viewStream'])->name('user.view-stream');
+        Route::get('/{user:username}/token-store',[UserController::class,'storeToken'])->name('fcm.token.store');
+        Route::post('/{user:username}/service-book',[UserController::class,'service_book'])->name('user.service.book');
+
     });
 });

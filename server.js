@@ -61,11 +61,15 @@ io.on('connection', (socket) => {
 
   });
   socket.on('client-connect',(userid)=>{
-    console.log('client-connet as '+userid.userid);
+    console.log('client-connet ass '+userid.userid);
     var sql = "INSERT INTO user_socket_ids (userid, socket_id) VALUES ('"+userid.userid+"','"+socket.id+"')";
     con.query(sql);
 
   });
+
+  socket.on("user_disconnected_testing",(data) =>{
+    console.log(data)
+  })
 
   socket.on('send-message-to-influencer',(data) =>{
     io.emit('send-message-to-influencer',data);
@@ -129,17 +133,7 @@ io.on('connection', (socket) => {
         timestamp: new Date().toISOString(),
     });
 });
-  // socket.on('leaveRoom', (room) => {
-  //       socket.leave(room);
-  //       console.log(`User left room: ${room}`);
-
-  //       // Update the viewer count
-  //       if (roomViewers[room]) {
-  //           roomViewers[room]--;
-  //           io.to(room).emit('viewerUpdate', { viewers: roomViewers[room] });
-  //           io.to(room).emit('userLeft', { message: 'A user has left the stream!' });
-  //       }
-  // });
+  
 
   socket.on('disconnecting', function(){
     const rooms = Array.from(socket.rooms).filter(room => room !== socket.id); 
@@ -152,6 +146,8 @@ io.on('connection', (socket) => {
         // Notify users in each room that someone left
         io.to(room).emit('userLeft', { message: 'A user has left the stream!' });
     });
+
+   
 
 
   });

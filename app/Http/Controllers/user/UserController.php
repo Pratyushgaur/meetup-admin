@@ -31,8 +31,9 @@ class UserController extends Controller
         ->select('posts.*','post_unlocks.id as post_unlock_id')
         ->where('post_type','=','0')->orderBy('posts.id','desc')->limit(5);
         
+        $services = \App\Models\Service::where("influencer_id",'=',$user->id)->orderBy('id','desc');
        
-        return view('user.home',compact('user','plans','ex_posts'));
+        return view('user.home',compact('user','plans','ex_posts','services'));
     }
 
     function exclusive(User $user ){
@@ -320,6 +321,7 @@ class UserController extends Controller
         }
         
     }
+
     function orderId(){
         $count = \App\Models\Order::whereMonth('created_at', '=', \DB::raw('MONTH(CURDATE())'))->whereYear('created_at', '=', \DB::raw('YEAR(CURDATE())'))->count();
         return Carbon::now()->format('Y').Carbon::now()->format('m').$count+1;
@@ -330,5 +332,43 @@ class UserController extends Controller
         MessageSent::dispatch($message);
         return "done";
     }
-    
+    function storeToken(User $user,Request $request){
+        $request->validate([
+            'token' =>'required'
+        ]);
+        $user = auth()->guard('customer')->user();
+        $user->fcm_tokem = $request->token;
+        $user->save();
+    }
+    function service_book(User $user,Request $request)  {
+        $request->validate([
+            'serviceId' =>'required'
+        ]);
+        $service = \App\Models\Service::find($request->serviceId);
+        if($service->price <=  auth()->guard('customer')->user()->balance){
+            \DB::beginTransaction();
+            try {
+                \App\Models\ServiceBooking::insert(['user_id' => auth()->guard('customer')->user()->id,'influencer_id'=> $user->id,'service_id' => $request->serviceId,'price' => $service->price,'title' => $service->service_type,'description' => $service->service_type]);
+                User::where('id','=',auth()->guard('customer')->user()->id)->where('role','=','2')->update(['balance' => auth()->guard('customer')->user()->balance-$service->price]);
+                UserWalletTrasaction::insert(['transction_type' => '0','transction_title' => 'Service Buy','transction_desc' =>'Service Buy By wallet','amount' => $service->price,'user_id' =>auth()->guard('customer')->user()->id]);
+                \App\Models\Order::insert(['userid' =>auth()->guard('customer')->user()->id,'influencer_id' => $user->id,'order_id' =>$this->orderId(),'amount'=>$service->price,'order_type' => 'service_buy','order_status' => '1'    ]);
+                
+                \DB::commit();
+                $notification = array(
+                    'title' => "New Service Buy",
+                    'description' => "New Service Buy by  ".auth()->guard('customer')->user()->name,
+                    'type' => 'service_buy'
+                );
+                SendNotification::dispatch($notification,$user);
+                return response()->json(['status' => '1' ,'message' => "Congratulation Service Buy successfully"]);  
+            } catch (\Exception  $e) {
+                \DB::rollback();
+                return response()->json(['status' => '0' ,'message' => $e->getMessage()]); 
+            }
+        }else{
+            return response()->json(['status' => '0' ,'message' => 'Insufficient Balance']);
+        }
+
+
+    }
 }

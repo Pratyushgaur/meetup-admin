@@ -25,19 +25,36 @@ class ServiceController extends Controller
         return redirect()->back();
     }
     function service_influencer_update(Request $request)  {
-        \App\Models\Service::where('id','=',$request->id)->update([
-            'service_type' => $request->service_title,
-            'price' => $request->price
-        ]);
+       
+        if($request->hasFile('service_image')){
+            $imageName = time().rand().time().'.'.request()->service_image->getClientOriginalExtension();
+            request()->service_image->move(public_path('services_images'), $imageName);
+        }
+        $updatedata = \App\Models\Service::find($request->id);
+        $updatedata->service_type = $request->service_title;
+        $updatedata->price = $request->price;
+        if($request->hasFile('service_image')){
+            $updatedata->image  = $imageName;
+        }
+        $updatedata->save();
+       
         return redirect()->back();
     }
     function service_influencer_create(Request $request)  {
+        $imageName = time().rand().time().'.'.request()->service_image->getClientOriginalExtension();
+        request()->service_image->move(public_path('services_images'), $imageName);
         \App\Models\Service::create([
             'service_type' => $request->service_type,
             'price' => $request->price,
             'influencer_id' => \Auth::id(),
+            'image' => $imageName
         ]);
         return redirect()->back();
         
+    }
+
+    function service_influencer_delete($id){
+        \App\Models\Service::where('id','=',$id)->where('influencer_id','=',\Auth::id())->delete();
+        return redirect()->back();
     }
 }

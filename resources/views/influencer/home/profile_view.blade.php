@@ -23,7 +23,7 @@
 <main class="mb-70">
     <!-- Profile Cover -->
     <div class="container-fluid profile--cover">
-        <img src="{{ asset('assets/images/cover-profile.jpg') }}" alt="" class="profile--cover--image">
+        <img src="{{ URL::TO('cover') }}/{{auth()->user()->cover}}" onerror="this.src='{{ asset('assets/images/cover-profile.jpg') }}'" alt="" class="profile--cover--image">
     </div>
     <!-- /Profile Cover -->
 
@@ -39,16 +39,16 @@
                     Hi, I'm {{auth()->user()->name}}
                 </h5>
                 <p>
-                    {{strip_tags(auth()->user()->bio)}} Message Me Message Me Message Me Message Me Message Me Message Me Message Me Message Me Message Me
+                    {{strip_tags(auth()->user()->bio)}} 
                 </p>
             </div>
         </div>
 
         <div class="profile--links--section mt-3">
-            <a href="" class="btn preview--link">
+            <a href="#" class="btn preview--link">
                 Subscribe Now
             </a>
-            <a href="{{ route('user.chat',request()->segment(2)) }}" class="btn preview--link">
+            <a href="#" class="btn preview--link">
                 Message Me
             </a>
             @if(Auth::guard('customer')->check())
@@ -64,7 +64,7 @@
     <!-- Feature Section -->
     <div class="container-fluid feature--section">
         <div class="feature--heading mt-1">
-            Membership
+        {{ auth()->user()->plan_label_name  }}
         </div>
 
         <div class="feature--dispaly">

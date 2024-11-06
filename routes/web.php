@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\InfluencerMiddleware;
 use App\Models\User;
 use Illuminate\Http\Request;
-
+use App\Events\SendNotification;
 
 //login
 Route::get('influencer-login', function () {
@@ -41,20 +41,30 @@ Route::group(['prefix' => 'influencer','as' => 'influencer.','middleware' => Inf
     route::post('service-name-update',[App\Http\Controllers\influencer\ServiceController::class,'service_name_update'])->name('services.name.post');
     route::post('service-influencer-update',[App\Http\Controllers\influencer\ServiceController::class,'service_influencer_update'])->name('services.influencer.post');
     route::post('service-influencer-create',[App\Http\Controllers\influencer\ServiceController::class,'service_influencer_create'])->name('services.influencer.create');
+    Route::get("service-influencer-delete/{id}",[App\Http\Controllers\influencer\ServiceController::class,'service_influencer_delete'])->name('services.influencer.delete');
     //member ship
     route::get('membership',[App\Http\Controllers\influencer\MembershipController::class,'index'])->name('membership');
     route::post('membership-name-update',[App\Http\Controllers\influencer\MembershipController::class,'membership_name_update'])->name('membership.name.post');
     Route::post('membership-create',[App\Http\Controllers\influencer\MembershipController::class,'membership_submit'])->name('membership.create');
     Route::post('membership-edit',[App\Http\Controllers\influencer\MembershipController::class,'membership_update'])->name('membership.edit');
+    Route::get("membership-delete/{id}",[App\Http\Controllers\influencer\MembershipController::class,'membership_delete'])->name('membership.influencer.delete');
+    Route::get("membership-get-subscriberlist",[App\Http\Controllers\influencer\MembershipController::class,'getAllSubscriber'])->name('membership.getAllSubscriber');
     //links 
     route::get('links',[App\Http\Controllers\influencer\LinksController::class,'index'])->name('links');
     route::post('links',[App\Http\Controllers\influencer\LinksController::class,'save'])->name('links.post');
     route::get('links/delete/{id}',[App\Http\Controllers\influencer\LinksController::class,'delete'])->name('link.delete');
+    route::post('links-update',[App\Http\Controllers\influencer\LinksController::class,'update'])->name('links.edit.post');
 
     //post
     Route::get('post/{type}',[App\Http\Controllers\influencer\PostController::class,'view'])->name('post');
     Route::post('post',[App\Http\Controllers\influencer\PostController::class,'index'])->name('post.submit');
+    Route::get('get-post-by-id',[App\Http\Controllers\influencer\PostController::class,'get_post'])->name('post.get');
+    Route::post('post-update',[App\Http\Controllers\influencer\PostController::class,'post_update'])->name('post.update');
     Route::post('videopost',[App\Http\Controllers\influencer\PostController::class,'video_post'])->name('video.post.submit');
+    Route::post('comment-post',[App\Http\Controllers\influencer\PostController::class,'post_comment'])->name('post.comment.send');
+    Route::get('comment-post-get',[App\Http\Controllers\influencer\PostController::class,'comment_get'])->name('post.comment.get');
+    
+    
     //orders 
     Route::get('orders',[App\Http\Controllers\influencer\OrderController::class,'history'])->name('orders.history');
     Route::get('orders-pending',[App\Http\Controllers\influencer\OrderController::class,'pending'])->name('orders.pending');
@@ -80,6 +90,12 @@ Route::group(['prefix' => 'influencer','as' => 'influencer.','middleware' => Inf
     Route::post('send-audio-chat',[App\Http\Controllers\influencer\ChatController::class,'sendAudio'])->name('send.audio');
     // live streaming 
     Route::post('create-stream',[App\Http\Controllers\influencer\HomeController::class,'create_stream'])->name('stream.create');    
+    //
+    Route::post('youtube-connect',[App\Http\Controllers\influencer\HomeController::class,'youtube_connect'])->name('youtube.connect');
+    // fcm token connect
+    Route::get('fcm-token-store',[App\Http\Controllers\influencer\HomeController::class,'storeToken'])->name('fcm.token.store');
+
+    
 
     Route::get('success-uploaded',function(){
         return view('influencer.success');
@@ -113,3 +129,12 @@ Route::get('socket',function(){
 
 
  
+Route::get('sendNoticationTest',function(){
+    $user = \App\Models\User::find(9);
+    $notification = array(
+        'title' => "Post Unlock",
+        'description' => "new Post Unlock by new user ",
+        'type' => 'post_unlock'
+    );
+    SendNotification::dispatch($notification,$user);
+});

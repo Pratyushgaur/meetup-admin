@@ -170,9 +170,11 @@
                             <div class="feature--display--body feature--display--body--links">
                                 {{$user->title}}
                                 <br>
-                                <a href="javascript:viod(0)" class="feature--links text-truncate"></a>
+                                <br>
+                                <a href="{{$user->link}}" target="_blank" class="feature--links text-truncate " style="border:1px solid black; padding:5px;border-radius:10px;color:#333;">Open</a>
                             </div>
                         </div>
+                        
                 @empty
                         <div class="carousel-item active">
                             <div class="feature--display--body feature--display--body--links">
@@ -214,9 +216,9 @@
             <div class="feature--display--body youtube--channel--section">
                 <img src="{{ asset('assets/images/youtube-icon.png') }}" alt="" class="youtube--icon">
                 Connect your Channel
-                <input type="text" class="form-control youtube--channel--input">
+                <input type="text" class="form-control youtube--channel--input link_input" value="{{ auth()->user()->youtube_url; }}">
             </div>
-            <a href="javascript:void(0)" class="btn youtube--channel--button">
+            <a href="javascript:void(0)" class="btn youtube--channel--button youtubeVerify">
                 Connect
             </a>
         </div>
@@ -285,3 +287,29 @@
 
 <!-- live stream end model -->
 @endsection
+@push('js')
+<script>
+    $(document).ready(function(){
+        $(".youtubeVerify").click(function(){
+            let csrfToken = $('meta[name="csrf-token"]').attr('content');
+            let link = $(".link_input").val();
+            alert('link')
+            if(link !=""){
+
+                $.ajax({
+                    url: "{{ route('influencer.youtube.connect') }}",
+                    method: "post",
+                    data: {link:link},
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the request headers
+                    },
+                    success: function(response) {
+                    },
+
+
+                });
+            }
+        })
+    })
+</script>
+@endpush

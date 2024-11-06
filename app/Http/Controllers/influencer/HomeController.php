@@ -75,7 +75,7 @@ class HomeController extends Controller
     }
     function profile_preview(){
         $plans = \App\Models\Influencerplan::where('user_id',\Auth::id())->latest()->get();
-        $plans = [];
+        
         $posts = \App\Models\Post::where('userid','=',\Auth::id())->where('post_type','=','0')->latest()->get();
         
         return view('influencer.home.profile_view',compact('plans','posts'));
@@ -110,13 +110,22 @@ class HomeController extends Controller
     }
 
 
-    function show(User $user ,Request $request){
-        
-        dd($user->toArray());
-        // Route::prefix('influencer')->middleware('auth')->group(function () {
-        //     Route::get('/{influencer:username}', [InfluencerController::class, 'show'])->name('influencer.show');
-        //     // Other routes...
-        // });
+    function youtube_connect(Request $request)  {
+        $request->validate([
+            'link' => 'required'
+        ]);
+        \App\Models\User::where('id','=',\Auth::id())->update([
+            'youtube_url' => $request->link
+        ]);
+        echo json_encode(array('res' => 'success' ));
+    }
 
+    function storeToken(Request $request){
+        $request->validate([
+            'token' =>'required'
+        ]);
+        $user = auth()->user();
+        $user->fcm_tokem = $request->token;
+        $user->save();
     }
 }

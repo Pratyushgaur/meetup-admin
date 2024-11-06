@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('services', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->text('service_type');
-            $table->string('price');
-            $table->string('image');
-            $table->string('influencer_id');
-            
+            $table->integer('user_id');
+            $table->string('type');
+            $table->string('title');
+            $table->text('description');
+            $table->enum('is_read',["0","1"])->default('0');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('notifications');
     }
 };

@@ -23,8 +23,8 @@ class LoginController extends Controller
         $request->validate([
             'fullname' => 'required',
             'gender' => 'required',
-            'email' =>['required|email',new UniqueEmailWithRole("1",'email')],
-            'mobile' => ['required',new UniqueEmailWithRole("1",'mobile')],
+            'email' => ['required', 'email', new UniqueEmailWithRole("1", 'email')],
+            'mobile' => ['required', new UniqueEmailWithRole("1", 'mobile')],
             'country_code' => 'required',
             'username' => 'required',
             

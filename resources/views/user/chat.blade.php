@@ -309,9 +309,16 @@
     const userid = "{{ auth()->guard('customer')->user()->id }}";
      socket.on('connect',()=>{
         socket.emit('client-connect',{userid:userid});
-        
+        socket.emit('user_disconnected_testing', { test:"test" });
         
      });
+
+  
+    $(window).unload(function() {
+        if (validNavigation == 0) {
+            socket.emit('user_disconnected_testing', { test:"test" });
+        }
+    });
 </script>
     <script>
         $(document).ready(function(){
@@ -333,7 +340,7 @@
             });
 
             socket.on('request-to-connect',(data) =>{
-                if(data.requestUserId == userId){
+                if(data.requestUserId == userId && influencer_id == data.sender){
                     window.location.href = data.url;
                 }
                 

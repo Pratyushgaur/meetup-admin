@@ -229,7 +229,8 @@
                             </div>
                             <div class="form-group pl-3 pr-3 price-section">
                                 <label for="Select1">Price</label>
-                                <select name="price" class="form-control live-stram-input post_price" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
+                                <select name="price" class="form-control live-stram-input post_price price_sector" id="Select1" style="background: url({{ asset('assets/images/select-arrow.png') }}) no-repeat center right 5px;background-size: 25px;">
+                                    <option value="0">Free</option>
                                     <?php
                                     $price = \App\Models\Price::get();
 
@@ -239,6 +240,10 @@
                                     <option value="{{ $value->prices }}">{{$value->prices}}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                            <div class="form-group pl-3 pr-3" id="customPriceInput" style="display: none;">
+                                <label for="customPrice">Custom Price</label>
+                                <input type="number" name="price" class="form-control live-stram-input" id="customPrice" placeholder="Enter custom price" min="0">
                             </div>
                             <div class="form-group pl-3 pr-3 plan-section" style="display:none">
                                 <label for="Select1">Choose Subscription</label>
@@ -355,6 +360,9 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
     <script src="{{asset('OwlCarousel/dist/owl.carousel.min.js')}}"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js" integrity="sha512-JyCZjCOZoyeQZSd5+YEAcFgz2fowJ1F1hyJOXgtKu4llIa0KneLcidn5bwfutiehUTiOuK87A986BZJMko0eWQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging-compat.js"></script>
     @stack('js')
     <script>
         var canvas = document.getElementById('thumbnailCanvas');
@@ -362,13 +370,40 @@
 
             document.getElementById("createImage").click();
         }
+        $(".price_sector").change(function(){
+            
+            let $customPriceInput = $(this).closest('.form-group').next('#customPriceInput');
+            console.log($(this).val())
+            if ($(this).val() == 'custom') {
+                console.log($customPriceInput)
+                $customPriceInput.show();
+                $customPriceInput.find('input').attr('required', true);
+                $customPriceInput.find('input').attr('name','price');
+                $(this).attr('name','')
+                $(this).closest('.form-group').hide();
+            } else {
+                $customPriceInput.find('input').attr('required', false);
+                $customPriceInput.find('input').attr('name','');
+                
+            }
+        })
         let imageFiles = [];
         $("#createImage").change(function(event) {
             document.getElementById('loader').classList.add('loader-visible');
             $(".create-post-image-section").hide();
             $(".create-post-form-section").show();
-
+            const allowedExtensions = ['jpg', 'jpeg', 'png'];
             const files = event.target.files;
+            const filename = files[0].name;
+            const fileExtension = filename.split('.').pop().toLowerCase(); // Get file extension
+            if (!allowedExtensions.includes(fileExtension)) {
+                document.getElementById('loader').classList.remove('loader-visible');
+                $(".error_message_post").html('Invalid file type. Please upload a JPG or PNG image.');
+                $(".error_message_post").show();
+                
+                return false;
+            }
+            
             if (files.length > 0) {
                 $.each(files, function(index, file) {
                     if (file instanceof Blob) {
@@ -443,6 +478,13 @@
                 let csrfToken = $('meta[name="csrf-token"]').attr('content');
                 document.getElementById('loader').classList.add('loader-visible');
                 const formData = new FormData();
+                if(imageFiles.length == 0){
+                    document.getElementById('loader').classList.remove('loader-visible');
+                    
+                    $(".error_message_post").html("Please Select At least one image");
+                    $(".error_message_post").show();
+                    return false;
+                }
                 $.each(imageFiles, function(index, file) {
                     formData.append('images[]', file);
                 });
@@ -464,9 +506,18 @@
                     success: function(response) {
                         // $(".create-post-image-section").hide();
                         // $(".create-post-form-section").show();
-                        document.getElementById('loader').classList.remove('loader-visible');
-                        window.location.href = "{{ route('influencer.success.page') }}";
+                        //document.getElementById('loader').classList.remove('loader-visible');
+                        //window.location.href = "{{ route('influencer.success.page') }}";
                     },
+                    error:(request, status, error) =>{
+                        let er = JSON.parse(request.responseText);
+                        document.getElementById('loader').classList.remove('loader-visible');
+                        
+                        $(".error_message_post").html(er.message);
+                        $(".error_message_post").show();
+                       
+                        
+                    }
 
 
                 });
@@ -615,7 +666,7 @@
                 document.getElementById("mySidebar").style.left = "0px";
             } else {
                 document.getElementById("mySidebarContainer").style.width = "425px";
-                document.getElementById("mySidebar").style.left = "555px";
+                document.getElementById("mySidebar").style.left = "calc(50% - 213px)";
                 document.getElementById("mySidebar").style.visibility = "visible";
             }
         }
@@ -628,7 +679,7 @@
                 document.getElementById("mySidebar").style.left = "-250px";
             } else {
                 document.getElementById("mySidebarContainer").style.width = "0";
-                document.getElementById("mySidebar").style.left = "300px";
+                document.getElementById("mySidebar").style.left = "calc(50% - 468px)";
                 document.getElementById("mySidebar").style.visibility = "collapse";
             }
             
@@ -663,6 +714,59 @@
             });
         })
     </script>
+    @if(auth()->check())
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCk-dnh8allXw1dAAH7SzWZQ7vO8CnVjms",
+            authDomain: "meetupme-e7533.firebaseapp.com",
+            projectId: "meetupme-e7533",
+            storageBucket: "meetupme-e7533.firebasestorage.app",
+            messagingSenderId: "72929492017",
+            appId: "1:72929492017:web:d3d87cc235349c0fcc2910",
+        
+        };
+
+            // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Initialize Firebase Messaging
+        const messaging = firebase.messaging();
+        function requestPermissionAndGenerateToken() {
+            
+            Notification.requestPermission().then(permission => {
+                
+                if (permission === 'granted') {
+                    messaging.getToken({ vapidKey: 'BOzd7n6RhtWUYeilKmPETebe9928d_87nGuilucKvRYY-458zQtWGZO2RAxCkbVIiIqekWUwVG8W_GAPrE1-JTM' })
+                        .then(token => {
+                            if (token) {
+                                console.log('Device token generated:', token);
+                                // Send the token to your Laravel server
+                                sendTokenToServer(token);
+                            } else {
+                                console.warn('No registration token available. Request permission to generate one.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('An error occurred while retrieving token:', error);
+                        });
+                } else {
+                    console.log('Notification permission denied.');
+                }
+            });
+        }
+        function sendTokenToServer(token) {
+            $.ajax({
+                url:"{{ route('influencer.fcm.token.store' ) }}",
+                data:{token:token},
+                success:(res)=>{
+
+                }
+            })
+           
+        }
+        requestPermissionAndGenerateToken();
+    </script>
+    @endif
 </body>
 
 </html>

@@ -167,18 +167,22 @@
      let requestId = "{{ $receiverData->id}}";
      let usertype = "{{ $usertype }}";
      let url = "{{ $url }}";
-     socket.on('connect',()=>{
+    socket.on('connect',()=>{
         
         
         if(usertype == 'sender'){
             
             socket.emit('client-connect',{userid:userId});
-            socket.emit('request-to-connect',{requestUserId:requestId,url:url});
+            socket.emit('request-to-connect',{requestUserId:requestId,url:url,sender:userId});
             
         }
         
+
         
-     });
+        
+    });
+
+    
 
 </script>
   

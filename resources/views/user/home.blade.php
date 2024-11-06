@@ -24,6 +24,18 @@
         color:red;
         font-weight:bold;
     }
+
+    .live-tag{
+        position:absolute; 
+        top:45px; 
+        left:45px; 
+        font-weight:bold; 
+        color:red; 
+        background:rgba(0,0,0,0.5);.
+        text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
+               1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
+        
+    }
 </style>
 @endpush
 @section('content')
@@ -80,19 +92,21 @@
 
     <!-- Profile Data -->
     <div class="container-fluid preview--data">
-        @if($user->is_live)
-        <div class="live-section" onclick="window.location.href='{{ route('user.view-stream',request()->segment(2)) }}'">
-            Live
-        </div>
-        @endif
+       
         <div class="profile--info">
-            
+            <div class="profile--image--section" @if($user->is_live) style="border:5px solid red;" @endif>
+            @if($user->is_live)
+                <span class="live-tag" style=" " onclick="window.location.href='{{ route('user.view-stream',request()->segment(2)) }}'">>LIVE</span>
+            @endif                
+                <img src="{{ URL::TO('avator') }}/{{$user->avtar}}" onerror="this.src='{{ asset('assets/images/verify-badge.png') }}'" alt="" class="profile--image">
+            </div>
             @if(Auth::guard('customer')->check())
-            <div class="preview--bio--section">
-                <h5 class="preview--name--heading">
+            <div class="preview--bio--section" style="padding:0px; font-size:18px;">
+                <h4 class="preview--name--heading">
                     Hey, {{Auth::guard('customer')->user()->name}}
-                </h5>
-                <div class="amount-box" >
+                </h4>
+                <div class="amount-box" style="display:flex; justify-content:center;">
+                    
                     <h2>{{auth()->guard('customer')->user()->balance}}</h2>
                 </div>
             </div>
@@ -190,36 +204,36 @@
             </div>
         </div>
     </div>
-    @if($ex_posts->exists())
+    @if($services->exists())
     <div class="container-fluid feature--section mt-3">
         <div class="feature--heading mt-1">
-            Exclusives
+        {{ $user->service_label_name  }}
         </div>
 
         <div class="exclusives--cards--section mt-1">
             <div class="owl-carousel owl-theme loopscards">
-                @foreach($ex_posts->get() as $key => $value)
-                <div class="max-w-36 mx-auto">
+                @foreach($services->get() as $key => $value)
+                <div class="max-w-36 mx-auto" >
                     <div class="grid grid-cols-1 sm:grid-cols-1 gap-4 border">
                         <!-- Card -->
                         <div class="bg-white rounded-lg shadow-md overflow-hidden">
                             <div class="relative">
                                 <img alt="Person taking a selfie in a mirror" class="w-full h-24 object-cover" height="400"
-                                    src="https://storage.googleapis.com/a1aa/image/Ewq9ExFuAVbJNl4nLnGEnBRBn2FKTdS7jAVIotCfxs7PHepTA.jpg"
+                                    src="{{URL::TO('services_images')}}/{{ $value->image }}" onerror="this.src='{{URL::TO('services_images/noimage.jpg')}}';" class="posting-logo-img" 
                                     width="280" />
                                 <div class="absolute top-2 right-2 bg-white rounded-full px-2 py-1 text-sm font-semibold text-gray-700 flex items-center">
                                     <img src="{{ asset('assets/images/58c4274d9028aa1790c58509601e92b8.png') }}" alt="" style="height: 15px;margin-right:5px">
-                                    2999
+                                    {{$value->price}}
                                 </div>
                             </div>
                             <div class="p-1">
                                 <h2 class="text-sm font-bold">
-                                    {{ Str::limit('Add me on snapchat &', 15, '...') }}
+                                    {{ Str::limit($value->service_type, 15, '...') }}
                                 </h2>
                                 <p class="text-xs mb-4">
-                                {{ Str::limit('Lets make spicy streaks together.😈😘 Lets make spicy streaks together.😈😘', 55, '...') }}
+                                {{ Str::limit($value->service_type, 30, '...') }}
                                 </p>
-                                <button class="bg-gray-200 text-sm text-gray-700 font-semibold py-1 px-2 rounded">
+                                <button data-image="{{URL::TO('services_images')}}/{{ $value->image }}" data-id="{{ $value->id }}" data-price="{{  $value->price }}" data-service_type="{{ $value->service_type }}" data class="bg-gray-200 text-sm text-gray-700 font-semibold py-1 px-2 rounded book_now">
                                     Book Now
                                 </button>
                             </div>
@@ -231,14 +245,14 @@
         </div>
     </div>
     @endif
-
+   
     <!-- Free post -->
     <div class="post">
         <div class="post-header">
             <img alt="Profile picture" src="https://storage.googleapis.com/a1aa/image/PIDJOMLnKwJEO9wV1MBv8rKPdnNIH0LnoZ6vrfqWfmgcT8pTA.jpg" class="image_fit" />
             <div>
                 <span class="username">
-                    {{Str::limit('shy_lii', 40, '...')}} <i class="fas fa-check-circle verified"></i>
+                    {{Str::limit($user->name, 40, '...')}} <i class="fas fa-check-circle verified"></i>
                 </span>
 
                 <div class="time">
@@ -338,7 +352,7 @@
             </div>
         </div>
     </div>
-
+ 
     <div class="post">
         <div class="post-header">
             <img alt="Profile picture" src="https://storage.googleapis.com/a1aa/image/PIDJOMLnKwJEO9wV1MBv8rKPdnNIH0LnoZ6vrfqWfmgcT8pTA.jpg" class="image_fit" />
@@ -380,13 +394,63 @@
     <!-- /Feature Section -->
 
     <div class="mt-4 flex justify-center">
-        <button class="bg-black text-white py-2 px-4 rounded-full flex items-center">
+        <button onclick="window.location.href='{{ route('influencer.signup') }}'" class="bg-black text-white py-2 px-4 rounded-full flex items-center">
             <span>
                 Create your Profile
             </span>
         </button>
     </div>
 </main>
+<div id="edit-section-model" class="service-detail-model">
+    <div class="modelbox stream-model">
+        <div class="modelnav">
+            <div class="model--nav--head">View Service</div>
+            <div>
+                <img src="{{ asset('assets/images/cross-icon.png') }}" class="model--close live--model--close close_service_model" alt="">
+            </div>
+        </div>
+        <div class="servie-booking-detail-section" >
+            <div class="container-fluid profile--cover " style="padding:5px;">
+                <img class="service-image-block" src="" onerror="this.src='{{URL::TO('services_images/noimage.jpg')}}';" alt="" class="profile--cover--image">
+            </div>
+            <div class="p-2">
+            
+                <p class="text-xs mb-2 service-detail-block">
+                
+                </p>
+                <h2 class="text-sm font-bold service-price-block">
+                
+                </h2>
+                <div style="display:flex; justify-content:center;"> 
+                    <button  data class="bg-gray-200 text-sm text-gray-700 font-semibold py-1 px-2 rounded bookingNow" style="background:black; color:#fff;">
+                        Book Now
+                    </button>
+                    
+                    
+                </div>
+                <div class="text-center mt-2">
+                    <span class="text-danger booking-error"></span>   
+                </div>
+                
+            </div>
+        </div>
+        <div class="success-section mt-3 mb-3" style="display:none">
+            <div class="" style="padding:5px; display:flex; justify-content:center;">
+                <img class="" src="{{ URL::TO('check.png') }}" onerror="this.src='{{URL::TO('services_images/noimage.jpg')}}';" alt="" class="" width="100px;">
+            </div>
+            <div class="text-center">
+                <h2 style="font-size:25px !important; font-weight:bold">Congratulation</h2>
+            </div>
+            <div class="text-center mt-3 ">
+                <p >Service Booked successfully..</p>
+            </div>
+        </div>
+        
+
+        
+
+    </div>
+</div>
 
 @include('user.footer')
 
@@ -394,7 +458,9 @@
 
 @push('js')
 <script src="https://cdn.tailwindcss.com"></script>
+
 @vite('resources/js/app.js')
+
 <script type="module">
     document.addEventListener("DOMContentLoaded", function() {
         Echo.channel('chat-room')
@@ -421,6 +487,53 @@
         nav: false,
         dots: true,
         autoWidth: false,
+    })
+
+    $(document).on('click','.book_now',function(){
+        $(".booking-error").html('');
+        let id= $(this).attr('data-id');
+        let price = $(this).attr('data-price');
+        let name=$(this).attr('data-service_type');
+        let image=$(this).attr('data-image');
+        $(".service-detail-block").html(name);
+        $(".service-price-block").html("Rs."+price);
+        $(".service-image-block").attr('src',image)
+        $(".bookingNow").attr('data-id',id);
+        $(".service-detail-model").css('display','flex');
+    })
+    $(document).on('click','.bookingNow',function(){
+        document.getElementById('loader').classList.add('loader-visible');
+        element = $(this);
+        element.attr('disabled',true)
+        let serviceId = $(this).attr('data-id');
+        let csrfToken = $('meta[name="csrf-token"]').attr('content');
+        
+        $.ajax({
+            url: "{{ route('user.service.book',[request()->segment(2)]) }}",
+            method: "post",
+            
+            data: {serviceId:serviceId},
+            headers: {
+                'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the request headers
+            },
+            success: function(response) {
+                if(response.status == 0){
+                    $(".booking-error").html(response.message);
+                    element.attr('disabled',false)
+                    document.getElementById('loader').classList.remove('loader-visible');
+                }else if(response.status == 1){
+
+                    document.getElementById('loader').classList.remove('loader-visible');
+                }else{
+                    document.getElementById('loader').classList.remove('loader-visible');
+                }
+            },
+        });
+       
+
+    })
+    $(".close_service_model").click(function(){
+        $(".service-detail-model").css('display','none');
     })
 </script>
 @endpush

@@ -28,12 +28,15 @@ class MembershipController extends Controller
     }
 
     function membership_submit(Request $request){
+        
         $request->validate([
             'membershipname' => 'required',
             'description' => 'required',
             'price' => 'required',
             'coverimage' => 'required|mimes:jpg,jpeg,png'
         ]);
+
+        
 
         $imageName = time().rand().time().'.'.request()->coverimage->getClientOriginalExtension();
         request()->coverimage->move(public_path('plans'), $imageName);
@@ -79,4 +82,17 @@ class MembershipController extends Controller
         ]);
         return redirect()->back();
     }
+
+    function membership_delete($id){
+
+        Influencerplan::where('id','=',$id)->where('user_id','=',auth()->user()->id)->delete();
+        return redirect()->back();
+        
+    }
+    function getAllSubscriber(Request $request){
+       $users = \App\Models\UserSubscription::where('plan_id','=',$request->id)->join('users','user_subscriptions.user_id','=','users.id')->select('users.name','users.id as uid',\DB::raw("DATE_FORMAT(purchase_date, '%d-%b-%Y') as p_date"),\DB::raw("DATE_FORMAT(expire_date, '%d-%b-%Y') as ex_date"))->orderBy('user_subscriptions.id','desc')->get();
+       echo json_encode(array('user' => $users));
+
+    }
+    
 }

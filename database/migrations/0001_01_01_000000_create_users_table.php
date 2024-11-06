@@ -43,6 +43,8 @@ return new class extends Migration
             $table->decimal('per_msg_charge')->default(10);
             $table->timestamp('last_settlement')->nullable();
             $table->enum('is_live',["0","1"])->default('0');
+            $table->text('fcm_tokem')->nullable();
+
             
 
             

@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('services', function (Blueprint $table) {
+        Schema::create('service_bookings', function (Blueprint $table) {
             $table->id();
-            $table->text('service_type');
-            $table->string('price');
-            $table->string('image');
-            $table->string('influencer_id');
-            
+            $table->integer('user_id');
+            $table->integer('influencer_id');
+            $table->integer('service_id');
+            $table->decimal('price',16,2);
+            $table->string('title');
+            $table->text('description');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('service_bookings');
     }
 };

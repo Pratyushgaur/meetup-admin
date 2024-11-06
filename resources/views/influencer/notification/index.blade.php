@@ -11,6 +11,11 @@
     <nav class="navbar navbar--login">
         <ul class="navbar-nav">
             <li class="nav-item">
+                <a href="javascript:void(0)" onclick="history.back()" class="back--btn">
+                    <img src="{{ asset('assets/images/back-arrow.png') }}" alt="" class="back--arrow">
+                </a>
+            </li>
+            <li class="nav-item">
                 <span class="header-text">Notifications</span>
             </li>
         </ul>
@@ -36,9 +41,7 @@
             </p>
         </div>
 
-        <div class="notification--back-image--section">
-            <img src="{{ asset('assets/images/girls1.jpg') }}" alt="" class="notification--back-image">
-        </div>
+        
 
     </div>
 

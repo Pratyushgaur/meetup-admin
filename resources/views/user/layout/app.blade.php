@@ -162,6 +162,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
     <script src="{{asset('OwlCarousel/dist/owl.carousel.min.js')}}"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging-compat.js"></script>
     @vite('resources/js/app.js')
     @stack('js')
     <script>
@@ -224,6 +226,59 @@
             });
         })
     </script>
+    @if(auth()->guard('customer')->check())
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCk-dnh8allXw1dAAH7SzWZQ7vO8CnVjms",
+            authDomain: "meetupme-e7533.firebaseapp.com",
+            projectId: "meetupme-e7533",
+            storageBucket: "meetupme-e7533.firebasestorage.app",
+            messagingSenderId: "72929492017",
+            appId: "1:72929492017:web:d3d87cc235349c0fcc2910",
+        
+        };
+
+            // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Initialize Firebase Messaging
+        const messaging = firebase.messaging();
+        function requestPermissionAndGenerateToken() {
+            
+            Notification.requestPermission().then(permission => {
+                
+                if (permission === 'granted') {
+                    messaging.getToken({ vapidKey: 'BOzd7n6RhtWUYeilKmPETebe9928d_87nGuilucKvRYY-458zQtWGZO2RAxCkbVIiIqekWUwVG8W_GAPrE1-JTM' })
+                        .then(token => {
+                            if (token) {
+                                console.log('Device token generated:', token);
+                                // Send the token to your Laravel server
+                                sendTokenToServer(token);
+                            } else {
+                                console.warn('No registration token available. Request permission to generate one.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('An error occurred while retrieving token:', error);
+                        });
+                } else {
+                    console.log('Notification permission denied.');
+                }
+            });
+        }
+        function sendTokenToServer(token) {
+            $.ajax({
+                url:"{{ route('fcm.token.store',[request()->segment(2)] ) }}",
+                data:{token:token},
+                success:(res)=>{
+
+                }
+            })
+           
+        }
+        requestPermissionAndGenerateToken();
+    </script>
+@endif
 </body>
 
 </html>
