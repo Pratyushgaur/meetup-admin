@@ -127,7 +127,7 @@
                             </div>
                         </div>
                         <div class="content">
-                            Copy the below link and put it in your instagram Bio
+                            Copy the above link and put it in your instagram Bio
                         </div>
                     </div>
 
@@ -149,7 +149,7 @@
                             </div>
                         </div>
                         <div class="content">
-                            Let's start making some money!
+                            Let's start making money!
                         </div>
                     </div>
                 </div>
@@ -341,7 +341,9 @@
             </a>
         </div> -->
         <!-- /Account Detials -->
-
+        <div class="Home-footer">
+            Copyright by @MeetMeUp
+        </div>
         <!-- Whatsapp Notification -->
         <!-- <div class="whatsapp--notification--section border">
             <div class="whatsapp--notification--container" style="background-image: url({{ asset('assets/images/whatsapp-icon.png') }})">
