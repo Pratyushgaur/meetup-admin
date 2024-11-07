@@ -15,7 +15,7 @@ use App\Models\Customer;
 use App\Models\UserWalletTrasaction;
 use Carbon\Carbon;
 use App\Events\MessageSent;
-
+use App\Events\SendNotification;
 class UserController extends Controller
 {
     function index(User $user ,Request $request){
@@ -27,12 +27,15 @@ class UserController extends Controller
             $join->on('posts.id', '=', 'post_unlocks.post_id')
                  ->where('post_unlocks.user_id', '=', $userid); // Using the variable here
         })
+       
         //->where('post_unlocks.user_id','=',auth()->guard('customer')->user()->id)
         ->select('posts.*','post_unlocks.id as post_unlock_id')
-        ->where('post_type','=','0')->orderBy('posts.id','desc')->limit(5);
+        ->where('post_type','=','0')->orderBy('posts.id','desc')->limit(10);
         
         $services = \App\Models\Service::where("influencer_id",'=',$user->id)->orderBy('id','desc');
-       
+        
+       // dd($ex_posts->get()->toArray());
+        
         return view('user.home',compact('user','plans','ex_posts','services'));
     }
 
@@ -46,8 +49,10 @@ class UserController extends Controller
         ->where('post_type','=',"0")
         ->select('posts.*','post_unlocks.id as post_unlock_id')
         ->orderBy('posts.id','desc')->get();
+
+       
         $postype = 'Exclusive';
-        return view('user.exclusive',compact('posts','postype'));
+        return view('user.exclusive',compact('posts','postype','user'));
     }
     function prime(User $user)  {
         $userid =  (auth()->guard('customer')->check()) ?  auth()->guard('customer')->user()->id : null ;
@@ -65,7 +70,7 @@ class UserController extends Controller
        // dd($posts->toArray());
         $postype = 'premium';
 
-        return view('user.premium',compact('posts','postype'));
+        return view('user.premium',compact('posts','postype','user'));
     }
     function login(){
         return view('user.login');
@@ -254,7 +259,7 @@ class UserController extends Controller
         if($plan){
             if(auth()->guard('customer')->user()->balance >= $plan->price){
                 
-                $checkAlready  = \App\Models\UserSubscription::where('user_id','=',auth()->guard('customer')->user()->id)->where('user_subscriptions.influencer_id', '=', $user->id)->whereDate("purchase_date",'<=',Carbon::now())->whereDate("expire_date",'>=',Carbon::now())->exists();
+                $checkAlready  = \App\Models\UserSubscription::where('user_id','=',auth()->guard('customer')->user()->id)->where('user_subscriptions.influencer_id', '=', $user->id)->whereDate("purchase_date",'<=',Carbon::now())->whereDate("expire_date",'>=',Carbon::now())->where('plan_id','=',$planid)->exists();
                 if(!$checkAlready){
                     \DB::beginTransaction();
 
@@ -262,8 +267,14 @@ class UserController extends Controller
                         \App\Models\UserSubscription::insert(['influencer_id' => $user->id,'user_id' => auth()->guard('customer')->user()->id,'plan_id' => $planid,'purchase_date' =>Carbon::now()->format('Y-m-d'),'expire_date' =>Carbon::now()->addDays(30)->format('Y-m-d')]);
                         User::where('id','=',auth()->guard('customer')->user()->id)->where('role','=','2')->update(['balance' => auth()->guard('customer')->user()->balance-$plan->price]);
                         \App\Models\UserWalletTrasaction::insert(['transction_type' => '0','transction_title' => 'Plan Purchase','transction_desc' =>'Purchase Plan By wallet','amount' => $plan->price,'user_id' =>auth()->guard('customer')->user()->id]);
-                        \App\Models\Order::insert(['userid' =>auth()->guard('customer')->user()->id,'influencer_id' => $user->id,'order_id' =>$this->orderId(),'amount'=>$post->price,'order_type' => 'plan_purchase','order_status' => '1']);
+                        \App\Models\Order::insert(['userid' =>auth()->guard('customer')->user()->id,'influencer_id' => $user->id,'order_id' =>$this->orderId(),'amount'=>$plan->price,'order_type' => 'plan_purchase','order_status' => '1']);
                         \DB::commit();
+                        $notification = array(
+                            'title' => "New Plan Subscribed by User",
+                            'description' => "Congratulations! Your $plan->title  Subscribed by  ".auth()->guard('customer')->user()->name,
+                            'type' => 'plan_purchase'
+                        );
+                        SendNotification::dispatch($notification,$user);
                         echo json_encode(array('error'=>false,'message' => "Congratulation Plan  Unlocked")); 
                     } catch (\Exception  $e) {
                         \DB::rollback();
@@ -287,21 +298,30 @@ class UserController extends Controller
         $value = Post::where('id','=',$postid)->where('userid','=',$user->id)->FirstOrFail();
         return view('user.post_view',compact('value'));
     }
-    function post_unlock(User $user,$postid){
-    
+    function post_unlock(User $user,Request $request){
+        $postid = $request->postid;
         $post = Post::where('id','=',$postid)->where('userid','=',$user->id)->first();
         
         if($post){
+            
             if(auth()->guard('customer')->user()->balance >= $post->price){
                 if(!\App\Models\PostUnlock::where(['post_id' => $postid,'user_id' => auth()->guard('customer')->user()->id])->exists()){
                     \DB::beginTransaction();
 
                     try {
-                        \App\Models\PostUnlock::insert(['post_id' => $postid,'user_id' => auth()->guard('customer')->user()->id,'amount' => $post->price]);
+                        $postunlock = \App\Models\PostUnlock::create(['post_id' => $postid,'user_id' => auth()->guard('customer')->user()->id,'amount' => $post->price]);
                         User::where('id','=',auth()->guard('customer')->user()->id)->where('role','=','2')->update(['balance' => auth()->guard('customer')->user()->balance-$post->price]);
                         UserWalletTrasaction::insert(['transction_type' => '0','transction_title' => 'Post Unlock','transction_desc' =>'Post Unlock By wallet','amount' => $post->price,'user_id' =>auth()->guard('customer')->user()->id]);
-                        \App\Models\Order::insert(['userid' =>auth()->guard('customer')->user()->id,'influencer_id' => $user->id,'order_id' =>$this->orderId(),'amount'=>$post->price,'order_type' => 'post_unlock','order_status' => '1'    ]);
+                        \App\Models\Order::insert(['userid' =>auth()->guard('customer')->user()->id,'influencer_id' => $user->id,'order_id' =>$this->orderId(),'amount'=>$post->price,'order_type' => 'post_unlock','order_status' => '1' ,'detail_id' =>$postunlock->id   ]);
+                        Post::where('id','=',$postid)->where('userid','=',$user->id)->increment('total_unlock');
+                        Post::where('id','=',$postid)->where('userid','=',$user->id)->increment('total_earn',$post->price);
                         \DB::commit();
+                        $notification = array(
+                            'title' => "New Exclusive Post Unlock",
+                            'description' => "Congratulations! New post unlocked by  ".auth()->guard('customer')->user()->name,
+                            'type' => 'post_unlock'
+                        );
+                        SendNotification::dispatch($notification,$user);
                         echo json_encode(array('error'=>false,'message' => "Congratulation Post Unlocked")); 
                     } catch (\Exception  $e) {
                         \DB::rollback();
@@ -348,10 +368,18 @@ class UserController extends Controller
         if($service->price <=  auth()->guard('customer')->user()->balance){
             \DB::beginTransaction();
             try {
-                \App\Models\ServiceBooking::insert(['user_id' => auth()->guard('customer')->user()->id,'influencer_id'=> $user->id,'service_id' => $request->serviceId,'price' => $service->price,'title' => $service->service_type,'description' => $service->service_type]);
+                $serviceInsert = new \App\Models\ServiceBooking;
+                $serviceInsert->user_id = auth()->guard('customer')->user()->id;
+                $serviceInsert->influencer_id =  $user->id;
+                $serviceInsert->service_id =  $request->serviceId;
+                $serviceInsert->price = $service->price;
+                $serviceInsert->title = $service->service_type;
+                $serviceInsert->description = $service->service_type;
+                $serviceInsert->save();
+                $servid = $serviceInsert->id;
                 User::where('id','=',auth()->guard('customer')->user()->id)->where('role','=','2')->update(['balance' => auth()->guard('customer')->user()->balance-$service->price]);
-                UserWalletTrasaction::insert(['transction_type' => '0','transction_title' => 'Service Buy','transction_desc' =>'Service Buy By wallet','amount' => $service->price,'user_id' =>auth()->guard('customer')->user()->id]);
-                \App\Models\Order::insert(['userid' =>auth()->guard('customer')->user()->id,'influencer_id' => $user->id,'order_id' =>$this->orderId(),'amount'=>$service->price,'order_type' => 'service_buy','order_status' => '1'    ]);
+                UserWalletTrasaction::insert(['transction_type' => '0','transction_title' => 'Service Buy','transction_desc' =>'Service Booked  from '.$user->username.'','amount' => $service->price,'user_id' =>auth()->guard('customer')->user()->id]);
+                \App\Models\Order::insert(['userid' =>auth()->guard('customer')->user()->id,'influencer_id' => $user->id,'order_id' =>$this->orderId(),'amount'=>$service->price,'order_type' => 'service_purchase','order_status' => '0','detail_id' =>$servid    ]);
                 
                 \DB::commit();
                 $notification = array(
@@ -371,4 +399,50 @@ class UserController extends Controller
 
 
     }
+    function postLike(User $user,Request $request){
+        $request->validate([
+            'postid' =>'required',
+        ]);
+
+        if($request->islike == '1'){
+            \App\Models\PostLike::where('post_id','=',$request->postid)->where('user_id','=',auth()->guard('customer')->user()->id)->delete();
+            \App\Models\Post::find($request->postid)->decrement('like_count');
+            return response()->json(['status' => '1','message' => 'post unliked']);
+        }else{
+            $post_likes = new \App\Models\PostLike;
+            $post_likes->post_id = $request->postid;
+            $post_likes->user_id = auth()->guard('customer')->user()->id;
+            $post_likes->save();
+            \App\Models\Post::find($request->postid)->increment('like_count');
+            return response()->json(['status' => '1','message' => 'post like']);
+        }
+
+    }
+    function comment_get(User $user,Request $request)  {
+        try {
+            $request->validate([
+              'post_id' => 'required'
+            ]);
+            $comment = \App\Models\Comment::where('post_id','=',$request->post_id)->join('users','comments.user_id','=','users.id')->select('users.name','users.username','comments.*')->orderBy('comments.id','desc')->get();
+            return response()->json( array('status' => '1' ,'comment' => $comment), 200);
+          } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(  array('status' => '0' ,'message' => $e->getMessage()), 422);
+          }
+    }
+    function post_comment(User $user,Request $request) {
+        try {
+          $request->validate([
+            'comment' => 'required',
+            'post_id' => 'required'
+          ]);
+          $comment = new \App\Models\Comment;
+          $comment->post_id = $request->post_id;
+          $comment->comment = $request->comment;
+          $comment->user_id = auth()->guard('customer')->user()->id;
+          $comment->save();
+          return response()->json(  array('status' => '1' ,'message' => "comment added"), 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+          return response()->json(  array('status' => '0' ,'message' => $e->getMessage()), 422);
+        }
+      }
 }

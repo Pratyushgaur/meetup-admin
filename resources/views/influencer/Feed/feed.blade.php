@@ -254,17 +254,18 @@
                     <div class="post--content">
                         {{ $value->post_title }}<!-- After shower 💦 -->
                     </div>
-                    <div class="post--btn">
+                    <!-- <div class="post--btn">
                         <div class="feed--icons--box">
                             <img src="{{ asset('assets/images/copy-icon.png') }}" alt="" height="13px" width="13px">
                         </div>
                         <div class="feed--icons--box">
                             <img src="{{ asset('assets/images/notification-icon.png') }}" alt="" height="13px" width="13px">
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="date-time">
-                    {{ date('d/m/Y H:i',strtotime($value->created_at)) }} 
+                    {{ Helpers_time_ago($value->created_at) }}
+                  
                 </div>
                 <div class="exclusive">
                     <div class="exclusive-section-first">

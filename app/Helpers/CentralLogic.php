@@ -110,4 +110,32 @@ if(! function_exists('Helpers_get_previous_months')) {
     return $data['token'];
 }
 
+if(! function_exists('Helpers_time_ago')) {
+    function Helpers_time_ago($date)
+    {
+        return \Carbon\Carbon::parse($date)->diffForHumans();
+    }
+}
+if(! function_exists('Helpers_total_comment')) {
+    function Helpers_total_comment($postid)
+    {
+        return \App\Models\Comment::where('post_id','=',$postid)->count();
+    }
+    
+}
+if(! function_exists('is_liked')) {
+    function is_liked($postid,$user_id)
+    {
+        return \App\Models\PostLike::where('post_id','=',$postid)->where('user_id','=',$user_id)->exists();
+    }
+   
+}
+if(! function_exists('Helpers_unread_notification')) {
+    function Helpers_unread_notification()
+    {
+        return \App\Models\Notification::where('user_id','=',auth()->user()->id)->where('is_read','=','0')->exists();
+    }
+   
+}
+
 

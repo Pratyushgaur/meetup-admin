@@ -21,6 +21,7 @@ return new class extends Migration
             $table->enum('order_type',['post_unlock','plan_purchase','service_purchase']);
             $table->enum('order_status',['0','1'])->comment('0= pending 1= deliverd 2=reject');
             $table->float('commision')->defalut(0);
+            $table->integer('detail_id')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

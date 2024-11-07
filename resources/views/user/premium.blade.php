@@ -5,6 +5,20 @@
         background-color: black;
         color: white;
     }
+    .comment-section-container{
+        margin:10px 3px ;
+
+    }
+    .user-comment-section{
+        padding-left:5px;
+        display:flex;
+        justify-content:center;
+        margin-top:5px;
+    }
+    .exclusive-section-image{
+        width:12%;
+        margin-right:10px;
+    }
 </style>
 @endpush
 @section('content')
@@ -12,272 +26,237 @@
     <nav class="navbar navbar--login">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <span class="header-text">Premium</span>
+                <span class="header-text">Premium </span>
             </li>
         </ul>
     </nav>
 </header>
 <main class="mb-70">
-    <div class="container-fluid">
-        
+    <div class="container-fluid feature--section">
+    @foreach($posts as $key =>$value)
+        <?php 
+            $total_comment = Helpers_total_comment($value->id);
+        ?>
+        <div class="post">
+            <div class="post-header">
+                <img alt="Profile picture" src="{{ URL::TO('avator') }}/{{$user->avtar}}" onerror="this.src='{{ asset('assets/images/verify-badge.png') }}'" class="image_fit" />
+                <div>
+                    <span class="username">
+                        {{Str::limit($user->username, 40, '...')}} <i class="fas fa-check-circle verified"></i>
+                    </span>
 
-        <!-- <div class="video-container">
-            <div class="video-section mb-3">
-                <video class="video-clip" onclick="this.paused?this.play():this.pause();">
-                    <source src="{{ asset('assets/videos/private.mp4') }}" type="video/ogg">
-                </video>
-                <div class="video-blur-section">
-                    <div class="video-blur-execlusive">
-                        <div class="font-style">Move to prime</div>
-                    </div>
-                    <div class="video-blur-playbtn">
-                        <img src="{{ asset('assets/images/prime-play.png') }}" alt="" height="90px" width="90px">
-                    </div>
-                    <div class="video-like-icon">
-                        <button class="feed--prime--details">
-                            <img src="{{ asset('assets/images/like-feed.png') }}" alt="" height="22px" width="22px">
-                            <div class="feed--prime--details--content">
-                                139
-                            </div>
-                        </button>
-                        <div class="feed--prime--details">
-                            <img src="{{ asset('assets/images/earned-btn.png') }}" alt="" height="22px" width="22px">
-                            <div class="feed--prime--details--content">
-                                5000
-                            </div>
-                        </div>
-                        <div class="feed--prime--details">
-                            <img src="{{ asset('assets/images/feed-lock.png') }}" alt="" height="22px" width="22px">
-                            <div class="feed--prime--details--content">
-                                5000
-                            </div>
-                        </div>
+                    <div class="time">
+                    {{ Helpers_time_ago($value->created_at) }}
+                        <i class="fas fa-globe globe">
+                        </i>
                     </div>
                 </div>
             </div>
-            <div class="video-detail-section">
-                <div class="video-type">
-                    <div class="post--content">
-                        After shower 💦 After shower 💦 After shower 💦 After shower 💦 After shower 💦 After shower 💦 After shower 💦 After shower 💦
-                    </div>
-                    <div class="post--btn">
-                        <div class="feed--icons--box">
-                            <img src="{{ asset('assets/images/copy-icon.png') }}" alt="" height="13px" width="13px">
+            <div class="post-content">
+                <p class="post--caption mb-2">
+                {{$value->post_title}}
+                
+                </p>
+                @if(!auth()->guard('customer')->check())
+                <div class="image--lock">
+                    <div class="lock--price--label">
+                        <div class="h-52 flex justify-center items-center">
+                            <i class="fas fa-lock text-gray-500 text-8xl mt-4">
+                            </i>
                         </div>
-                        <div class="feed--icons--box">
-                            <img src="{{ asset('assets/images/notification-icon.png') }}" alt="" height="13px" width="13px">
+                        <div class="mt-4 flex justify-center">
+                            <button class="bg-black text-white py-2 px-4 rounded-full flex items-center">
+                                <span>
+                                    Login to View
+                                </span>
+                                
+                            </button>
                         </div>
+                        
                     </div>
                 </div>
-                <div class="date-time">
-                    29/07/2024 15:53
-                </div>
-                <div class="exclusive">
-                    <div class="exclusive-section-first">
-                        <input type="text" class="form-control comment--input" placeholder="Type your comment...." />
-                    </div>
-                    <div class="exclusive-section-second">
-                        <img src="{{ asset('assets/images/edit-icon.png') }}" alt="">
-                    </div>
-                </div>
-                <div class="view--comment--section">
-                    <a href="#">View all comments</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="video-container">
-            <div class="video-section mb-3">
-                <video class="video-clip" onclick="this.paused?this.play():this.pause();">
-                    <source src="{{ asset('assets/videos/private.mp4') }}" type="video/ogg">
-                </video>
-                <div class="video-blur-section hidden">
-                    <div class="video-blur-execlusive">
-                        <div class="font-style">Move to prime</div>
-                    </div>
-                    <div class="video-blur-playbtn">
-                        <img src="{{ asset('assets/images/prime-play.png') }}" alt="" height="90px" width="90px">
-                    </div>
-                    <div class="video-like-icon">
-                        <button class="feed--prime--details">
-                            <img src="{{ asset('assets/images/like-feed.png') }}" alt="" height="22px" width="22px">
-                            <div class="feed--prime--details--content">
-                                139
-                            </div>
-                        </button>
-                        <div class="feed--prime--details">
-                            <img src="{{ asset('assets/images/earned-btn.png') }}" alt="" height="22px" width="22px">
-                            <div class="feed--prime--details--content">
-                                5000
-                            </div>
-                        </div>
-                        <div class="feed--prime--details">
-                            <img src="{{ asset('assets/images/feed-lock.png') }}" alt="" height="22px" width="22px">
-                            <div class="feed--prime--details--content">
-                                5000
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="video-detail-section">
-                <div class="video-type">
-                    <div class="post--content">
-                        After shower 💦
-                    </div>
-                    <div class="post--btn">
-                        <div class="feed--icons--box">
-                            <img src="{{ asset('assets/images/copy-icon.png') }}" alt="" height="13px" width="13px">
-                        </div>
-                        <div class="feed--icons--box">
-                            <img src="{{ asset('assets/images/notification-icon.png') }}" alt="" height="13px" width="13px">
-                        </div>
-                    </div>
-                </div>
-                <div class="date-time">
-                    29/07/2024 15:53
-                </div>
-                <div class="exclusive">
-                    <div class="exclusive-section-first">
-                        <input type="text" class="form-control comment--input" placeholder="Type your comment...." />
-                    </div>
-                    <div class="exclusive-section-second">
-                        <img src="{{ asset('assets/images/edit-icon.png') }}" alt="">
-                    </div>
-                </div>
-                <div class="view--comment--section">
-                    <a href="#">View all comments</a>
-                </div>
-            </div>
-        </div> -->
-
-        @foreach($posts as $key =>$value)
-        <div class="video-container">
-        <div class="video-section mb-3">
-                @if($value->file_type == 'video')
-                    <img src="{{ asset('thumbnails/') }}/{{ $value->video_thumbnail }}" alt="" class="image_fit" id="thumbnails-{{$value->id}}">
-                    <video class="video-clip" id="video-{{$value->id}}" onclick="this.paused?this.play():this.pause();"></video>
                 @else
-                    @if(Auth::guard('customer')->check())
-                        @if($value->post_unlock_id !=null)
-                        <img src="{{ asset('posts/') }}/{{ $value->main_file }}" alt="" class="image_fit">
+                    @if($value->price  == 0)
+                        @if($value->file_type == 'video')
+                            <video class="post--image" src="{{ asset('posts') }}/{{ $value->main_file }}" onclick="this.paused?this.play():this.pause();"></video>
                         @else
-                        <img src="{{ asset('posts/') }}/{{ $value->main_image_blur }}" alt="" class="image_fit">
+                            <div class="owl-carousel owl-theme post--images">
+                                <div class="item">
+                                    <img alt="Person taking a mirror selfie wearing a grey top and jeans" class="post-content--image image_fit" src="{{ asset('posts') }}/{{ $value->main_file }}" />
+                                </div>
+                                @if($value->more_files!=null)
+                                    <?php 
+                                        $morefiles = json_decode($value->more_files);
+                                        foreach ($morefiles as $k => $v) {
+                                            ?>
+                                            <div class="item">
+                                                <img alt="Person taking a mirror selfie wearing a grey top and jeans" class="post-content--image image_fit" src="{{ asset('posts') }}/{{ $v; }}" />
+                                            </div>
+                                            <?php
+                                        }
+                                    ?>
+                                @endif
+                                
+                            </div>
                         @endif
-                        
-                        
                     @else
-                        <img src="{{ asset('posts/') }}/{{ $value->main_image_blur }}" alt="" class="image_fit">
+                    @if($value->post_unlock_id == null)   
+                            <div class="image--lock">
+                                <div class="lock--price--label">
+                                    <div class="h-52 flex justify-center items-center">
+                                        <i class="fas fa-lock text-gray-500 text-8xl mt-4">
+                                        </i>
+                                    </div>
+                                    <div class="mt-4 flex justify-center">
+                                        <button onclick="window.location.href='{{route('user.plan.view',[request()->segment(2),$value->plan_id])}}'" class="bg-black text-white py-2 px-4 rounded-full flex items-center" >
+                                            <span>
+                                                Subscribe to view post 
+                                            </span>
+                                            
+                                        </button>
+                                    </div>
+                                    
+                                </div>
+                            </div>            
+                    @else
+                            @if($value->file_type == 'video')
+                                    <video class="post--image" src="{{ asset('posts') }}/{{ $value->main_file }}" onclick="this.paused?this.play():this.pause();"></video>
+                                @else
+                                    <div class="owl-carousel owl-theme post--images">
+                                        <div class="item">
+                                            <img alt="Person taking a mirror selfie wearing a grey top and jeans" class="post-content--image image_fit" src="{{ asset('posts') }}/{{ $value->main_file }}" />
+                                        </div>
+                                        @if($value->more_files!=null)
+                                            <?php 
+                                                $morefiles = json_decode($value->more_files);
+                                                foreach ($morefiles as $k => $v) {
+                                                    ?>
+                                                    <div class="item">
+                                                        <img alt="Person taking a mirror selfie wearing a grey top and jeans" class="post-content--image image_fit" src="{{ asset('posts') }}/{{ $v; }}" />
+                                                    </div>
+                                                    <?php
+                                                }
+                                            ?>
+                                        @endif
+                                        
+                                    </div>
+                            @endif
+
+                    @endif              
                     @endif
-                    
+                
+                
                 @endif
                 
-                    
-                    @if($value->file_type == 'video')
-
-                        @if($value->post_unlock_id !=null)
-                        <div class="video-blur-section" style="display:flex; justify-content:center;align-items:center;">
-                            <div class="video-blur-playbtn video-blur-playbtn-edit" data-video="video-{{$value->id}}" data-id="{{$value->id}}" data-src="{{ asset('posts/') }}/{{ $value->main_file }}">
-                                <img src="{{ asset('assets/images/prime-play.png') }}" alt="" height="90px" width="90px">
-                            </div>
-                        </div>
-                        @else
-                        <div class="video-blur-section" style="display:flex; justify-content:center;align-items:center;">
-                            <div class="video-blur-playbtn">
-                                <img src="{{ asset('assets/images/lock-icon.png') }}" alt="" height="90px" width="90px">
-                            </div>
-                        </div>
-                        @endif
-                        <!-- <div class="video-blur-playbtn video-blur-playbtn-edit" data-video="video-{{$value->id}}" data-id="{{$value->id}}" data-src="{{ asset('posts/') }}/{{ $value->main_file }}">
-                            <img src="{{ asset('assets/images/prime-play.png') }}" alt="" height="90px" width="90px">
-                        </div> -->
-                        
-                    @else
-                        @if($value->post_unlock_id ==null)
-                        <div class="video-blur-section" style="display:flex; justify-content:center;align-items:center;">
-                            <div class="video-blur-playbtn">
-                                <img src="{{ asset('assets/images/lock-icon.png') }}" alt="" height="90px" width="90px">
-                            </div>
-                        </div>
-                        @endif
-                        
-                    @endif
-                    
-                    
-                    
-            
             </div>
-            <div class="video-detail-section">
-                <div class="video-type" style="align-items: start !important;justify-content: center !important;">
-                    @if($value->post_type == 0)
-                    <div class="feed--prime--btn">
-                        <div class="feed--prime--btn--content">
-                            Exclusive
-                        </div>
-                        
+            
+            <div class="post-footer">
+                @if(!auth()->guard('customer')->check())
+                    <div class="icon likes">
+                        <i class='fas fa-heart' style='font-size:18px;'></i>
+                        {{$value->like_count}}
                     </div>
-                    <div class="feed--prime--btn">
-                        <div class="feed--prime--btn--content">
-                            ₹{{number_format($value->price,2)}}
-                        </div>
-                        
+                    <div class="icon comments">
+                        <i class="far fa-comment" style='font-size:18px;'>
+                        </i>
+                        {{$total_comment}}
                     </div>
-                    <!-- <h6 style="margin-top:10px;margin-left:20px;" >₹100.00</h6> -->
+                    <!-- <div class="icon share">
+                        <i class="far fa-paper-plane" style='font-size:18px;'>
+                        </i>
+                    </div> -->
+                @else
+                    @if($value->price  == 0 || $value->post_unlock_id != null)   
+                        <?php 
+                            $isliked = is_liked($value->id,auth()->guard('customer')->user()->id);
+                        ?>
+                        <div class="icon likes postLike" data-islike="{{ $isliked }}" data-postid="{{ $value->id }}">
+                            <i class='fas fa-heart ' style='font-size:18px; @if($isliked) color:red;  @endif'></i>
+                            <span class="like-count-block">{{$value->like_count}}</span>
+                        </div>
+                        <div class="icon comments" onclick="showCommentBox('{{ $value->id }}')">
+                            <i class="far fa-comment" style='font-size:18px;'>
+                            </i>
+                            {{$total_comment}}
+                        </div>
+                        <!-- <div class="icon share">
+                            <i class="far fa-paper-plane" style='font-size:18px;'>
+                            </i>
+                        </div>     -->
                     @else
-                    <div class="feed--prime--btn" style="font-style: normal !important; background:black !important; color:#fff;">
-                        <div class="feed--prime--btn--content">
-                            {{$value->plan_name}}
-                        </div>
-                    </div>
-                        @if($value->post_unlock_id ==null)
-                        <div class="feed--prime--btn " style="font-style: normal !important; background:black !important; color:#fff;" >
-                            <a href="{{route('user.plan.view',[request()->segment(2),$value->plan_id])}}" style="text-decoration:none !important; color:#fff;">
-                                <div class="feed--prime--btn--content" style="text-decoration:none !important;;">
-                                    Buy Now
-                                </div>
-                            </a>
-                        </div>
-                        @endif
+                        <div class="icon likes">
+                                <i class='fas fa-heart' style='font-size:18px;'></i>
+                                {{$value->like_count}}
+                            </div>
+                            <div class="icon comments" >
+                                <i class="far fa-comment" style='font-size:18px;'>
+                                </i>
+                                {{$total_comment}}
+                            </div>
+                            <!-- <div class="icon share">
+                                <i class="far fa-paper-plane" style='font-size:18px;'>
+                                </i>
+                            </div>                          -->
                     @endif
-                    <button class="feed--prime--details" style="margin:7px 5px; height:25px;">
-                        <img src="{{ asset('assets/images/like-feed.png') }}" alt="" height="22px" width="22px">
-                        <div class="feed--prime--details--content">
-                            {{$value->like_count}}
-                        </div>
-                    </button>
-                </div>
-                <div class="video-type">
-                    <div class="post--content">
-                        {{ $value->post_title }}<!-- After shower 💦 -->
-                    </div>
-                   
-                </div>
-                <div class="date-time">
-                    {{ date('d M Y h:i A',strtotime($value->created_at)) }} 
-                </div>
-                <div class="exclusive">
-                    <div class="exclusive-section-first">
-                        <input type="text" class="form-control comment--input" placeholder="Type your comment...." />
-                    </div>
-
-                </div>
-                <div class="view--comment--section">
-                    <a href="#">View all comments</a>
-                </div>
+                @endif
+                
             </div>
         </div>
-        @endforeach
-        
+    @endforeach
 
 
     </div>
 </main>
+<div id="edit-menbership-model" class="userlist_model">
+    <div class="modelbox stream-model">
+        <div class="modelnav">
+            <div class="model--nav--head"> Comments</div>
+            <div>
+                <img src="{{ asset('assets/images/cross-icon.png') }}" class="model--close live--model--close modelClose" alt="">
+            </div>
+        </div>
+        <div class="usercontainer">
+            <div class="user-comment-section exclusive">
+                <div class="exclusive-section-image">
+                    <img alt="Profile picture" src="{{ asset('assets/images/verify-badge.png') }}" class="image_fit">   
+                </div>
+                <div class="exclusive-section-first">
+                    <input type="text" class="form-control comment--input comment-input" placeholder="Type your comment...." />
+                </div>
+                <div class="exclusive-section-second sendComment" data-postid="" style="background:black; border-radius:100%; height: 40px;width:40px;display:flex; justify-content:center;align-items:center; margin-left:5px;">
+                    <img src="{{ asset('assets/images/send.png') }}" alt="" style="height: 24px;width:24px; ">
+                </div>
+            </div>
+            <div class="comment-section-container"></div>
+            <h5 class="no_data" style="text-align:center; margin-top:20px; display:none;">No Comment exists</h5>
+        </div>
+    </div>
+</div>
 
 @include('user.footer')
 @endsection
 
 @push('js')
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+     $('.loopscards').owlCarousel({
+        loop: true,
+        margin: 15,
+        nav: false,
+        dots: false,
+        autoWidth: true,
+    })
+
+    $('.post--images').owlCarousel({
+        items: 1,
+        loop: false,
+        margin: 15,
+        nav: false,
+        dots: true,
+        autoWidth: false,
+    })
+
     $(document).ready(function(){
         $('.shiftPost').click(function(){
             window.location.href = $(this).attr('data-href');
@@ -296,5 +275,133 @@
             console.log($(this).attr('data-video'));
         })
     })
+
+    $(".modelClose").click(function(){
+
+    $(".userlist_model").css('display', 'none');
+    })
+    $(".sendComment").click(function(){
+        if($('.comment-input').val() != ''){
+            $(".userlist_model").css('display', 'none');
+            document.getElementById('loader').classList.add('loader-visible');
+            let csrfToken = $('meta[name="csrf-token"]').attr('content');
+            const formData = new FormData();
+            let postid = $(this).attr('data-postid');
+            formData.append('comment', $('.comment-input').val());
+            formData.append('post_id', postid);
+            $.ajax({
+                url: "{{ route('user.post.comment.send',[request()->segment(2)]) }}",
+                method: "post",
+                contentType: false,
+                processData: false,
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the request headers
+                },
+                success: function(response) {
+                    
+                    if(response.status == "1"){
+                        $('.comment-input').val('')
+                        showCommentBox(postid);
+                        document.getElementById('loader').classList.remove('loader-visible');
+                    }
+                },
+                error:(request, status, error) =>{
+                    let er = JSON.parse(request.responseText);
+                    document.getElementById('loader').classList.remove('loader-visible');
+                    Swal.fire({text:er.message,confirmButtonColor: "#333",});
+                }
+
+
+            });
+        }
+    })
+    $(".postLike").click(function(){
+        //$(this).attr('disabled',true);
+        //$(this).off('click')
+        
+        let elem = $(this);
+        let postid = $(this).attr('data-postid');
+
+        let islike = $(this).attr('data-islike');
+        
+        if(islike == '1'){
+            $(this).children('i').css('color','');
+            let countCon = $(this).find('.like-count-block');
+            countCon.html(parseInt(countCon.html())-1);
+            $(this).attr('data-islike','')
+        }else{
+           
+            $(this).children('i').css('color','red');
+            let countCon = $(this).find('.like-count-block');
+            countCon.html(parseInt(countCon.html())+1);
+            $(this).attr('data-islike','1')
+            
+        }
+        $.ajax({
+            url: "{{ route('user.post.like',[request()->segment(2)]) }}",
+            data: {postid:postid,islike:islike},
+            success: function(response) {
+                
+            }
+        });
+       // alert($(this).attr('data-islike'))
+    })
+    function showCommentBox(postid){
+        $.ajax({
+            url: "{{ route('user.post.comment.get',[request()->segment(2)]) }}",
+            method: "get",
+            data: {post_id:postid},
+            success: function(response) {
+                let html = '';
+                response.comment.forEach(element => {
+                    html+='<div class="post"><div class="post-header"><img alt="Profile picture" src="{{ asset('assets/images/verify-badge.png') }}" class="image_fit"><div><span class="username">'+element.name+'</span><div class="time">'+timeAgo(element.created_at)+'<i class="fas fa-globe globe"></i></div></div></div><div class="post-content"><p class="post--caption mb-2">'+element.comment+'</p></div></div>';
+                });
+                if(response.comment.length > 0){
+                    $(".comment-section-container").show();
+                    $(".no_data").hide();
+                    $(".comment-section-container").html(html);
+                }else{
+                    $(".comment-section-container").hide();
+                    $(".no_data").show();
+
+                }
+                $(".sendComment").attr('data-postid',postid);
+                $(".userlist_model").css('display', 'flex');
+            
+            },
+            error:(request, status, error) =>{
+                let er = JSON.parse(request.responseText);
+                document.getElementById('loader').classList.remove('loader-visible');
+                Swal.fire({text:er.message,confirmButtonColor: "#333",});
+            }
+
+
+        });
+
+    }
+    function timeAgo(dateInput) {
+        const now = new Date();
+        const date = new Date(dateInput);
+        const seconds = Math.floor((now - date) / 1000);
+
+        let interval = Math.floor(seconds / 31536000); // Years
+        if (interval >= 1) return `${interval} year${interval === 1 ? '' : 's'} ago`;
+
+        interval = Math.floor(seconds / 2592000); // Months
+        if (interval >= 1) return `${interval} month${interval === 1 ? '' : 's'} ago`;
+
+        interval = Math.floor(seconds / 86400); // Days
+        if (interval >= 1) return `${interval} day${interval === 1 ? '' : 's'} ago`;
+
+        interval = Math.floor(seconds / 3600); // Hours
+        if (interval >= 1) return `${interval} hour${interval === 1 ? '' : 's'} ago`;
+
+        interval = Math.floor(seconds / 60); // Minutes
+        if (interval >= 1) return `${interval} minute${interval === 1 ? '' : 's'} ago`;
+
+        return 'just now'; // Less than a minute ago
+    }
+    
 </script>
 @endpush

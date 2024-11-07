@@ -68,6 +68,7 @@ Route::group(['prefix' => 'influencer','as' => 'influencer.','middleware' => Inf
     //orders 
     Route::get('orders',[App\Http\Controllers\influencer\OrderController::class,'history'])->name('orders.history');
     Route::get('orders-pending',[App\Http\Controllers\influencer\OrderController::class,'pending'])->name('orders.pending');
+    Route::get('orders-delivered/{orderid}',[App\Http\Controllers\influencer\OrderController::class,'orderDelivered'])->name('orders.status.delivered');
 
     //settings
     Route::get('payout-setting',[App\Http\Controllers\influencer\SettingController::class,'payout_setting'])->name('payout.setting');

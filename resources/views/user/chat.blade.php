@@ -253,9 +253,10 @@
             </button>
             <input type="file" id="attechment--input--chat" name="">
             <div class="btncbox">
-                <button id="btnRecordSound" class="btn chat--input--btn" modifier="large" disable-auto-styling>
+                <!-- <button id="btnRecordSound" class="btn chat--input--btn" modifier="large" disable-auto-styling>
                     <img src="{{ asset('assets/images/chat-record.png')}}" alt="" style="height: 24px;width: 14px;">
-                </button>
+                </button> -->
+                <button id="btnRecordSound"  class="btnSendMessage btn chat--input--btn" modifier="large" disable-auto-styling><img src="{{ asset("assets/images/send.png")}}" alt="" style="height: 24px;width: 24px;"></button>
             </div>
            
         </div>
@@ -361,12 +362,12 @@
             })
             $('.write-message').on('keydown', function(event) {
                 
-                if($(this).val()  == ""){
-                    $(".btncbox").html(recordButton);
-                }else{
-                    $(".btncbox").html(sendButton);
+                // if($(this).val()  == ""){
+                //     $(".btncbox").html(recordButton);
+                // }else{
+                //     $(".btncbox").html(sendButton);
 
-                }
+                // }
                 if (event.key === 'Enter' || event.keyCode === 13) {
                     event.preventDefault(); // Prevent default behavior (like submitting a form)
                     sendMessage();

@@ -14,10 +14,11 @@
 <main>
 
     <div class="container-fluid main-pending-container">
+        @forelse($orders as $Key =>$value)
         <div class="pending_order_container">
             <div class="feature--heading--order mt-1">
-                <span style="font-size:14px">Order ID : <b>#2407415041023</b></span>
-                <span style="font-size:11px">Date 24/07/24 15:04</span>
+                <span style="font-size:14px">Order ID : <b>#{{$value->order_id}}</b></span>
+                <span style="font-size:11px">Date {{date('d/m/y h:i A',strtotime($value->created_at))}} </span>
             </div>
 
             <div class="deliver--detail--content pl-1">
@@ -26,7 +27,7 @@
                         Service :
                     </div>
                     <div class="col-9 p-0">
-                        <b>Exclusive Post Unlock</b>
+                        <b>{{Str::limit($value->title, 50, '...')}}</b>
                     </div>
                 </div>
                 <div class="row deliver--section--row">
@@ -34,7 +35,7 @@
                         Buyer :
                     </div>
                     <div class="col-9 p-0">
-                        <b>Sahil Bagga</b>
+                        <b>{{$value->name}}</b>
                     </div>
                 </div>
                 <div class="row deliver--section--row">
@@ -42,149 +43,48 @@
                         Amount :
                     </div>
                     <div class="col-9 p-0">
-                        <b>399.0</b>
+                        <b>{{$value->amount}}</b>
                     </div>
                 </div>
-                <!-- <div class="row deliver--section--row">
-                    <div class="col-3 p-0">
-                        Earning :
-                    </div>
-                    <div class="col-9 p-0">
-                        <b>279.3</b>
-                    </div>
-                </div>
-                <div class="row deliver--section--row">
-                    <div class="col-3 p-0">
-                        TDS :
-                    </div>
-                    <div class="col-9 p-0">
-                        <b>3.99</b>
-                    </div>
-                </div> -->
+                
 
-                <a href="javascript:void(0)" class="btn-chat">
+                <a href="{{ route('influencer.chat.list',\Crypt::encryptString($value->userid)) }}" class="btn-chat">
                     Chat
                 </a>
-                <a href="javascript:void(0)" class="btn-deliver">
+                <a href="javascript:void(0)" onclick="markDelivered('{{ route('influencer.orders.status.delivered',$value->id) }}')" class="btn-deliver">
                     Mark Delivered
                 </a>
             </div>
         </div>
-
+        @empty
         <div class="pending_order_container">
-            <div class="feature--heading--order mt-1">
-                <span style="font-size:14px">Order ID : <b>#2407415041023</b></span>
-                <span style="font-size:11px">Date 24/07/24 15:04</span>
-            </div>
-
-            <div class="deliver--detail--content pl-1">
-                <div class="row deliver--section--row">
-                    <div class="col-3 p-0">
-                        Service :
-                    </div>
-                    <div class="col-9 p-0">
-                        <b>Exclusive Post Unlock</b>
-                    </div>
-                </div>
-                <div class="row deliver--section--row">
-                    <div class="col-3 p-0">
-                        Buyer :
-                    </div>
-                    <div class="col-9 p-0">
-                        <b>Sahil Bagga</b>
-                    </div>
-                </div>
-                <div class="row deliver--section--row">
-                    <div class="col-3 p-0">
-                        Amount :
-                    </div>
-                    <div class="col-9 p-0">
-                        <b>399.0</b>
-                    </div>
-                </div>
-                <div class="row deliver--section--row">
-                    <div class="col-3 p-0">
-                        Earning :
-                    </div>
-                    <div class="col-9 p-0">
-                        <b>279.3</b>
-                    </div>
-                </div>
-                <div class="row deliver--section--row">
-                    <div class="col-3 p-0">
-                        TDS :
-                    </div>
-                    <div class="col-9 p-0">
-                        <b>3.99</b>
-                    </div>
-                </div>
-
-                <a href="javascript:void(0)" class="btn-chat">
-                    Chat
-                </a>
-                <a href="javascript:void(0)" class="btn-deliver">
-                    Mark Delivered
-                </a>
+            <div class="deliver--detail--content pl-1 text-center ">
+                <h4>No Order Found</h4>
             </div>
         </div>
-
-        <div class="pending_order_container">
-            <div class="feature--heading--order mt-1">
-                <span style="font-size:14px">Order ID : <b>#2407415041023</b></span>
-                <span style="font-size:11px">Date 24/07/24 15:04</span>
-            </div>
-
-            <div class="deliver--detail--content pl-1">
-                <div class="row deliver--section--row">
-                    <div class="col-3 p-0">
-                        Service :
-                    </div>
-                    <div class="col-9 p-0">
-                        <b>Exclusive Post Unlock</b>
-                    </div>
-                </div>
-                <div class="row deliver--section--row">
-                    <div class="col-3 p-0">
-                        Buyer :
-                    </div>
-                    <div class="col-9 p-0">
-                        <b>Sahil Bagga</b>
-                    </div>
-                </div>
-                <div class="row deliver--section--row">
-                    <div class="col-3 p-0">
-                        Amount :
-                    </div>
-                    <div class="col-9 p-0">
-                        <b>399.0</b>
-                    </div>
-                </div>
-                <div class="row deliver--section--row">
-                    <div class="col-3 p-0">
-                        Earning :
-                    </div>
-                    <div class="col-9 p-0">
-                        <b>279.3</b>
-                    </div>
-                </div>
-                <div class="row deliver--section--row">
-                    <div class="col-3 p-0">
-                        TDS :
-                    </div>
-                    <div class="col-9 p-0">
-                        <b>3.99</b>
-                    </div>
-                </div>
-
-                <a href="javascript:void(0)" class="btn-chat">
-                    Chat
-                </a>
-                <a href="javascript:void(0)" class="btn-deliver">
-                    Mark Delivered
-                </a>
-            </div>
-        </div>
+        @endforelse
     </div>
 
 </main>
 @endsection
+
+@push('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function markDelivered(url){
+        Swal.fire({
+            title: "Are you sure?",
+            text: "This action will change this order status to delivered .. Make sure you have delivered this service .",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Change it!"
+        }).then((result) => {
+            if(result.isConfirmed){
+                window.location.href = url;
+            }
+        });
+    }
+</script>
+@endpush

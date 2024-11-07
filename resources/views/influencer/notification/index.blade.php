@@ -23,8 +23,52 @@
 </header>
 
 <main class="mb-70">
-
+    @forelse ($notification as $key =>$value)
     <div class="notification--main--content">
+
+        <div class="notification--image--section" style="margin-right:none !important;">
+            <div class="main--notification--image" style="background-color: #c6c2ff;">
+                @if($value->type == 'post_unlock')
+                <img src="{{ asset('assets/images/padlock.png') }}" alt="" width="35" height="40" >
+                @elseif($value->type == 'plan_purchase')
+                <img src="{{ asset('assets/images/crown.png') }}" alt="">
+                @elseif($value->type == 'service_buy')
+                <img src="{{ asset('assets/images/customer-service.png') }}" alt="" width="35" height="40">
+                @else
+                <img src="{{ asset('assets/images/notification.png') }}" alt="">
+                @endif
+            </div> 
+        </div>
+
+        <div class="notification--content-section">
+            <div class="notification--content">
+                {{$value->description}}
+            </div>
+            <p>
+                {{$value->title}}
+            </p>
+        </div>
+
+
+
+    </div>
+    @empty
+    <div class="notification--main--content">
+
+        
+
+        <div class="notification--content-section">
+            <div class="notification--content">
+               No Notification Exists
+            </div>
+            
+        </div>
+
+
+
+    </div>
+    @endforelse
+    <!-- <div class="notification--main--content">
 
         <div class="notification--image--section">
             <div class="main--notification--image" style="background-color: #c6c2ff;">
@@ -83,7 +127,7 @@
             </p>
         </div>
 
-    </div>
+    </div> -->
     
 </main>
 
