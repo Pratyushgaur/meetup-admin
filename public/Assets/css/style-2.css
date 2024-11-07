@@ -129,20 +129,6 @@ body {
         backdrop-filter: blur(15px);
         overflow-x: scroll;
     }
-    #recording-model {
-        z-index: 2000;
-        position: fixed;
-        height: 100vh;
-        width: 450px;
-        top: 0px;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        background-color: rgba(255, 255, 255, 0.4);
-        -webkit-backdrop-filter: blur(15px);
-        backdrop-filter: blur(15px);
-        overflow-x: scroll;
-    }
 
     #createmodel--live {
         z-index: 2000;
@@ -283,7 +269,6 @@ body {
         max-width: 330px;
         font-size: 15px;
         font-weight: 600;
-        word-break: break-word;
     }
 
     .message--text--receive {
@@ -293,7 +278,6 @@ body {
         max-width: 330px;
         font-size: 15px;
         font-weight: 600;
-        word-break: break-word;
     }
 
     /* Home Page Css */
@@ -326,7 +310,7 @@ body {
         height: 100%;
         background-image: linear-gradient(180deg, white, black);
         position: fixed;
-        left: calc(50% - 468px);
+        left: 300px;
         visibility: collapse;
         transition: .8s;
         z-index: 2500;
@@ -436,20 +420,6 @@ body {
     }
 
     #createmodel {
-        position: fixed;
-        height: 100vh;
-        width: 100%;
-        top: 0px;
-        z-index: 2000;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        background-color: rgba(255, 255, 255, 0.4);
-        -webkit-backdrop-filter: blur(15px);
-        backdrop-filter: blur(15px);
-        overflow-x: scroll;
-    }
-    #recording-model {
         position: fixed;
         height: 100vh;
         width: 100%;
@@ -603,7 +573,6 @@ body {
         max-width: 82%;
         font-size: 15px;
         font-weight: 600;
-        word-break: break-word;
     }
 
     .message--text--receive {
@@ -613,7 +582,6 @@ body {
         max-width: 82%;
         font-size: 15px;
         font-weight: 600;
-        word-break: break-word;
     }
 
     /* Home Page Css */
@@ -1690,7 +1658,7 @@ input[type=radio].coolor-radio {
 .notification--image--section {
     min-width: 20%;
     height: 100%;
-    /* margin-right: auto; */
+    margin-right: auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1797,7 +1765,6 @@ input[type=radio].coolor-radio {
 }
 
 .message--chat--box {
-    width: 95%;
     padding-bottom: 10vh;
     padding-top: 30vh;
     padding-right: 15px;
@@ -2744,7 +2711,7 @@ input[type=radio].coolor-radio {
     justify-content: start;
     align-items: flex-end;
     height: 35px;
-    width: 70%;
+    width: 85%;
 }
 
 .comment--input {

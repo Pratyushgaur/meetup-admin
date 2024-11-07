@@ -34,7 +34,10 @@ Route::prefix('app')->group(function () {
         Route::get('/{user:username}/plan/view/{id}', [UserController::class, 'plan_view'])->name('user.plan.view');
         Route::get('/{user:username}/plan/buy/{id}',[UserController::class, 'plan_buy'])->name('user.plan.buy');
         Route::get('/{user:username}/post/view/{id}', [UserController::class, 'post_view'])->name('user.post.view');
-        Route::get('/{user:username}/post/unlock/{id}', [UserController::class, 'post_unlock'])->name('user.post.unlock');
+        Route::get('/{user:username}/post/unlock', [UserController::class, 'post_unlock'])->name('user.post.unlock');
+        Route::get('/{user:username}/post/like',[UserController::class, 'postLike'])->name('user.post.like');
+        Route::get('/{user:username}/comment-post-get',[UserController::class,'comment_get'])->name('user.post.comment.get');
+        Route::post('/{user:username}/comment-post',[UserController::class,'post_comment'])->name('user.post.comment.send');
         Route::post('/{user:username}/user-send-message',[ChatController::class,'sendMessage'])->name('user.send.message');
         Route::post('/{user:username}/user-send-gift-message',[ChatController::class,'sendGiftMessage'])->name('user.send.gift.message');
         Route::get('/{user:username}/chat', [ChatController::class, 'index'])->name('user.chat');

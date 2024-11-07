@@ -506,8 +506,8 @@
                     success: function(response) {
                         // $(".create-post-image-section").hide();
                         // $(".create-post-form-section").show();
-                        //document.getElementById('loader').classList.remove('loader-visible');
-                        //window.location.href = "{{ route('influencer.success.page') }}";
+                        document.getElementById('loader').classList.remove('loader-visible');
+                        window.location.href = "{{ route('influencer.success.page') }}";
                     },
                     error:(request, status, error) =>{
                         let er = JSON.parse(request.responseText);

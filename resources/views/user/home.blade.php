@@ -36,6 +36,20 @@
                1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
         
     }
+    .comment-section-container{
+        margin:10px 3px ;
+
+    }
+    .user-comment-section{
+        padding-left:5px;
+        display:flex;
+        justify-content:center;
+        margin-top:5px;
+    }
+    .exclusive-section-image{
+        width:12%;
+        margin-right:10px;
+    }
 </style>
 @endpush
 @section('content')
@@ -113,7 +127,7 @@
             @else
             <div class="profile--bio--section">
                 <h5>
-                    Hi, I'm {{$user->name}}
+                    Hi, I'm {{$user->username}}
                 </h5>
                 <p>
                     {{strip_tags($user->bio)}} 
@@ -245,9 +259,190 @@
         </div>
     </div>
     @endif
+    @if($ex_posts->exists())
+    <div class="container-fluid">
+        <div class="feature--heading mt-1">
+        Exclusive 
+        </div>
+    </div>
+    @foreach($ex_posts->get() as $key =>$value)
+        <?php 
+            $total_comment = Helpers_total_comment($value->id);
+        ?>
+        <div class="post">
+            <div class="post-header">
+                <img alt="Profile picture" src="{{ URL::TO('avator') }}/{{$user->avtar}}" onerror="this.src='{{ asset('assets/images/verify-badge.png') }}'" class="image_fit" />
+                <div>
+                    <span class="username">
+                        {{Str::limit($user->username, 40, '...')}} <i class="fas fa-check-circle verified"></i>
+                    </span>
+
+                    <div class="time">
+                    {{ Helpers_time_ago($value->created_at) }}
+                        <i class="fas fa-globe globe">
+                        </i>
+                    </div>
+                </div>
+            </div>
+            <div class="post-content">
+                <p class="post--caption mb-2">
+                {{$value->post_title}}
+                
+                </p>
+                @if(!auth()->guard('customer')->check())
+                <div class="image--lock">
+                    <div class="lock--price--label">
+                        <div class="h-52 flex justify-center items-center">
+                            <i class="fas fa-lock text-gray-500 text-8xl mt-4">
+                            </i>
+                        </div>
+                        <div class="mt-4 flex justify-center">
+                            <button class="bg-black text-white py-2 px-4 rounded-full flex items-center">
+                                <span>
+                                    Login to View
+                                </span>
+                                
+                            </button>
+                        </div>
+                        
+                    </div>
+                </div>
+                @else
+                    @if($value->price  == 0)
+                        @if($value->file_type == 'video')
+                            <video class="post--image" src="{{ asset('posts') }}/{{ $value->main_file }}" onclick="this.paused?this.play():this.pause();"></video>
+                        @else
+                            <div class="owl-carousel owl-theme post--images">
+                                <div class="item">
+                                    <img alt="Person taking a mirror selfie wearing a grey top and jeans" class="post-content--image image_fit" src="{{ asset('posts') }}/{{ $value->main_file }}" />
+                                </div>
+                                @if($value->more_files!=null)
+                                    <?php 
+                                        $morefiles = json_decode($value->more_files);
+                                        foreach ($morefiles as $k => $v) {
+                                            ?>
+                                            <div class="item">
+                                                <img alt="Person taking a mirror selfie wearing a grey top and jeans" class="post-content--image image_fit" src="{{ asset('posts') }}/{{ $v; }}" />
+                                            </div>
+                                            <?php
+                                        }
+                                    ?>
+                                @endif
+                                
+                            </div>
+                        @endif
+                    @else
+                    @if($value->post_unlock_id == null)   
+                            <div class="image--lock">
+                                <div class="lock--price--label">
+                                    <div class="h-52 flex justify-center items-center">
+                                        <i class="fas fa-lock text-gray-500 text-8xl mt-4">
+                                        </i>
+                                    </div>
+                                    <div class="mt-4 flex justify-center">
+                                        <button class="bg-black text-white py-2 px-4 rounded-full flex items-center confirm-unlock" data-postid="{{ $value->id }}" @if($value->price <= auth()->guard('customer')->user()->balance) data-eligble="true" @else data-eligble="false" @endif>
+                                            <span>
+                                                Unlock now @
+                                            </span>
+                                            <img src="{{ asset('assets/images/58c4274d9028aa1790c58509601e92b8.png') }}" alt="" style="height: 15px;width: 15px;margin-right: 5px;margin-left: 5px">
+                                            <span>
+                                                {{$value->price}}
+                                            </span>
+                                        </button>
+                                    </div>
+                                    
+                                </div>
+                            </div>            
+                    @else
+                            @if($value->file_type == 'video')
+                                    <video class="post--image" src="{{ asset('posts') }}/{{ $value->main_file }}" onclick="this.paused?this.play():this.pause();"></video>
+                                @else
+                                    <div class="owl-carousel owl-theme post--images">
+                                        <div class="item">
+                                            <img alt="Person taking a mirror selfie wearing a grey top and jeans" class="post-content--image image_fit" src="{{ asset('posts') }}/{{ $value->main_file }}" />
+                                        </div>
+                                        @if($value->more_files!=null)
+                                            <?php 
+                                                $morefiles = json_decode($value->more_files);
+                                                foreach ($morefiles as $k => $v) {
+                                                    ?>
+                                                    <div class="item">
+                                                        <img alt="Person taking a mirror selfie wearing a grey top and jeans" class="post-content--image image_fit" src="{{ asset('posts') }}/{{ $v; }}" />
+                                                    </div>
+                                                    <?php
+                                                }
+                                            ?>
+                                        @endif
+                                        
+                                    </div>
+                            @endif
+
+                    @endif              
+                    @endif
+                
+                
+                @endif
+                
+            </div>
+            
+            <div class="post-footer">
+                @if(!auth()->guard('customer')->check())
+                    <div class="icon likes">
+                        <i class='fas fa-heart' style='font-size:18px;'></i>
+                        {{$value->like_count}}
+                    </div>
+                    <div class="icon comments">
+                        <i class="far fa-comment" style='font-size:18px;'>
+                        </i>
+                        {{$total_comment}}
+                    </div>
+                    <!-- <div class="icon share">
+                        <i class="far fa-paper-plane" style='font-size:18px;'>
+                        </i>
+                    </div> -->
+                @else
+                    @if($value->price  == 0 || $value->post_unlock_id != null)   
+                        <?php 
+                            $isliked = is_liked($value->id,auth()->guard('customer')->user()->id);
+                        ?>
+                        <div class="icon likes postLike" data-islike="{{ $isliked }}" data-postid="{{ $value->id }}">
+                            <i class='fas fa-heart ' style='font-size:18px; @if($isliked) color:red;  @endif'></i>
+                            <span class="like-count-block">{{$value->like_count}}</span>
+                        </div>
+                        <div class="icon comments" onclick="showCommentBox('{{ $value->id }}')">
+                            <i class="far fa-comment" style='font-size:18px;'>
+                            </i>
+                            {{$total_comment}}
+                        </div>
+                        <!-- <div class="icon share">
+                            <i class="far fa-paper-plane" style='font-size:18px;'>
+                            </i>
+                        </div>     -->
+                    @else
+                        <div class="icon likes">
+                                <i class='fas fa-heart' style='font-size:18px;'></i>
+                                {{$value->like_count}}
+                            </div>
+                            <div class="icon comments" >
+                                <i class="far fa-comment" style='font-size:18px;'>
+                                </i>
+                                {{$total_comment}}
+                            </div>
+                            <!-- <div class="icon share">
+                                <i class="far fa-paper-plane" style='font-size:18px;'>
+                                </i>
+                            </div>                          -->
+                    @endif
+                @endif
+                
+            </div>
+        </div>
+    @endforeach
+
+    @endif
    
     <!-- Free post -->
-    <div class="post">
+    <!-- <div class="post">
         <div class="post-header">
             <img alt="Profile picture" src="https://storage.googleapis.com/a1aa/image/PIDJOMLnKwJEO9wV1MBv8rKPdnNIH0LnoZ6vrfqWfmgcT8pTA.jpg" class="image_fit" />
             <div>
@@ -290,10 +485,10 @@
                 </i>
             </div>
         </div>
-    </div>
-
+    </div> -->
+    
     <!-- Post Lock -->
-    <div class="post">
+    <!-- <div class="post">
         <div class="post-header">
             <img alt="Profile picture" src="https://storage.googleapis.com/a1aa/image/PIDJOMLnKwJEO9wV1MBv8rKPdnNIH0LnoZ6vrfqWfmgcT8pTA.jpg" class="image_fit" />
             <div>
@@ -328,15 +523,10 @@
                             </span>
                         </button>
                     </div>
-                    <div class="mt-2 flex justify-center text-gray-500">
-                        <i class="fas fa-image mt-1"></i>
-                        <span class="ml-1">
-                            1
-                        </span>
-                    </div>
+                    
                 </div>
             </div>
-            <!-- <img alt="Person taking a mirror selfie wearing a grey top and jeans" class="post--image" src="https://storage.googleapis.com/a1aa/image/up0uM1ECjVosANcV8p4aWvjwetDsA6RtqneCjOO0U0TdT8pTA.jpg"/> -->
+           
         </div>
         <div class="post-footer">
             <div class="icon likes">
@@ -351,9 +541,9 @@
                 <i class="fas fa-share-square" style='font-size:18px;'></i>
             </div>
         </div>
-    </div>
+    </div> -->
  
-    <div class="post">
+    <!-- <div class="post">
         <div class="post-header">
             <img alt="Profile picture" src="https://storage.googleapis.com/a1aa/image/PIDJOMLnKwJEO9wV1MBv8rKPdnNIH0LnoZ6vrfqWfmgcT8pTA.jpg" class="image_fit" />
             <div>
@@ -372,7 +562,7 @@
             <p class="post--caption mb-2">
                 Caption.. Caption.. Caption.. Caption.. Caption.. Caption..Caption.. Caption.. Caption.. Caption..
             </p>
-            <!-- <img alt="Person taking a mirror selfie wearing a grey top and jeans" class="post--image" src="https://storage.googleapis.com/a1aa/image/up0uM1ECjVosANcV8p4aWvjwetDsA6RtqneCjOO0U0TdT8pTA.jpg" /> -->
+            
             <video class="post--image" src="{{ asset('assets/video/private.mp4') }}" onclick="this.paused?this.play():this.pause();"></video>
         </div>
         <div class="post-footer">
@@ -390,9 +580,8 @@
                 </i>
             </div>
         </div>
-    </div>
-    <!-- /Feature Section -->
-
+    </div> -->
+   
     <div class="mt-4 flex justify-center">
         <button onclick="window.location.href='{{ route('influencer.signup') }}'" class="bg-black text-white py-2 px-4 rounded-full flex items-center">
             <span>
@@ -451,6 +640,31 @@
 
     </div>
 </div>
+<div id="edit-menbership-model" class="userlist_model">
+    <div class="modelbox stream-model">
+        <div class="modelnav">
+            <div class="model--nav--head"> Comments</div>
+            <div>
+                <img src="{{ asset('assets/images/cross-icon.png') }}" class="model--close live--model--close modelClose" alt="">
+            </div>
+        </div>
+        <div class="usercontainer">
+            <div class="user-comment-section exclusive">
+                <div class="exclusive-section-image">
+                    <img alt="Profile picture" src="{{ asset('assets/images/verify-badge.png') }}" class="image_fit">   
+                </div>
+                <div class="exclusive-section-first">
+                    <input type="text" class="form-control comment--input comment-input" placeholder="Type your comment...." />
+                </div>
+                <div class="exclusive-section-second sendComment" data-postid="" style="background:black; border-radius:100%; height: 40px;width:40px;display:flex; justify-content:center;align-items:center; margin-left:5px;">
+                    <img src="{{ asset('assets/images/send.png') }}" alt="" style="height: 24px;width:24px; ">
+                </div>
+            </div>
+            <div class="comment-section-container"></div>
+            <h5 class="no_data" style="text-align:center; margin-top:20px; display:none;">No Comment exists</h5>
+        </div>
+    </div>
+</div>
 
 @include('user.footer')
 
@@ -458,7 +672,7 @@
 
 @push('js')
 <script src="https://cdn.tailwindcss.com"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @vite('resources/js/app.js')
 
 <script type="module">
@@ -491,6 +705,8 @@
 
     $(document).on('click','.book_now',function(){
         $(".booking-error").html('');
+        $('.success-section').hide();
+        $('.servie-booking-detail-section').show();
         let id= $(this).attr('data-id');
         let price = $(this).attr('data-price');
         let name=$(this).attr('data-service_type');
@@ -522,12 +738,16 @@
                     element.attr('disabled',false)
                     document.getElementById('loader').classList.remove('loader-visible');
                 }else if(response.status == 1){
-
+                    $('.success-section').show();
+                    $('.servie-booking-detail-section').hide();
                     document.getElementById('loader').classList.remove('loader-visible');
                 }else{
                     document.getElementById('loader').classList.remove('loader-visible');
                 }
             },
+            error:() =>{
+                document.getElementById('loader').classList.remove('loader-visible');
+            }
         });
        
 
@@ -535,5 +755,183 @@
     $(".close_service_model").click(function(){
         $(".service-detail-model").css('display','none');
     })
+    $(".postLike").click(function(){
+        //$(this).attr('disabled',true);
+        //$(this).off('click')
+        
+        let elem = $(this);
+        let postid = $(this).attr('data-postid');
+
+        let islike = $(this).attr('data-islike');
+        
+        if(islike == '1'){
+            $(this).children('i').css('color','');
+            let countCon = $(this).find('.like-count-block');
+            countCon.html(parseInt(countCon.html())-1);
+            $(this).attr('data-islike','')
+        }else{
+           
+            $(this).children('i').css('color','red');
+            let countCon = $(this).find('.like-count-block');
+            countCon.html(parseInt(countCon.html())+1);
+            $(this).attr('data-islike','1')
+            
+        }
+        $.ajax({
+            url: "{{ route('user.post.like',[request()->segment(2)]) }}",
+            data: {postid:postid,islike:islike},
+            success: function(response) {
+                
+            }
+        });
+       // alert($(this).attr('data-islike'))
+    })
+
+    $(".modelClose").click(function(){
+
+        $(".userlist_model").css('display', 'none');
+    })
+    $(".sendComment").click(function(){
+        if($('.comment-input').val() != ''){
+            $(".userlist_model").css('display', 'none');
+            document.getElementById('loader').classList.add('loader-visible');
+            let csrfToken = $('meta[name="csrf-token"]').attr('content');
+            const formData = new FormData();
+            let postid = $(this).attr('data-postid');
+            formData.append('comment', $('.comment-input').val());
+            formData.append('post_id', postid);
+            $.ajax({
+                url: "{{ route('user.post.comment.send',[request()->segment(2)]) }}",
+                method: "post",
+                contentType: false,
+                processData: false,
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the request headers
+                },
+                success: function(response) {
+                    
+                    if(response.status == "1"){
+                        $('.comment-input').val('')
+                        showCommentBox(postid);
+                        document.getElementById('loader').classList.remove('loader-visible');
+                    }
+                },
+                error:(request, status, error) =>{
+                    let er = JSON.parse(request.responseText);
+                    document.getElementById('loader').classList.remove('loader-visible');
+                    Swal.fire({text:er.message,confirmButtonColor: "#333",});
+                }
+
+
+            });
+        }
+    })
+    $(document).on('click','.confirm-unlock',function(){
+        if($(this).attr('data-eligble') == 'true'){
+            let postid = $(this).attr('data-postid');
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't to unlock this port !",
+                icon: "info",
+                showCancelButton: true,
+                confirmButtonColor: "#333",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Unlock it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    document.getElementById('loader').classList.add('loader-visible');
+                    $.ajax({
+                        url: "{{ route('user.post.unlock',[request()->segment(2)]) }}",
+                        method: "get",
+                    
+                        data: {postid:postid},
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the request headers
+                        },
+                        success: function(response) {
+                            document.getElementById('loader').classList.remove('loader-visible');
+                            let r = JSON.parse(response);
+                            
+                            if(r.error){
+                                Swal.fire({text:r.message,confirmButtonColor: "#333",});
+                            }else{
+                                window.location.reload();
+                            }
+                            // $(".create-post-image-section").hide();
+                            // $(".create-post-form-section").show();
+                            
+                            //window.location.href = "{{ route('influencer.success.page') }}";
+                        },
+
+
+                    });
+                }
+            });
+        }else{
+            Swal.fire({
+                text:"Insufficient balance in wallet !",
+                confirmButtonColor: "#333",
+            });
+
+        }
+        
+    })
+    function showCommentBox(postid){
+        $.ajax({
+            url: "{{ route('user.post.comment.get',[request()->segment(2)]) }}",
+            method: "get",
+            data: {post_id:postid},
+            success: function(response) {
+                let html = '';
+                response.comment.forEach(element => {
+                    html+='<div class="post"><div class="post-header"><img alt="Profile picture" src="{{ asset('assets/images/verify-badge.png') }}" class="image_fit"><div><span class="username">'+element.name+'</span><div class="time">'+timeAgo(element.created_at)+'<i class="fas fa-globe globe"></i></div></div></div><div class="post-content"><p class="post--caption mb-2">'+element.comment+'</p></div></div>';
+                });
+                if(response.comment.length > 0){
+                    $(".comment-section-container").show();
+                    $(".no_data").hide();
+                    $(".comment-section-container").html(html);
+                }else{
+                    $(".comment-section-container").hide();
+                    $(".no_data").show();
+
+                }
+                $(".sendComment").attr('data-postid',postid);
+                $(".userlist_model").css('display', 'flex');
+               
+            },
+            error:(request, status, error) =>{
+                let er = JSON.parse(request.responseText);
+                document.getElementById('loader').classList.remove('loader-visible');
+                Swal.fire({text:er.message,confirmButtonColor: "#333",});
+            }
+
+
+        });
+        
+    }
+    function timeAgo(dateInput) {
+        const now = new Date();
+        const date = new Date(dateInput);
+        const seconds = Math.floor((now - date) / 1000);
+        
+        let interval = Math.floor(seconds / 31536000); // Years
+        if (interval >= 1) return `${interval} year${interval === 1 ? '' : 's'} ago`;
+
+        interval = Math.floor(seconds / 2592000); // Months
+        if (interval >= 1) return `${interval} month${interval === 1 ? '' : 's'} ago`;
+
+        interval = Math.floor(seconds / 86400); // Days
+        if (interval >= 1) return `${interval} day${interval === 1 ? '' : 's'} ago`;
+
+        interval = Math.floor(seconds / 3600); // Hours
+        if (interval >= 1) return `${interval} hour${interval === 1 ? '' : 's'} ago`;
+
+        interval = Math.floor(seconds / 60); // Minutes
+        if (interval >= 1) return `${interval} minute${interval === 1 ? '' : 's'} ago`;
+
+        return 'just now'; // Less than a minute ago
+    }
 </script>
 @endpush

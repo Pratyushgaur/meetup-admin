@@ -20,12 +20,17 @@
                 </a>
                 <span class="new--inbox--indicator"></span>
             </div>
-            <!-- <div class="navber--options--container">
+            @if(Helpers_unread_notification())
+             <div class="navber--options--container" onclick="window.location.href='{{ route('influencer.notification') }}'">
                 <img src="{{ asset('assets/images/home-bell.png') }}" alt="" class="bell--icon">
-            </div> -->
-            <div class="navber--options--container">
+            </div>
+            @else
+            <div class="navber--options--container" onclick="window.location.href='{{ route('influencer.notification') }}'">
                 <img src="{{ asset('assets/images/home-bell2.png') }}" alt="" class="bell--icon">
             </div>
+            @endif
+           
+            
         </div>
     </nav>
 </header>

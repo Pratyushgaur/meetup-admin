@@ -79,6 +79,7 @@ class PostController extends Controller
         $posts->join('influencer_plans','posts.plan_id','=','influencer_plans.id');
         $posts->select('posts.*','influencer_plans.title as plan_name');
       })
+      ->orderBy('posts.id','desc')
       ->get();
       $plans = \App\Models\Influencerplan::where('user_id',\Auth::id())->latest()->get();
         return view("influencer.Feed.feed",compact('posts','postype','plans'));
