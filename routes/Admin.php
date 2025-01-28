@@ -8,10 +8,10 @@ use App\Http\Controllers\Admin\{
     UserController,
     BusinessSettingController,
     PaymentController,
+    ReportsController,
     transactionController
 };
-
-
+use App\Models\User;
 
 Route::group(['prefix' =>'admin','as' => 'admin.'],function(){
     //Auth Routes
@@ -70,10 +70,12 @@ Route::group(['prefix' =>'admin','as' => 'admin.'],function(){
             Route::delete('/categorydelete', [MastersController::class,'CategoryDelete'])->name('category.delete');
         });
 
-        Route::group(['prefix' => 'influncers' , 'as' => 'influncers.'], function(){
+        Route::group(['prefix' => 'influncers' , 'as' => 'influncers.'], function()
+        {
             // Influncer Analysis Routes
             Route::get('list', [InfluncerController::class,'List'])->name('list');
             Route::post('list', [InfluncerController::class,'List_edit_submit'])->name('list.edit.submit');
+            Route::get('list/{number}', [InfluncerController::class,'list_infulencer_login'])->name('list.infulencer.login');
             Route::get('/status/{id}', [InfluncerController::class,'InfluncerStatus'])->name('status');
 
             Route::get('posts/{id}', [InfluncerController::class,'InfluncerPostView'])->name('post.view');
@@ -83,15 +85,30 @@ Route::group(['prefix' =>'admin','as' => 'admin.'],function(){
             Route::get('orders/view/{id}', [InfluncerController::class,'PendingOrdersView'])->name('pending.order.view');
             Route::get('kyc-verification', [InfluncerController::class,'KYCVerification'])->name('kyc.verification');
             Route::get('kyc/view/{id}', [InfluncerController::class,'KYCVerificationView'])->name('kyc.verification.view');
-            Route::post('kyc/view/{id}', [InfluncerController::class,'KYCVerificationViewSubmit'])->name('kyc.verification.view.submit');
+            Route::post('kyc/view', [InfluncerController::class,'KYCVerificationViewSubmit'])->name('kyc.verification.view.submit');
         });
 
-        Route::group(['prefix' => 'users' , 'as' => 'users.'],function(){
+        Route::group(['prefix' => 'users' , 'as' => 'users.'],function()
+        {
             // User Analysis Routes
             Route::get('list', [UserController::class,'UserList'])->name('list');
             Route::get('/status/{id}', [UserController::class,'UserStatus'])->name('status');
 
         });
+
+        // Reports Routes
+        Route::group(['prefix' => 'reports' , 'as' => 'reports.'],function()
+        {
+            Route::get('income', [ReportsController::class,'Income'])->name('income');
+            Route::get('deposit', [ReportsController::class,'Deposit'])->name('deposit');
+            
+            Route::get('/status/{id}', [UserController::class,'UserStatus'])->name('status');
+
+        });
+
+        //Missed Live Route
+        Route::get('live/list', [UserController::class,'MissedLiveList'])->name('live.list');
+        
 
         Route::group(['prefix' => 'payments' , 'as' => 'payments.'],function(){
             Route::get('UnSettlements', [PaymentController::class,'paymentUnSettlements'])->name('unsettlements');

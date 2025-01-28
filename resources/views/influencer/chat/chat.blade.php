@@ -194,7 +194,7 @@
                 </div>
                 @endif
             @endforeach  
-
+            </div>
             
         </div>
         <div id="recordingIndicator" class="recording-indicator" style="display: none;">

@@ -9,6 +9,9 @@ use Illuminate\Routing\Redirector;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Categories;
+use App\Models\UserKyc;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 
@@ -23,9 +26,12 @@ class InfluncerController extends Controller
     public function List() : View
     {
         
-        $influencer_list = User::where('role', '1')->with('post')->get();
-       
+        $influencer_list = User::where('role', '1')->with(['post', 'income' => function($q){
+            return $q->where('transction_type' , '1');
+        }])->get();
+        
         $category = Categories::all();
+
         return view('admin.influencer.list',compact('influencer_list','category'));
     }
 
@@ -81,6 +87,24 @@ class InfluncerController extends Controller
 
         flash()->success('influncer list Update');
         return redirect(route('admin.influncers.list'));
+    }
+
+    /**
+     * 
+     * @param int $number
+     * @return Redirector|RedirectResponse
+     */
+    public function list_infulencer_login($number): Redirector|RedirectResponse
+    {
+        $influencer = User::where('mobile', $number)->first();
+        if($influencer)
+        {
+            Auth::login($influencer);
+            return redirect()->route('influencer.home');
+        }else{
+            flash()->error('influncer not found');
+            return redirect()->back();
+        }
     }
 
      /**
@@ -204,13 +228,38 @@ class InfluncerController extends Controller
 
     /**
      * 
-     * 
+     * @param int $id
      * @return view
      */
     public function KYCVerificationView($id) : View
     {
        $kyc_data = User::where('id' , $id)->with('kyc')->first();
         return view('admin.influencer.kyc_verify_view',compact('kyc_data'));
+    }
+
+    /**
+     * 
+     * @param Request $request
+     * @return Redirector|RedirectResponse
+     */
+    public function KYCVerificationViewSubmit(Request $request) : Redirector|RedirectResponse
+    {
+        $request->validate([
+            'id' => 'required',
+            'kyc_status' => 'required',
+            'kyc_remarks' => 'required_if:kyc_status,2',
+        ],
+        [
+            'kyc_remarks.required_if' => 'Please enter remarks'
+        ]);
+
+        
+        $kyc = UserKyc::where('id' , $request->id)->update([
+            'status' => $request->kyc_status,
+            'reject_reason' => $request->kyc_remarks
+        ]); 
+
+        return redirect()->route('admin.influncers.kyc.verification');
     }
 
     

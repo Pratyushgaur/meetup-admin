@@ -125,10 +125,10 @@
                                     <div class="row">
                                         @if(!empty($kyc_data->kyc->docs))
                                             @php($image = json_decode($kyc_data->kyc->docs))
-                                            @foreach($image as $key => $value2)
+                                            @foreach($image as $key2 => $value2)
                                                 <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 mx-auto mb-5">
-                                                    <div class="mb-md-0 mb-4 kyc_image" id="kyc_image-{{$key}}">
-                                                        <img src="{{ asset('posts/').'/'.$value2 }}" class="card-img-top kyc_zoom_img"
+                                                    <div class="mb-md-0 mb-4 kyc_image" id="kyc_image-{{$key2}}">
+                                                        <img src="{{ asset('docs/').'/'.$value2 }}" class="card-img-top kyc_zoom_img"
                                                             alt="...">
                                                     </div>
                                                 </div>
@@ -137,6 +137,39 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 layout-spacing">
+                            <form action="{{ route('admin.influncers.kyc.verification.view.submit') }}" method="POST">
+                                @csrf
+                                <input type="hidden" value="{{ $kyc_data->id }}" name="id">
+
+                                <div class="row">
+                                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label for="status">
+                                                Rejected Remark
+                                            </label>
+                                            <textarea name="kyc_remarks" class="form-control mb-5" id="" cols="15" rows="2">{{ $kyc_data->kyc->reject_reason }}</textarea>
+                                        </div>
+                                    </div>
+
+                                    @if($kyc_data->kyc->status == '0')
+                                        <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                            <button type="submit" class="btn btn-primary" value="1" name="kyc_status">
+                                                Accept
+                                            </button>
+
+                                            <button type="submit" class="btn btn-danger" value="2" name="kyc_status">
+                                                Reject
+                                            </button>
+                                        </div>
+                                    @endif
+                                </div>
+                                        
+                            </form>
                         </div>
                     </div>
                 </div>

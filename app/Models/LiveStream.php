@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class LiveStream extends Model
 {
     use HasFactory;
+
+    function user(){
+        return $this->belongsTo(User::class);
+    }
 }

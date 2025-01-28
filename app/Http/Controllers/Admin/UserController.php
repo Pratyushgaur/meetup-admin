@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\LiveStream;
 use Illuminate\Http\{Request,RedirectResponse};
 use Illuminate\Contracts\View\View;
 use Illuminate\Routing\Redirector;
 use App\Models\User;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -22,7 +24,7 @@ class UserController extends Controller
 
     }
 
-     /**
+    /**
      * 
      * @param $id
      * @return Redirector|RedirectResponse
@@ -44,5 +46,27 @@ class UserController extends Controller
             flash()->error('Unexpectec Error');
             return redirect(route('admin.users.list'));
         }
+    }
+
+    /**
+     * @param Request $request
+     * @return View
+     */
+    public function MissedLiveList(Request $request): View
+    {
+        if($request->has('search') && $request->search != 'All') 
+        {
+            $users = LiveStream::where(['user_id' => $request->search , 'is_start' => '0'])
+            ->orwhere('scheduled_time' , '>' , Carbon::now()->format('Y-m-d H:i:s'))
+            ->with('user')->orderBy('scheduled_time' , 'desc')->get();
+        }else{
+            $users = LiveStream::where(['is_start' => '0'])
+            ->orwhere('scheduled_time' , '>' , Carbon::now()->format('Y-m-d H:i:s'))
+            ->with('user')->orderBy('scheduled_time' , 'desc')->get();
+        }
+
+        $influencers = User::where(['role' => '1'])->orderBy('name' , 'asc')->get();
+
+        return view('admin.user.live',compact('users' , 'influencers'));
     }
 }

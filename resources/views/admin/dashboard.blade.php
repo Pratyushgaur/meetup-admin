@@ -100,24 +100,5 @@
             </div>
         </div>
     </div>
-
-    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
-        <div class="widget widget-chart-three">
-            <div class="widget-heading">
-                <div class="">
-                    <h5 class="">Monthly Income</h5>
-                    <p class="value">
-                        <span>
-                            In ₹ (Rupees)
-                        </span>
-                    </p>
-                </div>
-            </div>
-
-            <div class="widget-content">
-                <div id="uniqueVisits"></div>
-            </div>
-        </div>
-    </div>
 </div>
 @endsection

@@ -32,6 +32,7 @@
                             <th class="text-center">Status</th>
                             <th class="text-center">Total Income</th>
                             <th class="text-center">Edit Profile</th>
+                            <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -100,7 +101,11 @@
                                 @endif
                             </td>
                             <td class="text-center">
-                                {{ $value->total_income }}
+                                @php($total = 0)
+                                @foreach($value->income as $income)
+                                    @php($total += $income->amount)
+                                @endforeach
+                                {{ $total }}
                             </td>
                             <td class="text-center">
                                 <a class="badge badge-light-primary text-start me-2 action-edit edit-btn"
@@ -113,40 +118,41 @@
                                     </svg>
                                 </a>
                             </td>
+
+                            <td class="text-center">
+                                <a class="badge badge-light-primary text-start me-2 action-edit edit-btn" href="{{route('admin.influncers.list.infulencer.login', $value->mobile)}}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-eye">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </a>
+                            </td>
                         </tr>
 
-                        <div class="modal fade" id="EditPriceModalCenter-{{ $value->id }}" tabindex="-1" role="dialog"
-                            aria-labelledby="EditPriceModalCenterTitle" aria-hidden="true">
+                        <div class="modal fade" id="EditPriceModalCenter-{{ $value->id }}" tabindex="-1" role="dialog" aria-labelledby="EditPriceModalCenterTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
-                                    <form action="{{route('admin.influncers.list.edit.submit' )}}" method="post"
-                                        enctype="multipart/form-data">
+                                    <form action="{{route('admin.influncers.list.edit.submit' )}}" method="post" enctype="multipart/form-data">
                                         @csrf
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="EditPriceModalCenterTitle">Profile Edit</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close">
-                                                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                    class="feather feather-x">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
                                                     <line x1="18" y1="6" x2="6" y2="18"></line>
                                                     <line x1="6" y1="6" x2="18" y2="18"></line>
                                                 </svg>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-
                                             <div class="">
                                                 <div class="user-profile custom--form">
                                                     <div class="widget-content widget-content-area">
                                                         <div class="text-center influncer--profile--layout">
                                                             <a href="javascript:void(0)" class="mt-2 edit-profile edit-profile--cover" id="edit-profile--cover">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                    height="24" viewBox="0 0 24 24" fill="none"
-                                                                    stroke="currentColor" stroke-width="2"
-                                                                    stroke-linecap="round" stroke-linejoin="round"
-                                                                    class="feather feather-edit-3">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3">
                                                                     <path d="M12 20h9"></path>
                                                                     <path
                                                                         d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z">
