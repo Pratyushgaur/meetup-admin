@@ -297,14 +297,14 @@
                 </a>
                 <ul class="collapse submenu list-unstyled {{Request::is('admin/transactions*') ? 'show' : '' }}"
                     id="transactions" data-bs-parent="#accordionExample">
-                    <li class="{{Request::is('admin/transactions') ? 'active' : '' }}">
-                        <a href="{{route('admin.transactions.influncerlist')}}">
-                            Influncers
+                    <li class="{{Request::is('admin/transactions/wallet-transaction') ? 'active' : '' }}">
+                        <a href="{{route('admin.transactions.wallet.transaction')}}">
+                            Wallet Transaction
                         </a>
                     </li>
-                    <li>
-                        <a href="{{route('admin.transactions.Userlist')}}">
-                            Users
+                    <li class="{{Request::is('admin/transactions/order-transaction') ? 'active' : '' }}">
+                        <a href="{{route('admin.transactions.order.transaction')}}">
+                            Order Transaction
                         </a>
                     </li>
                 </ul>

@@ -110,15 +110,17 @@ Route::group(['prefix' =>'admin','as' => 'admin.'],function(){
         Route::get('live/list', [UserController::class,'MissedLiveList'])->name('live.list');
         
 
-        Route::group(['prefix' => 'payments' , 'as' => 'payments.'],function(){
+        Route::group(['prefix' => 'payments' , 'as' => 'payments.'],function()
+        {
             Route::get('UnSettlements', [PaymentController::class,'paymentUnSettlements'])->name('unsettlements');
             Route::get('Settlements', [PaymentController::class,'paymentSettlements'])->name('settlements');
             
         });
 
-        Route::group(['prefix' => 'transactions' , 'as' => 'transactions.'],function(){
-            Route::get('Userlist', [transactionController::class,'transactionUserList'])->name('Userlist');
-            Route::get('influncerlist', [transactionController::class,'transactionInfluncerList'])->name('influncerlist');
+        Route::group(['prefix' => 'transactions' , 'as' => 'transactions.'],function()
+        {
+            Route::get('wallet-transaction', [transactionController::class,'WalletTransaction'])->name('wallet.transaction');
+            Route::get('order-transaction', [transactionController::class,'OrderTransaction'])->name('order.transaction');
             
         });
 

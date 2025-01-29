@@ -61,6 +61,16 @@ class User extends Authenticatable
         return $this->hasOne(UserWalletTrasaction::class,'user_id','id');
     }
 
+    public function order()
+    {
+        return $this->hasOne(Order::class,'userid','id');
+    }
+
+    public function influencer()
+    {
+        return $this->hasOne(Order::class,'influencer_id','id');
+    }
+
     public function live()
     {
         return $this->hasMany(LiveStream::class,'user_id','id');
