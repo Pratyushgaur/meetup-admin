@@ -121,6 +121,7 @@ Route::group(['prefix' =>'admin','as' => 'admin.'],function(){
         {
             Route::get('wallet-transaction', [transactionController::class,'WalletTransaction'])->name('wallet.transaction');
             Route::get('order-transaction', [transactionController::class,'OrderTransaction'])->name('order.transaction');
+            Route::get('order-export', [transactionController::class,'OrderExport'])->name('order.export');
             
         });
 

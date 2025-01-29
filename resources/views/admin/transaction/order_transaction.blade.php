@@ -29,6 +29,13 @@
                     <div class="row">
                         <div class="col-xl-2 col-md-2 col-sm-12 col-12 p-4">
                             <div class="form-group">
+                                <button type="submit" value="export" name="export" class="btn btn-primary">Export</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-2 col-md-2 col-sm-12 col-12 p-4">
+                            <div class="form-group">
                                 <label for="">To</label>
                                 <input type="date" class="form-control date" placeholder="date" name="todate" value="{{ request()->has('todate') ? request()->get('todate') : '' }}">
                             </div>
@@ -72,7 +79,7 @@
                             <th>Order Id</th>
                             <th>User Info</th>
                             <th>Order Type</th>
-                            <th>Influancer</th>
+                            <th>Influencer</th>
                             <th>Status</th>
                             <th>Amount</th>
                             <th>Influencer Amount</th>
